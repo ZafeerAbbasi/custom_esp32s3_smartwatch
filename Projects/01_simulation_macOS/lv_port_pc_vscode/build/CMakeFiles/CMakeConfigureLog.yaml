@@ -1,0 +1,502 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Darwin - 22.6.0 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/local/Cellar/llvm/20.1.2/bin/clang 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is Clang, found in:
+        /Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/4.0.1/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/local/Cellar/llvm/20.1.2/bin/clang++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is Clang, found in:
+        /Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/4.0.1/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP"
+      binary: "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/local/Cellar/llvm/20.1.2/bin/clang-scan-deps"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_16058
+        [1/2] /usr/local/Cellar/llvm/20.1.2/bin/clang   -v -Wl,-v -MD -MT CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake/Modules/CMakeCCompilerABI.c
+        Homebrew clang version 20.1.2
+        Target: x86_64-apple-darwin22.6.0
+        Thread model: posix
+        InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+        Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+        System configuration file directory: /usr/local/etc/clang
+        User configuration file directory: /Users/zafeer/.config/clang
+        clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+         (in-process)
+         "/usr/local/Cellar/llvm/20.1.2/bin/clang-20" -cc1 -triple x86_64-apple-macosx13.0.0 -Wundef-prefix=TARGET_OS_ -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=all -ffp-contract=on -fno-rounding-math -funwind-tables=2 -target-sdk-version=13.3 -fcompatibility-qualified-id-block-type-checking -fvisibility-inlines-hidden-static-local-var -fbuiltin-headers-in-system-modules -fdefine-target-os-macros -target-cpu penryn -tune-cpu generic -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP -target-linker-version 1022.1 -v -fcoverage-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP -resource-dir /usr/local/Cellar/llvm/20.1.2/lib/clang/20 -dependency-file CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include -internal-isystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include -ferror-limit 19 -stack-protector 1 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -x c /usr/local/share/cmake/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 20.1.2 based upon LLVM 20.1.2 default target x86_64-apple-darwin22.6.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/SubFrameworks"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks (framework directory)
+        End of search list.
+        [2/2] : && /usr/local/Cellar/llvm/20.1.2/bin/clang  -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -o cmTC_16058   && :
+        Homebrew clang version 20.1.2
+        Target: x86_64-apple-darwin22.6.0
+        Thread model: posix
+        InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+        Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+        System configuration file directory: /usr/local/etc/clang
+        User configuration file directory: /Users/zafeer/.config/clang
+         "/usr/bin/ld" -demangle -lto_library /usr/local/Cellar/llvm/20.1.2/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 13.0.0 13.3 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_16058 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -lSystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld  PROJECT:ld64-857.1
+        BUILD 23:13:24 May  7 2023
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+        Library search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib
+        Framework search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks/
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:122 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Effective list of requested architectures (possibly empty)  : ""
+      Effective list of architectures found in the ABI info binary: "x86_64"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:191 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include]
+          add: [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+        end of search list found
+        collapse include dir [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include] ==> [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include]
+        collapse include dir [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+        implicit include dirs: [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include;/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:227 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/local/bin/ninja -v cmTC_16058]
+        ignore line: [[1/2] /usr/local/Cellar/llvm/20.1.2/bin/clang   -v -Wl -v -MD -MT CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Homebrew clang version 20.1.2]
+        ignore line: [Target: x86_64-apple-darwin22.6.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin]
+        ignore line: [Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg]
+        ignore line: [System configuration file directory: /usr/local/etc/clang]
+        ignore line: [User configuration file directory: /Users/zafeer/.config/clang]
+        ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+        ignore line: [ (in-process)]
+        ignore line: [ "/usr/local/Cellar/llvm/20.1.2/bin/clang-20" -cc1 -triple x86_64-apple-macosx13.0.0 -Wundef-prefix=TARGET_OS_ -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=all -ffp-contract=on -fno-rounding-math -funwind-tables=2 -target-sdk-version=13.3 -fcompatibility-qualified-id-block-type-checking -fvisibility-inlines-hidden-static-local-var -fbuiltin-headers-in-system-modules -fdefine-target-os-macros -target-cpu penryn -tune-cpu generic -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP -target-linker-version 1022.1 -v -fcoverage-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-VQTSRP -resource-dir /usr/local/Cellar/llvm/20.1.2/lib/clang/20 -dependency-file CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include -internal-isystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include -ferror-limit 19 -stack-protector 1 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -x c /usr/local/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 20.1.2 based upon LLVM 20.1.2 default target x86_64-apple-darwin22.6.0]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include"]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/SubFrameworks"]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/Library/Frameworks"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks (framework directory)]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /usr/local/Cellar/llvm/20.1.2/bin/clang  -Wl -search_paths_first -Wl -headerpad_max_install_names -v -Wl -v CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -o cmTC_16058   && :]
+        ignore line: [Homebrew clang version 20.1.2]
+        ignore line: [Target: x86_64-apple-darwin22.6.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin]
+        ignore line: [Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg]
+        ignore line: [System configuration file directory: /usr/local/etc/clang]
+        ignore line: [User configuration file directory: /Users/zafeer/.config/clang]
+        link line: [ "/usr/bin/ld" -demangle -lto_library /usr/local/Cellar/llvm/20.1.2/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 13.0.0 13.3 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_16058 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o -lSystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a]
+          arg [/usr/bin/ld] ==> ignore
+          arg [-demangle] ==> ignore
+          arg [-lto_library] ==> ignore, skip following value
+          arg [/usr/local/Cellar/llvm/20.1.2/lib/libLTO.dylib] ==> skip value of -lto_library
+          arg [-dynamic] ==> ignore
+          arg [-arch] ==> ignore
+          arg [x86_64] ==> ignore
+          arg [-platform_version] ==> ignore
+          arg [macos] ==> ignore
+          arg [13.0.0] ==> ignore
+          arg [13.3] ==> ignore
+          arg [-syslibroot] ==> ignore
+          arg [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk] ==> ignore
+          arg [-mllvm] ==> ignore
+          arg [-enable-linkonceodr-outlining] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_16058] ==> ignore
+          arg [-search_paths_first] ==> ignore
+          arg [-headerpad_max_install_names] ==> ignore
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_16058.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lSystem] ==> lib [System]
+          arg [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a] ==> lib [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a]
+        linker tool for 'C': /usr/bin/ld
+        Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib]
+        Framework search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks/]
+        remove lib [System]
+        remove lib [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a]
+        collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib]
+        collapse framework dir [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks/] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks]
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib]
+        implicit fwks: [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:264 (cmake_determine_linker_id)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the C compiler's linker: "/usr/bin/ld" "-v"
+      @(#)PROGRAM:ld  PROJECT:ld64-857.1
+      BUILD 23:13:24 May  7 2023
+      configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+      LTO support using: LLVM version 14.0.3, (clang-1403.0.22.14.1) (static support for 29, runtime is 29)
+      TAPI support using: Apple TAPI version 14.0.3 (tapi-1403.0.5.1)
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm"
+      binary: "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/local/Cellar/llvm/20.1.2/bin/clang-scan-deps"
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_60efc
+        [1/2] /usr/local/Cellar/llvm/20.1.2/bin/clang++   -v -Wl,-v -MD -MT CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Homebrew clang version 20.1.2
+        Target: x86_64-apple-darwin22.6.0
+        Thread model: posix
+        InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+        Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+        System configuration file directory: /usr/local/etc/clang
+        User configuration file directory: /Users/zafeer/.config/clang
+        clang++: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+         (in-process)
+         "/usr/local/Cellar/llvm/20.1.2/bin/clang-20" -cc1 -triple x86_64-apple-macosx13.0.0 -Wundef-prefix=TARGET_OS_ -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=all -ffp-contract=on -fno-rounding-math -funwind-tables=2 -target-sdk-version=13.3 -fcompatibility-qualified-id-block-type-checking -fvisibility-inlines-hidden-static-local-var -fbuiltin-headers-in-system-modules -fdefine-target-os-macros -target-cpu penryn -tune-cpu generic -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm -target-linker-version 1022.1 -v -fcoverage-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm -resource-dir /usr/local/Cellar/llvm/20.1.2/lib/clang/20 -dependency-file CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -internal-isystem /usr/local/Cellar/llvm/20.1.2/bin/../include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include -internal-isystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 20.1.2 based upon LLVM 20.1.2 default target x86_64-apple-darwin22.6.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/SubFrameworks"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/Cellar/llvm/20.1.2/bin/../include/c++/v1
+         /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks (framework directory)
+        End of search list.
+        [2/2] : && /usr/local/Cellar/llvm/20.1.2/bin/clang++  -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_60efc   && :
+        Homebrew clang version 20.1.2
+        Target: x86_64-apple-darwin22.6.0
+        Thread model: posix
+        InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+        Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+        System configuration file directory: /usr/local/etc/clang
+        User configuration file directory: /Users/zafeer/.config/clang
+         "/usr/bin/ld" -demangle -lto_library /usr/local/Cellar/llvm/20.1.2/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 13.0.0 13.3 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_60efc -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld  PROJECT:ld64-857.1
+        BUILD 23:13:24 May  7 2023
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+        Library search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib
+        Framework search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks/
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:122 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Effective list of requested architectures (possibly empty)  : ""
+      Effective list of architectures found in the ABI info binary: "x86_64"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:191 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/local/Cellar/llvm/20.1.2/bin/../include/c++/v1]
+          add: [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include]
+          add: [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+        end of search list found
+        collapse include dir [/usr/local/Cellar/llvm/20.1.2/bin/../include/c++/v1] ==> [/usr/local/Cellar/llvm/20.1.2/include/c++/v1]
+        collapse include dir [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include] ==> [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include]
+        collapse include dir [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+        implicit include dirs: [/usr/local/Cellar/llvm/20.1.2/include/c++/v1;/usr/local/Cellar/llvm/20.1.2/lib/clang/20/include;/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:227 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/local/bin/ninja -v cmTC_60efc]
+        ignore line: [[1/2] /usr/local/Cellar/llvm/20.1.2/bin/clang++   -v -Wl -v -MD -MT CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Homebrew clang version 20.1.2]
+        ignore line: [Target: x86_64-apple-darwin22.6.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin]
+        ignore line: [Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg]
+        ignore line: [System configuration file directory: /usr/local/etc/clang]
+        ignore line: [User configuration file directory: /Users/zafeer/.config/clang]
+        ignore line: [clang++: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+        ignore line: [ (in-process)]
+        ignore line: [ "/usr/local/Cellar/llvm/20.1.2/bin/clang-20" -cc1 -triple x86_64-apple-macosx13.0.0 -Wundef-prefix=TARGET_OS_ -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=all -ffp-contract=on -fno-rounding-math -funwind-tables=2 -target-sdk-version=13.3 -fcompatibility-qualified-id-block-type-checking -fvisibility-inlines-hidden-static-local-var -fbuiltin-headers-in-system-modules -fdefine-target-os-macros -target-cpu penryn -tune-cpu generic -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm -target-linker-version 1022.1 -v -fcoverage-compilation-dir=/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-zTU8Tm -resource-dir /usr/local/Cellar/llvm/20.1.2/lib/clang/20 -dependency-file CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -internal-isystem /usr/local/Cellar/llvm/20.1.2/bin/../include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include -internal-isystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 20.1.2 based upon LLVM 20.1.2 default target x86_64-apple-darwin22.6.0]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/local/include"]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/SubFrameworks"]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/Library/Frameworks"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/local/Cellar/llvm/20.1.2/bin/../include/c++/v1]
+        ignore line: [ /usr/local/Cellar/llvm/20.1.2/lib/clang/20/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks (framework directory)]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /usr/local/Cellar/llvm/20.1.2/bin/clang++  -Wl -search_paths_first -Wl -headerpad_max_install_names -v -Wl -v CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_60efc   && :]
+        ignore line: [Homebrew clang version 20.1.2]
+        ignore line: [Target: x86_64-apple-darwin22.6.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin]
+        ignore line: [Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg]
+        ignore line: [System configuration file directory: /usr/local/etc/clang]
+        ignore line: [User configuration file directory: /Users/zafeer/.config/clang]
+        link line: [ "/usr/bin/ld" -demangle -lto_library /usr/local/Cellar/llvm/20.1.2/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 13.0.0 13.3 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_60efc -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a]
+          arg [/usr/bin/ld] ==> ignore
+          arg [-demangle] ==> ignore
+          arg [-lto_library] ==> ignore, skip following value
+          arg [/usr/local/Cellar/llvm/20.1.2/lib/libLTO.dylib] ==> skip value of -lto_library
+          arg [-dynamic] ==> ignore
+          arg [-arch] ==> ignore
+          arg [x86_64] ==> ignore
+          arg [-platform_version] ==> ignore
+          arg [macos] ==> ignore
+          arg [13.0.0] ==> ignore
+          arg [13.3] ==> ignore
+          arg [-syslibroot] ==> ignore
+          arg [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk] ==> ignore
+          arg [-mllvm] ==> ignore
+          arg [-enable-linkonceodr-outlining] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_60efc] ==> ignore
+          arg [-search_paths_first] ==> ignore
+          arg [-headerpad_max_install_names] ==> ignore
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_60efc.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lc++] ==> lib [c++]
+          arg [-lSystem] ==> lib [System]
+          arg [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a] ==> lib [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a]
+        linker tool for 'CXX': /usr/bin/ld
+        Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib]
+        Framework search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks/]
+        remove lib [System]
+        remove lib [/usr/local/Cellar/llvm/20.1.2/lib/clang/20/lib/darwin/libclang_rt.osx.a]
+        collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib]
+        collapse framework dir [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks/] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks]
+        implicit libs: [c++]
+        implicit objs: []
+        implicit dirs: [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/usr/lib]
+        implicit fwks: [/Library/Developer/CommandLineTools/SDKs/MacOSX13.sdk/System/Library/Frameworks]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:264 (cmake_determine_linker_id)"
+      - "/usr/local/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the CXX compiler's linker: "/usr/bin/ld" "-v"
+      @(#)PROGRAM:ld  PROJECT:ld64-857.1
+      BUILD 23:13:24 May  7 2023
+      configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+      LTO support using: LLVM version 14.0.3, (clang-1403.0.22.14.1) (static support for 29, runtime is 29)
+      TAPI support using: Apple TAPI version 14.0.3 (tapi-1403.0.5.1)
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "/usr/local/share/cmake/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake/Modules/FindThreads.cmake:97 (check_c_source_compiles)"
+      - "/usr/local/share/cmake/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "FreeRTOS/portable/CMakeLists.txt:1099 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-SKqTsY"
+      binary: "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-SKqTsY"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/local/Cellar/llvm/20.1.2/bin/clang-scan-deps"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-SKqTsY'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_16c0b
+        [1/2] /usr/local/Cellar/llvm/20.1.2/bin/clang -DCMAKE_HAVE_LIBC_PTHREAD   -MD -MT CMakeFiles/cmTC_16c0b.dir/src.c.o -MF CMakeFiles/cmTC_16c0b.dir/src.c.o.d -o CMakeFiles/cmTC_16c0b.dir/src.c.o -c /Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/01_simulation_macOS/lv_port_pc_vscode/build/CMakeFiles/CMakeScratch/TryCompile-SKqTsY/src.c
+        [2/2] : && /usr/local/Cellar/llvm/20.1.2/bin/clang  -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_16c0b.dir/src.c.o -o cmTC_16c0b   && :
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1243 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:139 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "lvgl/CMakeLists.txt:8 (enable_language)"
+    message: |
+      Checking whether the ASM compiler is GNU using "--version" did not match "(GNU assembler)|(GCC)|(Free Software Foundation)":
+      Homebrew clang version 20.1.2
+      Target: x86_64-apple-darwin22.6.0
+      Thread model: posix
+      InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+      Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1243 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:139 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "lvgl/CMakeLists.txt:8 (enable_language)"
+    message: |
+      Checking whether the ASM compiler is AppleClang using "--version" did not match "(Apple (clang|LLVM) version)":
+      Homebrew clang version 20.1.2
+      Target: x86_64-apple-darwin22.6.0
+      Thread model: posix
+      InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+      Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1230 (message)"
+      - "/usr/local/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:139 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "lvgl/CMakeLists.txt:8 (enable_language)"
+    message: |
+      Checking whether the ASM compiler is Clang using "--version" matched "(clang version)":
+      Homebrew clang version 20.1.2
+      Target: x86_64-apple-darwin22.6.0
+      Thread model: posix
+      InstalledDir: /usr/local/Cellar/llvm/20.1.2/bin
+      Configuration file: /usr/local/etc/clang/x86_64-apple-darwin22.cfg
+...
