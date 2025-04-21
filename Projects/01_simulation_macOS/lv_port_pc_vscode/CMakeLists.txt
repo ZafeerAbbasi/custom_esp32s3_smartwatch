@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12.4)
+cmake_minimum_required(VERSION 3.10)
 project(lvgl C CXX)
 
 # Set the correct FreeRTOS port for your system (e.g., Posix for WSL)
@@ -6,7 +6,7 @@ set(FREERTOS_PORT GCC_POSIX CACHE STRING "Port for FreeRTOS on Posix environment
 
 unset(USE_FREERTOS CACHE)
 
-option(USE_FREERTOS "Enable FreeRTOS" ON) # Turn this on to enable FreeRTOS
+option(USE_FREERTOS "Enable FreeRTOS" OFF) # Turn this on to enable FreeRTOS
 
 if(USE_FREERTOS)
     message(STATUS "FreeRTOS is enabled")
@@ -81,7 +81,7 @@ if(USE_FREERTOS)
         ${FREERTOS_SOURCES}  # Add only if USE_FREERTOS is enabled
     )
     # Link FreeRTOS libraries
-    target_link_libraries(main freertos_config ${PROJECT_SOURCE_DIR}/build/FreeRTOS/libfreertos_kernel.a)
+    target_link_libraries(main freertos_config FreeRTOS)
 else()
     add_executable(main
         ${PROJECT_SOURCE_DIR}/main/src/main.c

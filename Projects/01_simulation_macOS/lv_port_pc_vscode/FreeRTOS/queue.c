@@ -418,7 +418,7 @@ BaseType_t xQueueGenericReset( QueueHandle_t xQueue,
 
             #if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
             {
-                /* Queues can be allocated either statically or dynamically, so
+                /* Queues can be allocated wither statically or dynamically, so
                  * note this queue was allocated statically in case the queue is
                  * later deleted. */
                 pxNewQueue->ucStaticallyAllocated = pdTRUE;
@@ -513,10 +513,7 @@ BaseType_t xQueueGenericReset( QueueHandle_t xQueue,
             /* Check for multiplication overflow. */
             ( ( SIZE_MAX / uxQueueLength ) >= uxItemSize ) &&
             /* Check for addition overflow. */
-            /* MISRA Ref 14.3.1 [Configuration dependent invariant] */
-            /* More details at: https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/main/MISRA.md#rule-143. */
-            /* coverity[misra_c_2012_rule_14_3_violation] */
-            ( ( SIZE_MAX - sizeof( Queue_t ) ) >= ( size_t ) ( ( size_t ) uxQueueLength * ( size_t ) uxItemSize ) ) )
+            ( ( UBaseType_t ) ( SIZE_MAX - sizeof( Queue_t ) ) >= ( uxQueueLength * uxItemSize ) ) )
         {
             /* Allocate enough space to hold the maximum number of items that
              * can be in the queue at any time.  It is valid for uxItemSize to be
@@ -833,10 +830,6 @@ static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,
         if( pxMutex->u.xSemaphore.xMutexHolder == xTaskGetCurrentTaskHandle() )
         {
             ( pxMutex->u.xSemaphore.uxRecursiveCallCount )++;
-
-            /* Check if an overflow occurred. */
-            configASSERT( pxMutex->u.xSemaphore.uxRecursiveCallCount );
-
             xReturn = pdPASS;
         }
         else
@@ -849,9 +842,6 @@ static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,
             if( xReturn != pdFAIL )
             {
                 ( pxMutex->u.xSemaphore.uxRecursiveCallCount )++;
-
-                /* Check if an overflow occurred. */
-                configASSERT( pxMutex->u.xSemaphore.uxRecursiveCallCount );
             }
             else
             {
@@ -2212,11 +2202,11 @@ UBaseType_t uxQueueMessagesWaiting( const QueueHandle_t xQueue )
 
     configASSERT( xQueue );
 
-    portBASE_TYPE_ENTER_CRITICAL();
+    taskENTER_CRITICAL();
     {
         uxReturn = ( ( Queue_t * ) xQueue )->uxMessagesWaiting;
     }
-    portBASE_TYPE_EXIT_CRITICAL();
+    taskEXIT_CRITICAL();
 
     traceRETURN_uxQueueMessagesWaiting( uxReturn );
 
@@ -2233,11 +2223,11 @@ UBaseType_t uxQueueSpacesAvailable( const QueueHandle_t xQueue )
 
     configASSERT( pxQueue );
 
-    portBASE_TYPE_ENTER_CRITICAL();
+    taskENTER_CRITICAL();
     {
         uxReturn = ( UBaseType_t ) ( pxQueue->uxLength - pxQueue->uxMessagesWaiting );
     }
-    portBASE_TYPE_EXIT_CRITICAL();
+    taskEXIT_CRITICAL();
 
     traceRETURN_uxQueueSpacesAvailable( uxReturn );
 
@@ -3196,27 +3186,7 @@ BaseType_t xQueueIsQueueFullFromISR( const QueueHandle_t xQueue )
         return pxQueue;
     }
 
-#endif /* #if ( ( configUSE_QUEUE_SETS == 1 ) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) ) */
-/*-----------------------------------------------------------*/
-
-#if ( ( configUSE_QUEUE_SETS == 1 ) && ( configSUPPORT_STATIC_ALLOCATION == 1 ) )
-
-    QueueSetHandle_t xQueueCreateSetStatic( const UBaseType_t uxEventQueueLength,
-                                            uint8_t * pucQueueStorage,
-                                            StaticQueue_t * pxStaticQueue )
-    {
-        QueueSetHandle_t pxQueue;
-
-        traceENTER_xQueueCreateSetStatic( uxEventQueueLength );
-
-        pxQueue = xQueueGenericCreateStatic( uxEventQueueLength, ( UBaseType_t ) sizeof( Queue_t * ), pucQueueStorage, pxStaticQueue, queueQUEUE_TYPE_SET );
-
-        traceRETURN_xQueueCreateSetStatic( pxQueue );
-
-        return pxQueue;
-    }
-
-#endif /* #if ( ( configUSE_QUEUE_SETS == 1 ) && ( configSUPPORT_STATIC_ALLOCATION == 1 ) ) */
+#endif /* configUSE_QUEUE_SETS */
 /*-----------------------------------------------------------*/
 
 #if ( configUSE_QUEUE_SETS == 1 )

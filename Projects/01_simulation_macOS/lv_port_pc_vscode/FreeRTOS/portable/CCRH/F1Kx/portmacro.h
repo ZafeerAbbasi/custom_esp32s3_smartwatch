@@ -111,11 +111,11 @@
 /* Scheduler utilities */
 
 /* Called at the end of an ISR that can cause a context switch */
-    extern void vPortSetSwitch( BaseType_t xSwitchRequired );
+    extern void vPortSetSwitch( BaseType_t vPortSetSwitch );
 
-    #define portEND_SWITCHING_ISR( x )    vPortSetSwitch( x )
+    #define portEND_SWITCHING_ISR( xSwitchRequired )    vPortSetSwitch( vPortSetSwitch )
 
-    #define portYIELD_FROM_ISR( x )       portEND_SWITCHING_ISR( x )
+    #define portYIELD_FROM_ISR( x )                     portEND_SWITCHING_ISR( x )
 
 /* Use to transfer control from one task to perform other tasks of
  * higher priority */
@@ -131,7 +131,7 @@
         #define coreid    xPortGET_CORE_ID()
 
 /* Request the core ID x to yield. */
-        extern void vPortYieldCore( uint32_t coreID );
+        extern void vPortYieldCore( unsigned int coreID );
 
         #define portYIELD_CORE( x )                vPortYieldCore( x )
 
@@ -141,18 +141,18 @@
     #endif /* if ( configNUMBER_OF_CORES > 1 ) */
 
     #if ( configNUMBER_OF_CORES == 1 )
-        #define portGET_ISR_LOCK( xCoreID )
-        #define portRELEASE_ISR_LOCK( xCoreID )
-        #define portGET_TASK_LOCK( xCoreID )
-        #define portRELEASE_TASK_LOCK( xCoreID )
+        #define portGET_ISR_LOCK()
+        #define portRELEASE_ISR_LOCK()
+        #define portGET_TASK_LOCK()
+        #define portRELEASE_TASK_LOCK()
     #else
-        extern void vPortRecursiveLockAcquire( BaseType_t xCoreID, BaseType_t xFromIsr );
-        extern void vPortRecursiveLockRelease( BaseType_t xCoreID, BaseType_t xFromIsr );
+        extern void vPortRecursiveLockAcquire( BaseType_t xFromIsr );
+        extern void vPortRecursiveLockRelease( BaseType_t xFromIsr );
 
-        #define portGET_ISR_LOCK( xCoreID )         vPortRecursiveLockAcquire( ( xCoreID ), pdTRUE )
-        #define portRELEASE_ISR_LOCK( xCoreID )     vPortRecursiveLockRelease( ( xCoreID ), pdTRUE )
-        #define portGET_TASK_LOCK( xCoreID )        vPortRecursiveLockAcquire( ( xCoreID ), pdFALSE )
-        #define portRELEASE_TASK_LOCK( xCoreID )    vPortRecursiveLockRelease( ( xCoreID ), pdFALSE )
+        #define portGET_ISR_LOCK()         vPortRecursiveLockAcquire( pdTRUE )
+        #define portRELEASE_ISR_LOCK()     vPortRecursiveLockRelease( pdTRUE )
+        #define portGET_TASK_LOCK()        vPortRecursiveLockAcquire( pdFALSE )
+        #define portRELEASE_TASK_LOCK()    vPortRecursiveLockRelease( pdFALSE )
     #endif /* if ( configNUMBER_OF_CORES == 1 ) */
 
 /*-----------------------------------------------------------*/

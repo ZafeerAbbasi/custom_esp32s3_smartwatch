@@ -3,16 +3,21 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${config:idf.espIdfPath}/components/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64",
-            "compileCommands": [
-                "${workspaceFolder}/build/compile_commands.json"
-            ]
+            "compileCommands": "/Users/zafeer/Documents/GITHUB/Custom-ESP32-S3-Smartwatch/Projects/03_waveshare_demos/ESP-IDF/02_ESP_IDF_ST7789_LVGL/build/compile_commands.json",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4

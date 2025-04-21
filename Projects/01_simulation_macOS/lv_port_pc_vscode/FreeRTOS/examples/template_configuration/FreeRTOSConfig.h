@@ -643,13 +643,14 @@
  * contain the most recent error for that task. */
 #define configUSE_POSIX_ERRNO                  0
 
-/* Set the following INCLUDE_* constants to 1 to include the named API function,
+/* Set the following INCLUDE_* constants to 1 to incldue the named API function,
  * or 0 to exclude the named API function.  Most linkers will remove unused
  * functions even when the constant is 1. */
 #define INCLUDE_vTaskPrioritySet               1
 #define INCLUDE_uxTaskPriorityGet              1
 #define INCLUDE_vTaskDelete                    1
 #define INCLUDE_vTaskSuspend                   1
+#define INCLUDE_xResumeFromISR                 1
 #define INCLUDE_vTaskDelayUntil                1
 #define INCLUDE_vTaskDelay                     1
 #define INCLUDE_xTaskGetSchedulerState         1
@@ -657,6 +658,7 @@
 #define INCLUDE_uxTaskGetStackHighWaterMark    0
 #define INCLUDE_xTaskGetIdleTaskHandle         0
 #define INCLUDE_eTaskGetState                  0
+#define INCLUDE_xEventGroupSetBitFromISR       1
 #define INCLUDE_xTimerPendFunctionCall         0
 #define INCLUDE_xTaskAbortDelay                0
 #define INCLUDE_xTaskGetHandle                 0

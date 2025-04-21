@@ -31,7 +31,7 @@
  * common across all currently supported RISC-V chips (implementations of the
  * RISC-V ISA), and code that tailors the port to a specific RISC-V chip:
  *
- * + FreeRTOS\Source\portable\GCC\RISC-V\portASM.S contains the code that
+ * + FreeRTOS\Source\portable\GCC\RISC-V-RV32\portASM.S contains the code that
  *   is common to all currently supported RISC-V chips.  There is only one
  *   portASM.S file because the same file is built for all RISC-V target chips.
  *
@@ -46,7 +46,7 @@
  * compiler's!) include path.  For example, if the chip in use includes a core
  * local interrupter (CLINT) and does not include any chip specific register
  * extensions then add the path below to the assembler's include path:
- * FreeRTOS\Source\portable\GCC\RISC-V\chip_specific_extensions\RV32I_CLINT_no_extensions
+ * FreeRTOS\Source\portable\GCC\RISC-V-RV32\chip_specific_extensions\RV32I_CLINT_no_extensions
  *
  */
 
@@ -80,22 +80,22 @@ csrr t2, lpcount0
 csrr t3, lpstart1
 csrr t4, lpend1
 csrr t5, lpcount1
-sw t0, 2 * portWORD_SIZE( sp )
-sw t1, 3 * portWORD_SIZE( sp )
-sw t2, 4 * portWORD_SIZE( sp )
-sw t3, 5 * portWORD_SIZE( sp )
-sw t4, 6 * portWORD_SIZE( sp )
-sw t5, 7 * portWORD_SIZE( sp )
+sw t0, 1 * portWORD_SIZE( sp )
+sw t1, 2 * portWORD_SIZE( sp )
+sw t2, 3 * portWORD_SIZE( sp )
+sw t3, 4 * portWORD_SIZE( sp )
+sw t4, 5 * portWORD_SIZE( sp )
+sw t5, 6 * portWORD_SIZE( sp )
    .endm
 
 /* Restore the additional registers found on the Pulpino. */
    .macro portasmRESTORE_ADDITIONAL_REGISTERS
-lw t0, 2 * portWORD_SIZE( sp ) /* Load additional registers into accessible temporary registers. */
-lw t1, 3 * portWORD_SIZE( sp )
-lw t2, 4 * portWORD_SIZE( sp )
-lw t3, 5 * portWORD_SIZE( sp )
-lw t4, 6 * portWORD_SIZE( sp )
-lw t5, 7 * portWORD_SIZE( sp )
+lw t0, 1 * portWORD_SIZE( sp ) /* Load additional registers into accessible temporary registers. */
+lw t1, 2 * portWORD_SIZE( sp )
+lw t2, 3 * portWORD_SIZE( sp )
+lw t3, 4 * portWORD_SIZE( sp )
+lw t4, 5 * portWORD_SIZE( sp )
+lw t5, 6 * portWORD_SIZE( sp )
 csrw lpstart0, t0
 csrw lpend0, t1
 csrw lpcount0, t2

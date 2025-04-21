@@ -11,6 +11,12 @@
     "idf.openOcdConfigs": [
         "board/esp32s3-builtin.cfg"
     ],
-    "idf.port": "/dev/tty.usbmodem144301",
-    "idf.flashType": "UART"
+    "idf.port": "/dev/tty.usbmodem143301",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "esp_lvgl_port.h": "c"
+    },
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.intelliSenseCacheSize": 1024,
+    "C_Cpp.intelliSenseCacheDirectory": "${workspaceFolder}/.vscode/cache"
 }

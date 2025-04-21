@@ -171,7 +171,7 @@
     #define configSETUP_TICK_INTERRUPT()    prvSetupTimerInterrupt()
 #endif /* configSETUP_TICK_INTERRUPT */
 
-#if ( !defined( configMAX_INT_NESTING ) || ( configMAX_INT_NESTING == 0 ) )
+#ifndef configMAX_INT_NESTING
 
 /* Set the default value for depth of nested interrupt. In theory, the
  * microcontroller have mechanism to limit number of nested level of interrupt
@@ -225,7 +225,7 @@ volatile BaseType_t xPortScheduleStatus[ configNUMBER_OF_CORES ] = { 0 };
  * It is necessary to control maximum stack depth.
  */
 volatile UBaseType_t uxInterruptNesting[ configNUMBER_OF_CORES ] = { 0 };
-volatile const UBaseType_t uxPortMaxInterruptDepth = configMAX_INT_NESTING;
+volatile const UBaseType_t uxPortMaxInterruptDepth = configMAX_INT_NESTING - 1;
 
 /* Count number of nested locks by same cores. The lock is completely released
  * only if this count is decreased to 0, the lock is separated for task
@@ -258,8 +258,8 @@ void vPortTickISR( void );
  * already had lock can acquire lock without waiting. This function could be
  * call from task and interrupt context, the critical section is called
  * as in ISR */
-    void vPortRecursiveLockAcquire( BaseType_t xCoreID, BaseType_t xFromIsr );
-    void vPortRecursiveLockRelease( BaseType_t xCoreID, BaseType_t xFromIsr );
+    void vPortRecursiveLockAcquire( BaseType_t xFromIsr );
+    void vPortRecursiveLockRelease( BaseType_t xFromIsr );
 
 #endif /* (configNUMBER_OF_CORES > 1) */
 
@@ -688,9 +688,10 @@ prvExclusiveLock_Lock_success:
     }
 
 /*-----------------------------------------------------------*/
-    void vPortRecursiveLockAcquire( BaseType_t xCoreID, BaseType_t xFromIsr )
+    void vPortRecursiveLockAcquire( BaseType_t xFromIsr )
     {
         BaseType_t xSavedInterruptStatus;
+        BaseType_t xCoreID = xPortGET_CORE_ID();
         BaseType_t xBitPosition = ( xFromIsr == pdTRUE );
 
         xSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
@@ -704,9 +705,10 @@ prvExclusiveLock_Lock_success:
         portCLEAR_INTERRUPT_MASK_FROM_ISR( xSavedInterruptStatus );
     }
 
-    void vPortRecursiveLockRelease( BaseType_t xCoreID, BaseType_t xFromIsr )
+    void vPortRecursiveLockRelease( BaseType_t xFromIsr )
     {
         BaseType_t xSavedInterruptStatus;
+        BaseType_t xCoreID = xPortGET_CORE_ID();
         BaseType_t xBitPosition = ( xFromIsr == pdTRUE );
 
         xSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();

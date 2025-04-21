@@ -13,5 +13,6 @@
     ],
     "git.ignoreLimitWarning": true,
     "idf.flashType": "UART",
-    "idf.port": "/dev/tty.usbmodem144301"
+    "idf.port": "/dev/tty.usbmodem144301",
+    "idf.svdFilePath": "/Users/zafeer/esp/v5.4.1/esp-idf/svd/esp32s3.svd"
 }

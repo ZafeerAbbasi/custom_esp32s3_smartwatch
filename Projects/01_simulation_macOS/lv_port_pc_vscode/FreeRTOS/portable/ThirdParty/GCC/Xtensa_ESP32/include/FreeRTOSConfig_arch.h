@@ -85,7 +85,7 @@
 
 /* If CONFIG_FREERTOS_ASSERT_DISABLE is set then configASSERT is defined empty later in FreeRTOS.h and the macro */
 /* configASSERT_DEFINED remains unset (meaning some warnings are avoided) */
-#if ( configASSERT_DEFINED == 1 )
+#ifdef configASSERT
     #undef configASSERT
     #if defined( CONFIG_FREERTOS_ASSERT_FAIL_PRINT_CONTINUE )
         #define configASSERT( a )                                           \
@@ -114,7 +114,7 @@
  * interrupts. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY    XCHAL_EXCM_LEVEL
 
-/* Stack alignment, architecture specific. Must be a power of two. */
+/* Stack alignment, architecture specifc. Must be a power of two. */
 #define configSTACK_ALIGNMENT                   16
 
 

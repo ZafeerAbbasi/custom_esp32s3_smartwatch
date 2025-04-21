@@ -171,7 +171,7 @@ extern void vPortExitCritical( void );
 
 /*-----------------------------------------------------------*/
 
-#if ( configASSERT_DEFINED == 1 )
+#ifdef configASSERT
     void vPortValidateInterruptPriority( void );
     #define portASSERT_IF_INTERRUPT_PRIORITY_INVALID()    vPortValidateInterruptPriority()
 #endif

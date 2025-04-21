@@ -40,7 +40,7 @@ void setup_sensor() {
 
     // Initialize QMI8658 sensor with 4 parameters (port number, address, SDA, SCL)
     if (!qmi.begin(I2C_MASTER_NUM, QMI8658_ADDRESS, I2C_MASTER_SDA, I2C_MASTER_SCL)) {
-        printf(, "Failed to find QMI8658 - check your wiring!");
+        printf( "Failed to find QMI8658 - check your wiring!");
         vTaskDelete(NULL); // Handle error gracefully
     }
 
@@ -80,18 +80,18 @@ void read_sensor_data(void* arg) {
     while (1) {
         if (qmi.getDataReady()) {
             if (qmi.getAccelerometer(acc.x, acc.y, acc.z)) {
-                printf( "ACCEL: %f, %f, %f", acc.x, acc.y, acc.z);
+                printf( "ACCEL: %f, %f, %f\n", acc.x, acc.y, acc.z);
             } else {
-                printf(, "Failed to read accelerometer data");
+                printf( "Failed to read accelerometer data");
             }
 
             if (qmi.getGyroscope(gyr.x, gyr.y, gyr.z)) {
-                printf( "GYRO: %f, %f, %f", gyr.x, gyr.y, gyr.z);
+                printf( "GYRO: %f, %f, %f\n", gyr.x, gyr.y, gyr.z);
             } else {
-                printf(, "Failed to read gyroscope data");
+                printf( "Failed to read gyroscope data");
             }
 
-            printf( "Timestamp: %u, Temperature: %.2f *C", (unsigned int)qmi.getTimestamp(), qmi.getTemperature_C()); // Casting to unsigned int
+            printf( "Timestamp: %u, Temperature: %.2f *C\n", (unsigned int)qmi.getTimestamp(), qmi.getTemperature_C()); // Casting to unsigned int
         } else {
             ESP_LOGW(TAG, "Data not ready yet");
         }

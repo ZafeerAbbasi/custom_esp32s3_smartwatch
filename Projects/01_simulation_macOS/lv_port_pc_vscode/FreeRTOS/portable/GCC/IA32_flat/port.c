@@ -666,13 +666,11 @@ static BaseType_t prvCheckValidityOfVectorNumber( uint32_t ulVectorNumber )
         /* In use by FreeRTOS. */
         xReturn = pdFAIL;
     }
-#if ( configUSE_COMMON_INTERRUPT_ENTRY_POINT == 1 )
     else if( xInterruptHandlerTable[ ulVectorNumber ] != NULL )
     {
         /* Already in use by the application. */
         xReturn = pdFAIL;
     }
-#endif  /* configUSE_COMMON_INTERRUPT_ENTRY_POINT */
     else
     {
         xReturn = pdPASS;
