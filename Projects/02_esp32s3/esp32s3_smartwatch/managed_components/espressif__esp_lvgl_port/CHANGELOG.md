@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.0
+
+### Features
+- Scaling feature in touch
+- Added support for PPA rotation in LVGL9 (available for ESP32-P4)
+
 ## 2.5.0
 
 ### Features (Functional change for button v4 users)

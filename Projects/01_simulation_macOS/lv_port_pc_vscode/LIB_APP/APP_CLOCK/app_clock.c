@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file           : hal.c
-  * @brief          : Interface for dealing with low-level HW drivers
+  * @file           : app_clock.c
+  * @brief          : Contains Application Functions related to Clock feature
   ******************************************************************************
   * @attention
   *
@@ -17,7 +17,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "hal.h"
+#include "app_clock.h"
 
 /* Typedef -------------------------------------------------------------------*/
 
@@ -36,21 +36,3 @@
 
 /* User code -----------------------------------------------------------------*/
 
-/**
- * @brief Initializes all low level HW - LCD, I2C BUS, Touch Controller
- * 
- */
-void HAL_Init( void )
-{
-    /* Disable logging for everything -> Consumes way too much CPU, like 100% sometimes */
-    esp_log_level_set("*", ESP_LOG_NONE);
-    
-    /* LCD Controller Initialization */
-    LCD_LcdControllerInit( );
-
-    /* I2C Port Zero Bus Master Initialization */
-    I2C_PortZeroBusMasterInit( );
-
-    /* Touch Controller Initialization */
-    TOUCH_TouchControllerInit( );
-}

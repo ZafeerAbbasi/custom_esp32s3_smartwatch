@@ -26,12 +26,19 @@
         "spi_master.h": "c",
         "esp_lcd_panel_io.h": "c",
         "esp_lcd_touch_cst816s.h": "c",
-        "user_i2c.h": "c",
+        "i2c_app.h": "c",
         "periph_ctrl.h": "c",
         "esp_lcd_panel_ops.h": "c",
         "lv_conf_kconfig.h": "c",
         "touch.h": "c",
-        "i2c.h": "c"
+        "i2c.h": "c",
+        "lvgl.h": "c",
+        "esp_lvgl_port.h": "c",
+        "esp_lvgl_port_touch.h": "c",
+        "esp_lvgl_port_disp.h": "c",
+        "freertos.h": "c",
+        "lvgl_app.h": "c",
+        "hal.h": "c"
     },
     "git.ignoreLimitWarning": true
 }

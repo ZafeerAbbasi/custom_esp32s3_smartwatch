@@ -34,7 +34,7 @@
 /* Variables -----------------------------------------------------------------*/
 
 /* ESP LCD Touch Controller Handle */
-esp_lcd_touch_handle_t TOUCH_zTouchHdl = NULL;
+esp_lcd_touch_handle_t TOUCH_zTouchPanelHdl = NULL;
 
 /* Function prototypes -------------------------------------------------------*/
 
@@ -80,7 +80,7 @@ esp_err_t TOUCH_TouchControllerInit( void )
     ESP_ERROR_CHECK( esp_lcd_touch_new_i2c_cst816s( 
         zTouchIoHandle, 
         &zTouchConfig, 
-        &TOUCH_zTouchHdl ) );
+        &TOUCH_zTouchPanelHdl ) );
 
     return ret;
 }

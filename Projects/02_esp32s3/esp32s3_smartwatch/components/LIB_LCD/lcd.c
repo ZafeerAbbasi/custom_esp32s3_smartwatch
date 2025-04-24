@@ -38,6 +38,9 @@ esp_lcd_panel_handle_t LCD_zLcdPanelHdl = NULL;
 static const char *lcd_pTag = "MODULE_LCD";
 static bool LCD_bIsBacklightOn = false;
 
+/* Default black screen buffer */
+static uint16_t LCD_aBlackScreenBuff[ LCD_H_RES * LCD_V_RES ] = { 0x0000 };
+
 /* Function prototypes -------------------------------------------------------*/
 
 static void lcd_BackLightPWMInit( void );
@@ -52,9 +55,6 @@ static void lcd_BackLightPWMInit( void );
 esp_err_t LCD_LcdControllerInit( void )
 {
     esp_err_t ret = ESP_OK;
-
-    // /* LCD backlight */
-    lcd_BackLightPWMInit( );
 
     /* Initialize the LCD SPI Bus */
     const spi_bus_config_t zLcdSpiBusConifg = 
@@ -110,19 +110,24 @@ esp_err_t LCD_LcdControllerInit( void )
         lcd_pTag,
         "New panel failed" );
 
-    
-    /* Activate LCD */
+
+    // /* Activate LCD */
     esp_lcd_panel_reset( LCD_zLcdPanelHdl );
     esp_lcd_panel_init( LCD_zLcdPanelHdl );
-    esp_lcd_panel_mirror( LCD_zLcdPanelHdl, true, true );
-    LCD_SetDispOnOff( true );
-
-    /* LCD backlight on */
-    LCD_SetBacklightLvlPct( 100 );
+    esp_lcd_panel_mirror( LCD_zLcdPanelHdl, false, false );
 
     /* Set Panel Gap and invert colors */
     esp_lcd_panel_set_gap( LCD_zLcdPanelHdl, 0, 20 );
     esp_lcd_panel_invert_color( LCD_zLcdPanelHdl, true );
+
+    /* INSERT BOOTUP LOGO HERE */
+    esp_lcd_panel_draw_bitmap( LCD_zLcdPanelHdl, 0, 0, LCD_H_RES, LCD_V_RES, LCD_aBlackScreenBuff );
+    
+    LCD_SetDispOnOff( true );
+
+    /* LCD backlight on */
+    lcd_BackLightPWMInit( );
+    LCD_SetBacklightLvlPct( 50 );
 
     return ret;
 

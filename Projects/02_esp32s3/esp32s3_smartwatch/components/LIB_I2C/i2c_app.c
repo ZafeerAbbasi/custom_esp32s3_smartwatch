@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file           : hal.c
-  * @brief          : Interface for dealing with low-level HW drivers
+  * @file           : i2c_app.c
+  * @brief          : Used for general purpose i2c functions.
   ******************************************************************************
   * @attention
   *
@@ -17,7 +17,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "hal.h"
+#include "i2c_app.h"
+
 
 /* Typedef -------------------------------------------------------------------*/
 
@@ -37,20 +38,28 @@
 /* User code -----------------------------------------------------------------*/
 
 /**
- * @brief Initializes all low level HW - LCD, I2C BUS, Touch Controller
+ * @brief Initialize the I2C Port 0 Bus as Master
  * 
+ * @return esp_err_t ESP_OK on success, error code on failure
  */
-void HAL_Init( void )
+esp_err_t I2C_PortZeroBusMasterInit( void )
 {
-    /* Disable logging for everything -> Consumes way too much CPU, like 100% sometimes */
-    esp_log_level_set("*", ESP_LOG_NONE);
-    
-    /* LCD Controller Initialization */
-    LCD_LcdControllerInit( );
+    esp_err_t ret = ESP_OK;
 
-    /* I2C Port Zero Bus Master Initialization */
-    I2C_PortZeroBusMasterInit( );
+    /* I2C Bus Config Parameter Init */
+    const i2c_config_t zI2cConfig =
+    {
+        .mode               = I2C_MODE_MASTER,
+        .sda_io_num         = I2C_MASTER_GPIO_SDA,
+        .sda_pullup_en      = GPIO_PULLUP_ENABLE,
+        .scl_io_num         = I2C_MASTER_GPIO_SCL,
+        .scl_pullup_en      = GPIO_PULLUP_ENABLE,
+        .master.clk_speed   = I2C_MASTER_CLK_SPEED,
+    };
+    ESP_ERROR_CHECK( i2c_param_config( I2C_MASTER_PORT, &zI2cConfig ) );
 
-    /* Touch Controller Initialization */
-    TOUCH_TouchControllerInit( );
+    /* I2C Bus Driver Install */
+    ESP_ERROR_CHECK( i2c_driver_install( I2C_MASTER_PORT, zI2cConfig.mode, 0, 0, 0 ) );
+
+    return ret;
 }

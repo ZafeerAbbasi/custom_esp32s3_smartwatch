@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file           : hal.h
-  * @brief          : Header for HAL module
+  * @file           : lvgl_app.h
+  * @brief          : Header for Application LVGL Module
   ******************************************************************************
   * @attention
   *
@@ -16,8 +16,8 @@
 */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __HAL_H		
-#define __HAL_H
+#ifndef __LVGL_APP_H		
+#define __LVGL_APP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,11 +25,8 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "esp_err.h"
-#include "esp_log.h"
-#include "esp_check.h"
+#include "esp_lvgl_port.h"
 #include "lcd.h"
-#include "i2c_app.h"
 #include "touch.h"
 
 /* Exported types ------------------------------------------------------------*/
@@ -46,7 +43,9 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void HAL_Init( void );
+esp_err_t LVGL_Init( void );
+void LVGL_TouchDriverCallback( lv_indev_drv_t *pInputDeviceDriver, lv_indev_data_t *pUserData );
+
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -55,4 +54,4 @@ void HAL_Init( void );
 }
 #endif
 
-#endif /* __HAL_H */
+#endif /* __LCD_H */

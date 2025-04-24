@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file           : hal.h
-  * @brief          : Header for HAL module
+  * @file           : i2c_app.h
+  * @brief          : Header for i2c module.
   ******************************************************************************
   * @attention
   *
@@ -16,8 +16,8 @@
 */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __HAL_H		
-#define __HAL_H
+#ifndef __I2C_APP_H		
+#define __I2C_APP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,9 +28,8 @@ extern "C" {
 #include "esp_err.h"
 #include "esp_log.h"
 #include "esp_check.h"
-#include "lcd.h"
-#include "i2c_app.h"
-#include "touch.h"
+#include "driver/gpio.h"
+#include "driver/i2c.h"
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -46,13 +45,20 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void HAL_Init( void );
+esp_err_t I2C_PortZeroBusMasterInit( void );
 
 /* Private defines -----------------------------------------------------------*/
+
+
+/* Touch controller */
+#define I2C_MASTER_PORT         I2C_NUM_0
+#define I2C_MASTER_GPIO_SCL     (GPIO_NUM_10)
+#define I2C_MASTER_GPIO_SDA     (GPIO_NUM_11)
+#define I2C_MASTER_CLK_SPEED    (100 * 1000) // 100kHz
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __HAL_H */
+#endif /* __I2C_APP_H */

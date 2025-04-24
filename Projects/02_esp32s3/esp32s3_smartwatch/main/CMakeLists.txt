@@ -1,3 +1,3 @@
-idf_component_register(SRCS "main.c" "img_test.c"
+idf_component_register(SRCS "main.c"
                     INCLUDE_DIRS "."
-                    REQUIRES "LIB_I2C" "LIB_LCD" "LIB_TOUCH")
+                    REQUIRES "LIB_LVGL" "LIB_HAL" )

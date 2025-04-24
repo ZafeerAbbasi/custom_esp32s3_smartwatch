@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file           : hal.h
-  * @brief          : Header for HAL module
+  * @file           : app_clock.h
+  * @brief          : Header for APP_CLOCK Module
   ******************************************************************************
   * @attention
   *
@@ -16,8 +16,8 @@
 */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __HAL_H		
-#define __HAL_H
+#ifndef __APP_CLOCK_H
+#define __APP_CLOCK_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,12 +25,9 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "esp_err.h"
-#include "esp_log.h"
-#include "esp_check.h"
-#include "lcd.h"
-#include "i2c_app.h"
-#include "touch.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <lvgl/lvgl.h>
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -46,7 +43,6 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void HAL_Init( void );
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -55,4 +51,4 @@ void HAL_Init( void );
 }
 #endif
 
-#endif /* __HAL_H */
+#endif /* __APP_CLOCK_H */

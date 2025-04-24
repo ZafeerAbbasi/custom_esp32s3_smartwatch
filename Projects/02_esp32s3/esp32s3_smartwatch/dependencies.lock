@@ -24,7 +24,7 @@ dependencies:
       type: service
     version: 1.0.3
   espressif/esp_lvgl_port:
-    component_hash: bb938deffba7d80b2ce582a796c053681b0439e0a7033666688e0f1f5b921125
+    component_hash: e720c95cf0667554a204591bb5fade4655fb2990465557041200fa44b5bc7556
     dependencies:
     - name: idf
       require: private
@@ -36,7 +36,7 @@ dependencies:
     source:
       registry_url: https://components.espressif.com/
       type: service
-    version: 2.5.0
+    version: 2.6.0
   idf:
     source:
       type: idf

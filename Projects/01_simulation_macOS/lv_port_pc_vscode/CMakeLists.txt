@@ -85,7 +85,13 @@ if(USE_FREERTOS)
 else()
     add_executable(main
         ${PROJECT_SOURCE_DIR}/main/src/main.c
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CLOCK/app_clock.c
         ${PROJECT_SOURCE_DIR}/main/src/mouse_cursor_icon.c
+        ${PROJECT_SOURCE_DIR}/main/src/user_app.c
+    )
+
+    target_include_directories(main PUBLIC
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CLOCK
     )
 endif()
 
@@ -142,13 +148,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(lvgl PRIVATE
         -pedantic-errors
         -Wall
-        -Wclobbered
         -Wdeprecated
         -Wdouble-promotion
         -Wempty-body
         -Wextra
         -Wformat-security
-        -Wmaybe-uninitialized
         # -Wmissing-prototypes
         -Wpointer-arith
         -Wmultichar
@@ -159,7 +163,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         -Wsizeof-pointer-memaccess
         -Wtype-limits
         -Wundef
-        -Wuninitialized
         -Wunreachable-code
         -Wfloat-conversion
         -Wstrict-aliasing

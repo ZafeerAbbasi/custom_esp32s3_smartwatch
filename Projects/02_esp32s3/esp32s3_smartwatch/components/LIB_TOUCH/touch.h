@@ -39,7 +39,7 @@ extern "C" {
 
 /* Exported variables --------------------------------------------------------*/
 
-extern esp_lcd_touch_handle_t TOUCH_zTouchHdl;
+extern esp_lcd_touch_handle_t TOUCH_zTouchPanelHdl;
 
 /* Exported macro ------------------------------------------------------------*/
 

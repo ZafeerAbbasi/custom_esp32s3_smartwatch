@@ -15,126 +15,95 @@
 #include "lv_demos.h"
 
 /* User includes */
-#include "lcd.h"
-#include "user_i2c.h"
-#include "touch.h"
+#include "hal.h"
+#include "lvgl_app.h"
 
-/* LCD size */
-#define EXAMPLE_LCD_H_RES (240)
-#define EXAMPLE_LCD_V_RES (280)
-
-/* LCD settings */
-#define EXAMPLE_LCD_SPI_NUM (SPI2_HOST)
-#define EXAMPLE_LCD_PIXEL_CLK_HZ (40 * 1000 * 1000)
-#define EXAMPLE_LCD_CMD_BITS (8)
-#define EXAMPLE_LCD_PARAM_BITS (8)
-#define EXAMPLE_LCD_COLOR_SPACE (ESP_LCD_COLOR_SPACE_RGB)
-#define EXAMPLE_LCD_BITS_PER_PIXEL (16)
-#define EXAMPLE_LCD_DRAW_BUFF_DOUBLE (1)
-#define EXAMPLE_LCD_DRAW_BUFF_HEIGHT (50)
-#define EXAMPLE_LCD_BL_ON_LEVEL (1)
-
-/* LCD pins */
-#define EXAMPLE_LCD_GPIO_SCLK (GPIO_NUM_6)
-#define EXAMPLE_LCD_GPIO_MOSI (GPIO_NUM_7)
-#define EXAMPLE_LCD_GPIO_RST (GPIO_NUM_8)
-#define EXAMPLE_LCD_GPIO_DC (GPIO_NUM_4)
-#define EXAMPLE_LCD_GPIO_CS (GPIO_NUM_5)
-#define EXAMPLE_LCD_GPIO_BL (GPIO_NUM_15)
-
-#define EXAMPLE_USE_TOUCH 1
-
-#define TOUCH_HOST I2C_NUM_0
-
-#define EXAMPLE_PIN_NUM_TOUCH_SCL (GPIO_NUM_10)
-#define EXAMPLE_PIN_NUM_TOUCH_SDA (GPIO_NUM_11)
-#define EXAMPLE_PIN_NUM_TOUCH_RST (GPIO_NUM_13)
-#define EXAMPLE_PIN_NUM_TOUCH_INT (GPIO_NUM_14)
+#define SCREEN_WIDTH  240
+#define SCREEN_HEIGHT 280
 
 static const char *TAG = "EXAMPLE";
 
 static lv_obj_t *avatar;
 
-// /* LCD IO and panel */
-// static esp_lcd_panel_io_handle_t lcd_io = NULL;
-// static esp_lcd_panel_handle_t lcd_panel = NULL;
+void create_ui( void );
 
-/* LVGL display and touch */
-static lv_display_t *lvgl_disp = NULL;
+// static void _app_button_cb(lv_event_t *e)
+// {
+//     lv_disp_rotation_t rotation = lv_disp_get_rotation(lvgl_disp);
+//     rotation++;
+//     if (rotation > LV_DISPLAY_ROTATION_270)
+//     {
+//         rotation = LV_DISPLAY_ROTATION_0;
+//     }
 
-static void example_lvgl_touch_cb(lv_indev_drv_t *drv, lv_indev_data_t *data)
-{
-    esp_lcd_touch_handle_t tp = (esp_lcd_touch_handle_t)drv->user_data;
-    assert(tp);
+//     /* LCD HW rotation */
+//     lv_disp_set_rotation(lvgl_disp, rotation);
+// }
 
-    uint16_t tp_x;         
-    uint16_t tp_y;
-    uint8_t tp_cnt = 0;
-    /* Read data from touch controller into memory */
-    esp_lcd_touch_read_data(tp);
-    /* Read data from touch controller */
-    bool tp_pressed = esp_lcd_touch_get_coordinates(tp, &tp_x, &tp_y, NULL, &tp_cnt, 1);
-    if (tp_pressed && tp_cnt > 0)
-    {
-        data->point.x = tp_x;
-        data->point.y = tp_y;
-        data->state = LV_INDEV_STATE_PRESSED;
-        ESP_LOGD(TAG, "Touch position: %d,%d", tp_x, tp_y);
-    }
-    else
-    {
-        data->state = LV_INDEV_STATE_RELEASED;
+void create_ui(void) {
+
+    lv_obj_t *h_scroll_container = lv_obj_create(lv_scr_act());
+    lv_obj_remove_style_all(h_scroll_container);  // Remove border/shadow/padding
+    lv_obj_set_size(h_scroll_container, LV_HOR_RES, LV_VER_RES);
+    lv_obj_add_flag(h_scroll_container, LV_OBJ_FLAG_SCROLL_ONE);
+    lv_obj_set_scroll_snap_x(h_scroll_container, LV_SCROLL_SNAP_START);
+    lv_obj_set_scroll_dir(h_scroll_container, LV_DIR_HOR);
+    lv_obj_set_scrollbar_mode(h_scroll_container, LV_SCROLLBAR_MODE_OFF);
+
+    // ✅ Use FLEX layout with horizontal flow
+    lv_obj_set_layout(h_scroll_container, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(h_scroll_container, LV_FLEX_FLOW_ROW);  // Arrange children horizontally
+
+    // ✅ Remove all spacing/padding
+    lv_obj_set_style_pad_all(h_scroll_container, 0, 0);    // Internal padding
+    lv_obj_set_style_pad_row(h_scroll_container, 0, 0);
+    lv_obj_set_style_pad_column(h_scroll_container, 0, 0);
+    lv_obj_set_style_pad_gap(h_scroll_container, 0, 0);
+
+
+
+    lv_obj_t *screen1 = lv_obj_create(h_scroll_container);
+    lv_obj_remove_style_all(screen1);
+    lv_obj_set_size(screen1, LV_HOR_RES, LV_VER_RES);
+
+    lv_obj_set_style_bg_opa(screen1, LV_OPA_COVER, 0);  // Needed to show bg
+    lv_obj_set_style_bg_color(screen1, lv_color_hex(0x000000), 0);  // Set black background
+
+
+    // Add time label
+    lv_obj_t *label_time = lv_label_create(screen1);
+    lv_label_set_text(label_time, "12:45");
+    lv_obj_align(label_time, LV_ALIGN_CENTER, 0, -20);
+
+    // Add date label
+    lv_obj_t *label_date = lv_label_create(screen1);
+    lv_label_set_text(label_date, "Wed, Apr 23");
+    lv_obj_align(label_date, LV_ALIGN_CENTER, 0, 20);
+
+    lv_obj_t *screen2 = lv_obj_create(h_scroll_container);
+    lv_obj_set_layout(screen2, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(screen2, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_size(screen2, LV_HOR_RES, LV_VER_RES);
+    lv_obj_set_pos(screen2, LV_HOR_RES, 0);  // Place to the right
+
+    lv_obj_set_scroll_dir(screen2, LV_DIR_VER); // Vertical scroll for this screen
+    lv_obj_add_flag(screen2, LV_OBJ_FLAG_SCROLL_ONE);
+    lv_obj_set_scrollbar_mode(screen2, LV_SCROLLBAR_MODE_ACTIVE);
+
+    // Add rounded menu buttons
+    for(int i = 0; i < 5; i++) {
+        lv_obj_t *btn = lv_btn_create(screen2);
+        lv_obj_set_size(btn, 180, 60);
+        lv_obj_set_style_radius(btn, 30, 0);
+        lv_obj_add_flag(btn, LV_OBJ_FLAG_SNAPPABLE);  // Optional for snapping
+
+        // Center contents (label)
+        lv_obj_t *label = lv_label_create(btn);
+        lv_label_set_text_fmt(label, "Option %d", i + 1);
+        lv_obj_center(label);
     }
 }
 
-static esp_err_t app_lvgl_init(void)
-{
-    /* Initialize LVGL */
-    const lvgl_port_cfg_t lvgl_cfg = {
-        .task_priority = 4,       /* LVGL task priority */
-        .task_stack = 4096,       /* LVGL task stack size */
-        .task_affinity = -1,      /* LVGL task pinned to core (-1 is no affinity) */
-        .task_max_sleep_ms = 500, /* Maximum sleep in LVGL task */
-        .timer_period_ms = 5      /* LVGL timer tick period in ms */
-    };
-    ESP_RETURN_ON_ERROR(lvgl_port_init(&lvgl_cfg), TAG, "LVGL port initialization failed");
-
-    /* Add LCD screen */
-    ESP_LOGD(TAG, "Add LCD screen");
-    const lvgl_port_display_cfg_t disp_cfg = {
-        .io_handle = LCD_zLcdIoHdl,
-        .panel_handle = LCD_zLcdPanelHdl,
-        .buffer_size = EXAMPLE_LCD_H_RES * EXAMPLE_LCD_DRAW_BUFF_HEIGHT * sizeof(uint16_t),
-        .double_buffer = EXAMPLE_LCD_DRAW_BUFF_DOUBLE,
-        .hres = EXAMPLE_LCD_H_RES,
-        .vres = EXAMPLE_LCD_V_RES,
-        .monochrome = false,
-        /* Rotation values must be same as used in esp_lcd for initial settings of the screen */
-        .rotation = {
-            .swap_xy = false,
-            .mirror_x = false,
-            .mirror_y = false,
-        },
-        .flags = {
-            .buff_dma = true,
-        }};
-    lvgl_disp = lvgl_port_add_disp(&disp_cfg);
-
-    return ESP_OK;
-}
-
-static void _app_button_cb(lv_event_t *e)
-{
-    lv_disp_rotation_t rotation = lv_disp_get_rotation(lvgl_disp);
-    rotation++;
-    if (rotation > LV_DISPLAY_ROTATION_270)
-    {
-        rotation = LV_DISPLAY_ROTATION_0;
-    }
-
-    /* LCD HW rotation */
-    lv_disp_set_rotation(lvgl_disp, rotation);
-}
 
 static void app_main_display(void)
 {
@@ -143,7 +112,9 @@ static void app_main_display(void)
     /* Task lock */
     lvgl_port_lock(-1);
 
-    lv_demo_widgets();
+    create_ui( );
+
+    // lv_demo_widgets();
     
     // LV_IMG_DECLARE(img_test3);
     // avatar = lv_img_create(scr);
@@ -154,31 +125,15 @@ static void app_main_display(void)
 }
 
 void app_main(void)
-{
-    /* Disable logging for everything -> Consumes way too much CPU, like 100% sometimes */
-    esp_log_level_set("*", ESP_LOG_NONE);
-    
-    /* LCD Controller Initialization */
-    LCD_LcdControllerInit( );
-
-    /* I2C Port Zero Bus Master Initialization */
-    I2C_PortZeroBusMasterInit( );
-
-    /* Touch Controller Initialization */
-    TOUCH_TouchControllerInit( );
+{   
+    /* Low Level HW Init
+    - LCD/SPI
+    - I2C Bus
+    - Touch Controller */
+    HAL_Init( );
 
     /* LVGL initialization */
-    ESP_ERROR_CHECK(app_lvgl_init());
-
-#if EXAMPLE_USE_TOUCH
-    static lv_indev_drv_t indev_drv; // Input device driver (Touch)
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_POINTER;
-    indev_drv.disp = lvgl_disp;
-    indev_drv.read_cb = example_lvgl_touch_cb;
-    indev_drv.user_data = TOUCH_zTouchHdl;
-    lv_indev_drv_register(&indev_drv);
-#endif
+    LVGL_Init( );
 
     /* Show LVGL objects */
     app_main_display();
