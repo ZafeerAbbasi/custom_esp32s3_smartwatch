@@ -27,10 +27,16 @@ extern "C" {
 
 #include <lvgl/lvgl.h>
 #include "app_clock.h"
-#include "app_common.h"
 
 /* Exported types ------------------------------------------------------------*/
 
+/* Main Watch Object Struct */
+typedef struct APP_zUserWatchObj_t
+{
+    COMMON_zUserWidgetObj_t     zMainWatchContainer;
+    CLOCK_zUserClockObj_t       zClockObj;
+    COMMON_zUserWidgetObj_t     zControlPanelObj;
+} APP_zUserWatchObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 

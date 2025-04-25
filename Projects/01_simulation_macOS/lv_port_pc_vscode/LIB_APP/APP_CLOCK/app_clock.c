@@ -18,7 +18,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "app_clock.h"
-#include "app_user.h"
 
 /* Typedef -------------------------------------------------------------------*/
 
@@ -38,9 +37,6 @@
 
 
 /* Variables -----------------------------------------------------------------*/
-
-/* Main User Clock Object */
-CLOCK_zUserClockObj_t CLOCK_zUserClockObj = { 0 };
 
 bool CLOCK_bIs24Htime = false;
 const char *CLOCK_aDaysOfTheWeek[ ] =
@@ -74,18 +70,23 @@ const char *CLOCK_aMonthsOfTheYear[ ] =
 static void clock_SetInitialClockSettings( CLOCK_zClockTimeFields_t *ClockSettings );
 static void clock_ConvertMonthToString( char *buffer, CLOCK_eMonths_t eMonth );
 static void clock_ConvertDayToString( char *buffer, CLOCK_eDays_t eDay );
-static void clock_ConvertNumToString( char *buffer, uint32_t date );
+static void clock_ConvertNumToString( char *buffer, uint32_t num );
 static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t hours, CLOCK_eMeridiem_t eMeridiem );
 
 /* User code -----------------------------------------------------------------*/
 
-void CLOCK_Init( COMMON_zUserWatchObj_t *pUserWatchObj )
+/**
+ * @brief Initialize the Clock Object
+ *
+ * @param pUserClockObj Pointer to the User Clock Object from the Main Watch Object
+ * @param pParentObj Pointer to the parent obj
+ */
+void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, COMMON_zUserWidgetObj_t *pParentObj )
 {
-    pUserWatchObj->zClockObj                        = &CLOCK_zUserClockObj;
-    lv_obj_t *pMainContainerObj                     = pUserWatchObj->zMainWatchContainer.pUserWidget;
-    COMMON_zUserWidgetObj_t *pClockContainerObj     = &pUserWatchObj->zClockObj->zClockContainerObj;
-    COMMON_zUserWidgetObj_t *pClockLabelsArray      = pUserWatchObj->zClockObj->ClockLabelObjs;
-    CLOCK_zClockTimeFields_t *pCurrentTimeSettings  = &pUserWatchObj->zClockObj->zCurrentClockSettings;
+    lv_obj_t *pMainContainerObj                     = pParentObj->pUserWidget;
+    COMMON_zUserWidgetObj_t *pClockContainerObj     = &pUserClockObj->zClockContainerObj;
+    COMMON_zUserWidgetObj_t *pClockLabelsArray      = pUserClockObj->ClockLabelObjs;
+    CLOCK_zClockTimeFields_t *pCurrentTimeSettings  = &pUserClockObj->zCurrentClockSettings;
     char clockTimeStr[ 25 ]                         = { 0 };
     char clockDayStr[ 15 ]                          = { 0 };
     char clockDateStr[ 15 ]                         = { 0 };
@@ -93,7 +94,7 @@ void CLOCK_Init( COMMON_zUserWatchObj_t *pUserWatchObj )
     char clockYearStr[ 15 ]                         = { 0 };
 
     /* Set the Clock Settings to default values */
-    clock_SetInitialClockSettings( &pUserWatchObj->zClockObj->zCurrentClockSettings );
+    clock_SetInitialClockSettings( &pUserClockObj->zCurrentClockSettings );
 
     /* Create Clock Obj on main container and remove default styling */
     pClockContainerObj->pUserWidget = lv_obj_create( pMainContainerObj );
@@ -139,10 +140,17 @@ void CLOCK_Init( COMMON_zUserWatchObj_t *pUserWatchObj )
     lv_obj_align(pClockLabelsArray[ CLOCK_eLabelMonthObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(30));
     lv_obj_align(pClockLabelsArray[ CLOCK_eLabelYearObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(55));
 
+    /* TODO: Create a timer for 1 second, to update the seconds value */
+
 }
 
 
 
+/**
+ * @brief Set the Clock Time Fields to Inital Values
+ *
+ * @param pClockSettings Pointer to the Clock Time Fields struct from User Clock Object
+ */
 static void clock_SetInitialClockSettings( CLOCK_zClockTimeFields_t *pClockSettings )
 {
     /* Set the fields to the default values */
@@ -157,24 +165,54 @@ static void clock_SetInitialClockSettings( CLOCK_zClockTimeFields_t *pClockSetti
 }
 
 
+
+/**
+ * @brief Convert a CLOCK_eMonths_t enum to string
+ *
+ * @param buffer String Buffer
+ * @param eMonth Month Enum
+ */
 static void clock_ConvertMonthToString( char *buffer, CLOCK_eMonths_t eMonth )
 {
     sprintf( buffer, "%s", CLOCK_aMonthsOfTheYear[ eMonth ] );
 }
 
 
+
+/**
+ * @brief Convert a CLOCK_eDays_t enum to string
+ *
+ * @param buffer String Buffer
+ * @param eDay Day Enum
+ */
 static void clock_ConvertDayToString( char *buffer, CLOCK_eDays_t eDay )
 {
     sprintf( buffer, "%s", CLOCK_aDaysOfTheWeek[ eDay ] );
 }
 
 
-static void clock_ConvertNumToString( char *buffer, uint32_t date )
+
+/**
+ * @brief Convert a number to a string
+ *
+ * @param buffer String buffer
+ * @param num Number to convert
+ */
+static void clock_ConvertNumToString( char *buffer, uint32_t num )
 {
-    sprintf(buffer, "%d", date);
+    sprintf(buffer, "%d", num);
 }
 
 
+
+/**
+ * @brief Convert Hour/Min/Merdiem numerical values into a string representation
+ *
+ * @param buffer String Buffer
+ * @param minutes Numerical value of minutes
+ * @param hours Numerical value of hours
+ * @param eMeridiem Meridiem Enum
+ */
 static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t hours, CLOCK_eMeridiem_t eMeridiem )
 {
     // Temporary buffer for formatted time

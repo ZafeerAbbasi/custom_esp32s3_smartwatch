@@ -106,7 +106,7 @@ typedef struct CLOCK_zUserClockObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void CLOCK_Init( COMMON_zUserWatchObj_t *pUserWatchObj );
+void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, COMMON_zUserWidgetObj_t *pParentObj );
 
 /* Private defines -----------------------------------------------------------*/
 

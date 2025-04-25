@@ -30,23 +30,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 
-/* Foward Declaration for CLOCK_zUserClockObj_t */
-typedef struct CLOCK_zUserClockObj_t CLOCK_zUserClockObj_t;
-
 /* General Struct for Widgets and thier corresponding style */
 typedef struct COMMON_zUserWidgetObj_t
 {
     lv_obj_t                    *pUserWidget;
     lv_style_t                  userWidgetStyle;
 } COMMON_zUserWidgetObj_t;
-
-/* Main Watch Object Struct */
-typedef struct COMMON_zUserWatchObj_t
-{
-    COMMON_zUserWidgetObj_t     zMainWatchContainer;
-    CLOCK_zUserClockObj_t       *zClockObj;
-    COMMON_zUserWidgetObj_t     zControlPanelObj;
-} COMMON_zUserWatchObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 

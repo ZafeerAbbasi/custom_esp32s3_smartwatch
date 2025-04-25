@@ -31,11 +31,11 @@
 /* Variables -----------------------------------------------------------------*/
 
 /* Main User Watch Object */
-COMMON_zUserWatchObj_t APP_zMainUserWatchObj = { 0 };
+APP_zUserWatchObj_t APP_zMainUserWatchObj = { 0 };
 
 /* Function prototypes -------------------------------------------------------*/
 
-static void app_CreateMainContainer( COMMON_zUserWatchObj_t *pUserWatchObj );
+static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj );
 
 /* User code -----------------------------------------------------------------*/
 
@@ -49,7 +49,7 @@ void APP_Init( void )
     app_CreateMainContainer( &APP_zMainUserWatchObj );
 
     /* Create the Clock Object */
-    CLOCK_Init( &APP_zMainUserWatchObj );
+    CLOCK_Init( &APP_zMainUserWatchObj.zClockObj, &APP_zMainUserWatchObj.zMainWatchContainer );
 
     /* Create the Control Panel Object */
 }
@@ -61,7 +61,7 @@ void APP_Init( void )
  *
  * @param pUserWatchObj Pointer to the main user watch object
  */
-static void app_CreateMainContainer( COMMON_zUserWatchObj_t *pUserWatchObj )
+static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
 {
     lv_style_t *pMainContainerStyle = &pUserWatchObj->zMainWatchContainer.userWidgetStyle;
 
