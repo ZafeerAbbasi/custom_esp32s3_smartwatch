@@ -2,5 +2,12 @@
     "C_Cpp.default.compilerPath": "/usr/bin/clang",
     "idf.espIdfPath": "/Users/zafeer/esp/v5.4.1/esp-idf",
     "idf.toolsPath": "/Users/zafeer/.espressif",
-    "idf.pythonInstallPath": "/usr/local/bin/python3"
+    "idf.pythonInstallPath": "/usr/local/bin/python3",
+    "files.associations": {
+        "app_user.h": "c",
+        "app_clock.h": "c",
+        "app_common.h": "c",
+        "lvgl.h": "c",
+        "stdlib.h": "c"
+    }
 }

@@ -18,21 +18,191 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "app_clock.h"
+#include "app_user.h"
 
 /* Typedef -------------------------------------------------------------------*/
 
 
 /* Define --------------------------------------------------------------------*/
 
+#define CLOCK_INITIAL_SECOND                ((uint8_t) 0)
+#define CLOCK_INITIAL_MINUTE                ((uint8_t) 54)
+#define CLOCK_INITIAL_HOUR                  ((uint8_t) 16)
+#define CLOCK_INITIAL_DATE                  ((uint8_t) 24)
+#define CLOCK_INITIAL_YEAR                  ((uint16_t) 2025)
+#define CLOCK_INITIAL_MERIDIEM              CLOCK_eMeridiemPM
+#define CLOCK_INITIAL_DAY                   CLOCK_eDayThursday
+#define CLOCK_INITIAL_MONTH                 CLOCK_eMonthApr
 
 /* Macro ---------------------------------------------------------------------*/
 
 
 /* Variables -----------------------------------------------------------------*/
 
+/* Main User Clock Object */
+CLOCK_zUserClockObj_t CLOCK_zUserClockObj = { 0 };
+
+bool CLOCK_bIs24Htime = false;
+const char *CLOCK_aDaysOfTheWeek[ ] =
+{
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+};
+const char *CLOCK_aMonthsOfTheYear[ ] =
+{
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+};
 
 /* Function prototypes -------------------------------------------------------*/
 
+static void clock_SetInitialClockSettings( CLOCK_zClockTimeFields_t *ClockSettings );
+static void clock_ConvertMonthToString( char *buffer, CLOCK_eMonths_t eMonth );
+static void clock_ConvertDayToString( char *buffer, CLOCK_eDays_t eDay );
+static void clock_ConvertNumToString( char *buffer, uint32_t date );
+static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t hours, CLOCK_eMeridiem_t eMeridiem );
 
 /* User code -----------------------------------------------------------------*/
 
+void CLOCK_Init( COMMON_zUserWatchObj_t *pUserWatchObj )
+{
+    pUserWatchObj->zClockObj                        = &CLOCK_zUserClockObj;
+    lv_obj_t *pMainContainerObj                     = pUserWatchObj->zMainWatchContainer.pUserWidget;
+    COMMON_zUserWidgetObj_t *pClockContainerObj     = &pUserWatchObj->zClockObj->zClockContainerObj;
+    COMMON_zUserWidgetObj_t *pClockLabelsArray      = pUserWatchObj->zClockObj->ClockLabelObjs;
+    CLOCK_zClockTimeFields_t *pCurrentTimeSettings  = &pUserWatchObj->zClockObj->zCurrentClockSettings;
+    char clockTimeStr[ 25 ]                         = { 0 };
+    char clockDayStr[ 15 ]                          = { 0 };
+    char clockDateStr[ 15 ]                         = { 0 };
+    char clockMonthStr[ 15 ]                        = { 0 };
+    char clockYearStr[ 15 ]                         = { 0 };
+
+    /* Set the Clock Settings to default values */
+    clock_SetInitialClockSettings( &pUserWatchObj->zClockObj->zCurrentClockSettings );
+
+    /* Create Clock Obj on main container and remove default styling */
+    pClockContainerObj->pUserWidget = lv_obj_create( pMainContainerObj );
+    lv_obj_remove_style_all( pClockContainerObj->pUserWidget );
+    lv_obj_set_size( pClockContainerObj->pUserWidget, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+
+    /* Configure Clock Container Background */
+    lv_obj_set_style_bg_opa( pClockContainerObj->pUserWidget, LV_OPA_COVER, LV_PART_MAIN );
+    lv_obj_set_style_bg_color(pClockContainerObj->pUserWidget, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_color(pClockContainerObj->pUserWidget, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_dir(pClockContainerObj->pUserWidget, LV_GRAD_DIR_VER, LV_PART_MAIN);
+
+    /* Initialize the label objs */
+    for( int i = 0; i < CLOCK_eLabelCount; i++ )
+    {
+        pClockLabelsArray[ i ].pUserWidget = lv_label_create( pClockContainerObj->pUserWidget );
+
+        /* TODO: ADD IF STATEMENT BASED ON THEME SELECT TEXT COLOR */
+        lv_obj_set_style_text_color( pClockLabelsArray[ i ].pUserWidget, lv_color_white( ), LV_PART_MAIN );
+    }
+
+    /* Format the clock data into a string format for use in label */
+    clock_ConvertTimeToString( clockTimeStr,
+                                    pCurrentTimeSettings->minutes,
+                                    pCurrentTimeSettings->hour,
+                                    pCurrentTimeSettings->eMeridiem  );
+    clock_ConvertDayToString( clockDayStr, pCurrentTimeSettings->eDay );
+    clock_ConvertMonthToString( clockMonthStr, pCurrentTimeSettings->eMonth );
+    clock_ConvertNumToString( clockDateStr, ( uint32_t)pCurrentTimeSettings->date );
+    clock_ConvertNumToString( clockYearStr, pCurrentTimeSettings->year );
+
+    /* Set labels with default values */
+    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelTimeObj ].pUserWidget, clockTimeStr );
+    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelDateObj ].pUserWidget, clockDateStr );
+    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelDayObj ].pUserWidget, clockDayStr );
+    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelMonthObj ].pUserWidget, clockMonthStr );
+    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelYearObj ].pUserWidget, clockYearStr );
+
+    /* Align the labels */
+    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelTimeObj ].pUserWidget, LV_ALIGN_TOP_RIGHT, LV_PCT(-30), LV_PCT(30));
+    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelDateObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(40));
+    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelDayObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(35));
+    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelMonthObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(30));
+    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelYearObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(55));
+
+}
+
+
+
+static void clock_SetInitialClockSettings( CLOCK_zClockTimeFields_t *pClockSettings )
+{
+    /* Set the fields to the default values */
+    pClockSettings->seconds         = CLOCK_INITIAL_SECOND;
+    pClockSettings->minutes         = CLOCK_INITIAL_MINUTE;
+    pClockSettings->hour            = CLOCK_INITIAL_HOUR;
+    pClockSettings->eDay            = CLOCK_INITIAL_DAY;
+    pClockSettings->date            = CLOCK_INITIAL_DATE;
+    pClockSettings->eMonth          = CLOCK_INITIAL_MONTH;
+    pClockSettings->year            = CLOCK_INITIAL_YEAR;
+    pClockSettings->eMeridiem       = CLOCK_INITIAL_MERIDIEM;
+}
+
+
+static void clock_ConvertMonthToString( char *buffer, CLOCK_eMonths_t eMonth )
+{
+    sprintf( buffer, "%s", CLOCK_aMonthsOfTheYear[ eMonth ] );
+}
+
+
+static void clock_ConvertDayToString( char *buffer, CLOCK_eDays_t eDay )
+{
+    sprintf( buffer, "%s", CLOCK_aDaysOfTheWeek[ eDay ] );
+}
+
+
+static void clock_ConvertNumToString( char *buffer, uint32_t date )
+{
+    sprintf(buffer, "%d", date);
+}
+
+
+static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t hours, CLOCK_eMeridiem_t eMeridiem )
+{
+    // Temporary buffer for formatted time
+    char timeString[20];
+
+    if( CLOCK_bIs24Htime == true )
+    {
+        // 24-hour format (no AM/PM)
+        snprintf(timeString, sizeof(timeString), "%02d:%02d", hours, minutes);
+        snprintf(buffer, 20, "%s", timeString);
+    }
+    else
+    {
+        /* TODO: Add check if hours == 12, then use AM or PM*/
+
+        /* Convert 24H into 12H format */
+        if( hours > 12 )
+        {
+            hours = hours - 12;
+        }
+
+        // Format time as HH:MM AM/PM
+        snprintf(timeString, sizeof(timeString), "%02d:%02d", hours, minutes);
+
+        if (eMeridiem == CLOCK_eMeridiemAM) {
+            snprintf(buffer, 20, "%s AM", timeString);
+        } else {
+            snprintf(buffer, 20, "%s PM", timeString);
+        }
+    }
+}

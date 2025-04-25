@@ -84,14 +84,17 @@ if(USE_FREERTOS)
     target_link_libraries(main freertos_config FreeRTOS)
 else()
     add_executable(main
-        ${PROJECT_SOURCE_DIR}/main/src/main.c
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CLOCK/app_clock.c
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_COMMON/app_common.c
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_USER/app_user.c
         ${PROJECT_SOURCE_DIR}/main/src/mouse_cursor_icon.c
-        ${PROJECT_SOURCE_DIR}/main/src/user_app.c
+        ${PROJECT_SOURCE_DIR}/main/src/main.c
     )
 
     target_include_directories(main PUBLIC
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CLOCK
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_COMMON
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_USER
     )
 endif()
 

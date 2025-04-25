@@ -16,7 +16,7 @@
 #include "lvgl/examples/lv_examples.h"
 #include "lvgl/demos/lv_demos.h"
 #include "glob.h"
-#include "main.h"
+#include "app_user.h"
 
 /*********************
  *      DEFINES
@@ -67,26 +67,26 @@ extern void freertos_main(void);
 
 int main(int argc, char **argv)
 {
-  (void)argc; /*Unused*/
-  (void)argv; /*Unused*/
+    (void)argc; /*Unused*/
+    (void)argv; /*Unused*/
 
-  /*Initialize LVGL*/
-  lv_init();
+    /*Initialize LVGL*/
+    lv_init();
 
-  /*Initialize the HAL (display, input devices, tick) for LVGL*/
-  hal_init(240, 280);
-
-  create_ui( );
+    /*Initialize the HAL (display, input devices, tick) for LVGL*/
+    hal_init(240, 280);
 
 
-  while(1) {
-    /* Periodically call the lv_task handler.
-     * It could be done in a timer interrupt or an OS task too.*/
-    lv_timer_handler();
-    usleep(5 * 1000);
-  }
+    APP_Init( );
 
-  return 0;
+    while(1) {
+        /* Periodically call the lv_task handler.
+        * It could be done in a timer interrupt or an OS task too.*/
+        lv_timer_handler();
+        usleep(5 * 1000);
+    }
+
+    return 0;
 }
 
 /**********************
