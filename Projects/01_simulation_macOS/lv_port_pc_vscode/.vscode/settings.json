@@ -4,7 +4,7 @@
     "idf.toolsPath": "/Users/zafeer/.espressif",
     "idf.pythonInstallPath": "/usr/local/bin/python3",
     "files.associations": {
-        "app_user.h": "c",
+        "app_main.h": "c",
         "app_clock.h": "c",
         "app_common.h": "c",
         "lvgl.h": "c",

@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : app_user.c
+  * @file           : app_main.c
   * @brief          : Module for main application
   ******************************************************************************
   * @attention
@@ -17,7 +17,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "app_user.h"
+#include "app_main.h"
 
 /* Typedef -------------------------------------------------------------------*/
 
@@ -48,10 +48,11 @@ void APP_Init( void )
     /* Create the main container for the clock and control panel */
     app_CreateMainContainer( &APP_zMainUserWatchObj );
 
-    /* Create the Clock Object */
-    CLOCK_Init( &APP_zMainUserWatchObj.zClockObj, &APP_zMainUserWatchObj.zMainWatchContainer );
+    /* Create the Clock Screen */
+    CLOCK_Init( &APP_zMainUserWatchObj.zClockObj, APP_zMainUserWatchObj.pMainWatchContainer );
 
-    /* Create the Control Panel Object */
+    /* Create the Control Panel Screen */
+    CTRLPANEL_Init( &APP_zMainUserWatchObj.zCtrlPanelObj, APP_zMainUserWatchObj.pMainWatchContainer );
 }
 
 
@@ -63,14 +64,10 @@ void APP_Init( void )
  */
 static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
 {
-    lv_style_t *pMainContainerStyle = &pUserWatchObj->zMainWatchContainer.userWidgetStyle;
-
-    /* Create empty container and remove the default style */
+    /* Create empty container, register it and remove the default style */
     lv_obj_t *pMainContainerObj = lv_obj_create( lv_scr_act( ) );
+    COMMON_RegisterUserObj( pMainContainerObj );
     lv_obj_remove_style_all( pMainContainerObj );
-
-    /* Clear the style we will use for the container */
-    lv_style_init( pMainContainerStyle );
 
     /* Set size of Container Object */
     lv_obj_set_size( pMainContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
@@ -86,13 +83,11 @@ static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
     lv_obj_set_flex_flow( pMainContainerObj, LV_FLEX_FLOW_ROW ); // Add children horizontally
 
     /* Remove all spacing/padding of the container style */
-    lv_style_set_pad_all( pMainContainerStyle, 0 );
-    lv_style_set_pad_row( pMainContainerStyle, 0 );
-    lv_style_set_pad_column( pMainContainerStyle, 0 );
-    lv_style_set_pad_gap( pMainContainerStyle, 0 );
+    lv_obj_set_style_pad_all( pMainContainerObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_row( pMainContainerObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_column( pMainContainerObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_gap( pMainContainerObj, 0, LV_PART_MAIN );
 
-    /* Add style to container obj */
-    lv_obj_add_style( pMainContainerObj, pMainContainerStyle, LV_PART_MAIN );
-
-    pUserWatchObj->zMainWatchContainer.pUserWidget = pMainContainerObj;
+    /* Add Main container to the watch obj */
+    pUserWatchObj->pMainWatchContainer = pMainContainerObj;
 }

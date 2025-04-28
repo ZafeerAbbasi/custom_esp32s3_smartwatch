@@ -47,7 +47,7 @@ esp_err_t LVGL_Init( void );
 void LVGL_TouchDriverCallback( lv_indev_drv_t *pInputDeviceDriver, lv_indev_data_t *pUserData );
 
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 
 #ifdef __cplusplus

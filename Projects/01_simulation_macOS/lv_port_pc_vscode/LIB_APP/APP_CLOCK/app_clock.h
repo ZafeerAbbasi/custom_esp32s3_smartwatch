@@ -32,6 +32,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 
+/* CLOCK enums used for tracking dates*/
 typedef enum CLOCK_eMeridiem_t
 {
     CLOCK_eMeridiemAM = 0,
@@ -77,22 +78,30 @@ typedef struct CLOCK_zClockTimeFields_t
     CLOCK_eMeridiem_t           eMeridiem;
 } CLOCK_zClockTimeFields_t;
 
-typedef enum CLOCK_eLabelObjs
+/**
+ * @brief Clock Labels Enum
+ * @note Used to index the array of ClockLabelObjs in CLOCK_zUserClockObj_t
+ */
+typedef enum CLOCK_eLabels_t
 {
-    CLOCK_eLabelTimeObj,
-    CLOCK_eLabelDateObj,
-    CLOCK_eLabelDayObj,
-    CLOCK_eLabelMonthObj,
-    CLOCK_eLabelYearObj,
+    CLOCK_eLabelTime,
+    CLOCK_eLabelDate,
+    CLOCK_eLabelDay,
+    CLOCK_eLabelMonth,
+    CLOCK_eLabelYear,
     CLOCK_eLabelCount
-} CLOCK_eLabelObj_t;
+} CLOCK_eLabels_t;
 
+/**
+ * @brief Main User Clock Object Struct
+ * @note Contains: Current/Unsaved clock settings, Clock Label Objects, Clock Container Object
+ */
 typedef struct CLOCK_zUserClockObj_t
 {
     CLOCK_zClockTimeFields_t    zCurrentClockSettings;
     CLOCK_zClockTimeFields_t    zUnsavedClockSettings;
-    COMMON_zUserWidgetObj_t     ClockLabelObjs[7];
-    COMMON_zUserWidgetObj_t     zClockContainerObj;
+    lv_obj_t                    *aClockLabelObjs[ CLOCK_eLabelCount];
+    lv_obj_t                    *pClockContainerObj;
 } CLOCK_zUserClockObj_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -106,9 +115,9 @@ typedef struct CLOCK_zUserClockObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, COMMON_zUserWidgetObj_t *pParentObj );
+void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj );
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 
 #ifdef __cplusplus

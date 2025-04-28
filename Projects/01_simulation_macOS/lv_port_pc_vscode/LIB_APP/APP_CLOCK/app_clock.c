@@ -76,44 +76,44 @@ static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t ho
 /* User code -----------------------------------------------------------------*/
 
 /**
- * @brief Initialize the Clock Object
+ * @brief Initialize the Clock Screen
  *
  * @param pUserClockObj Pointer to the User Clock Object from the Main Watch Object
- * @param pParentObj Pointer to the parent obj
+ * @param pParentObj Pointer to the parent obj ( Main Watch Container )
  */
-void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, COMMON_zUserWidgetObj_t *pParentObj )
+void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj )
 {
-    lv_obj_t *pMainContainerObj                     = pParentObj->pUserWidget;
-    COMMON_zUserWidgetObj_t *pClockContainerObj     = &pUserClockObj->zClockContainerObj;
-    COMMON_zUserWidgetObj_t *pClockLabelsArray      = pUserClockObj->ClockLabelObjs;
-    CLOCK_zClockTimeFields_t *pCurrentTimeSettings  = &pUserClockObj->zCurrentClockSettings;
-    char clockTimeStr[ 25 ]                         = { 0 };
-    char clockDayStr[ 15 ]                          = { 0 };
-    char clockDateStr[ 15 ]                         = { 0 };
-    char clockMonthStr[ 15 ]                        = { 0 };
-    char clockYearStr[ 15 ]                         = { 0 };
+    lv_obj_t *pMainContainerObj                             = pParentObj;
+    lv_obj_t *pClockContainerObj                            = pUserClockObj->pClockContainerObj;
+    lv_obj_t **ppClockLabelsArray                           = pUserClockObj->aClockLabelObjs;
+    CLOCK_zClockTimeFields_t *pCurrentTimeSettings          = &pUserClockObj->zCurrentClockSettings;
+    char clockTimeStr[ 25 ]                                 = { 0 };
+    char clockDayStr[ 15 ]                                  = { 0 };
+    char clockDateStr[ 15 ]                                 = { 0 };
+    char clockMonthStr[ 15 ]                                = { 0 };
+    char clockYearStr[ 15 ]                                 = { 0 };
 
     /* Set the Clock Settings to default values */
     clock_SetInitialClockSettings( &pUserClockObj->zCurrentClockSettings );
 
-    /* Create Clock Obj on main container and remove default styling */
-    pClockContainerObj->pUserWidget = lv_obj_create( pMainContainerObj );
-    lv_obj_remove_style_all( pClockContainerObj->pUserWidget );
-    lv_obj_set_size( pClockContainerObj->pUserWidget, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+    /* Create Clock Container Obj on main container and remove default styling */
+    pClockContainerObj = lv_obj_create( pMainContainerObj );
+    lv_obj_remove_style_all( pClockContainerObj );
+    lv_obj_set_size( pClockContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
 
     /* Configure Clock Container Background */
-    lv_obj_set_style_bg_opa( pClockContainerObj->pUserWidget, LV_OPA_COVER, LV_PART_MAIN );
-    lv_obj_set_style_bg_color(pClockContainerObj->pUserWidget, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_color(pClockContainerObj->pUserWidget, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_dir(pClockContainerObj->pUserWidget, LV_GRAD_DIR_VER, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa( pClockContainerObj, LV_OPA_COVER, LV_PART_MAIN );
+    lv_obj_set_style_bg_color(pClockContainerObj, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_color(pClockContainerObj, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_dir(pClockContainerObj, LV_GRAD_DIR_VER, LV_PART_MAIN);
 
     /* Initialize the label objs */
     for( int i = 0; i < CLOCK_eLabelCount; i++ )
     {
-        pClockLabelsArray[ i ].pUserWidget = lv_label_create( pClockContainerObj->pUserWidget );
+        ppClockLabelsArray[ i ] = lv_label_create( pClockContainerObj );
 
         /* TODO: ADD IF STATEMENT BASED ON THEME SELECT TEXT COLOR */
-        lv_obj_set_style_text_color( pClockLabelsArray[ i ].pUserWidget, lv_color_white( ), LV_PART_MAIN );
+        lv_obj_set_style_text_color( ppClockLabelsArray[ i ], lv_color_white( ), LV_PART_MAIN );
     }
 
     /* Format the clock data into a string format for use in label */
@@ -127,20 +127,28 @@ void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, COMMON_zUserWidgetObj_t *
     clock_ConvertNumToString( clockYearStr, pCurrentTimeSettings->year );
 
     /* Set labels with default values */
-    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelTimeObj ].pUserWidget, clockTimeStr );
-    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelDateObj ].pUserWidget, clockDateStr );
-    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelDayObj ].pUserWidget, clockDayStr );
-    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelMonthObj ].pUserWidget, clockMonthStr );
-    lv_label_set_text( pClockLabelsArray[ CLOCK_eLabelYearObj ].pUserWidget, clockYearStr );
+    lv_label_set_text( ppClockLabelsArray[ CLOCK_eLabelTime ], clockTimeStr );
+    lv_label_set_text( ppClockLabelsArray[ CLOCK_eLabelDate ], clockDateStr );
+    lv_label_set_text( ppClockLabelsArray[ CLOCK_eLabelDay ], clockDayStr );
+    lv_label_set_text( ppClockLabelsArray[ CLOCK_eLabelMonth ], clockMonthStr );
+    lv_label_set_text( ppClockLabelsArray[ CLOCK_eLabelYear ], clockYearStr );
+
+    /* Set the label fonts */
+    lv_obj_set_style_text_font(ppClockLabelsArray[ CLOCK_eLabelDay ], &lv_font_montserrat_16, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ppClockLabelsArray[ CLOCK_eLabelMonth ], &lv_font_montserrat_12, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ppClockLabelsArray[ CLOCK_eLabelDate ], &lv_font_montserrat_40, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ppClockLabelsArray[ CLOCK_eLabelYear ], &lv_font_montserrat_12, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ppClockLabelsArray[ CLOCK_eLabelTime ], &lv_font_montserrat_40, LV_PART_MAIN);
 
     /* Align the labels */
-    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelTimeObj ].pUserWidget, LV_ALIGN_TOP_RIGHT, LV_PCT(-30), LV_PCT(30));
-    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelDateObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(40));
-    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelDayObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(35));
-    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelMonthObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(30));
-    lv_obj_align(pClockLabelsArray[ CLOCK_eLabelYearObj ].pUserWidget, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(55));
+    lv_obj_align(ppClockLabelsArray[ CLOCK_eLabelTime ], LV_ALIGN_CENTER, LV_PCT( -3 ), LV_PCT( 12 ));
+    lv_obj_align(ppClockLabelsArray[ CLOCK_eLabelDate ], LV_ALIGN_TOP_LEFT, LV_PCT(8), LV_PCT(20));
+    lv_obj_align(ppClockLabelsArray[ CLOCK_eLabelDay ], LV_ALIGN_TOP_LEFT, LV_PCT(8), LV_PCT(10));
+    lv_obj_align(ppClockLabelsArray[ CLOCK_eLabelMonth ], LV_ALIGN_TOP_LEFT, LV_PCT(8), LV_PCT(15));
+    lv_obj_align(ppClockLabelsArray[ CLOCK_eLabelYear ], LV_ALIGN_TOP_LEFT, LV_PCT(8), LV_PCT(35));
 
     /* TODO: Create a timer for 1 second, to update the seconds value */
+
 
 }
 
@@ -235,7 +243,7 @@ static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t ho
         }
 
         // Format time as HH:MM AM/PM
-        snprintf(timeString, sizeof(timeString), "%02d:%02d", hours, minutes);
+        snprintf(timeString, sizeof(timeString), "%2d:%2d", hours, minutes);
 
         if (eMeridiem == CLOCK_eMeridiemAM) {
             snprintf(buffer, 20, "%s AM", timeString);

@@ -325,9 +325,9 @@
  *If LV_USE_LOG is enabled an error message will be printed on failure*/
 #define LV_USE_ASSERT_NULL          1   /*Check if the parameter is NULL. (Very fast, recommended)*/
 #define LV_USE_ASSERT_MALLOC        1   /*Checks is the memory is successfully allocated or no. (Very fast, recommended)*/
-#define LV_USE_ASSERT_STYLE         1
-#define LV_USE_ASSERT_MEM_INTEGRITY 1
-#define LV_USE_ASSERT_OBJ           1
+#define LV_USE_ASSERT_STYLE         0
+#define LV_USE_ASSERT_MEM_INTEGRITY 0
+#define LV_USE_ASSERT_OBJ           0
 
 /*Add a custom handler when assert happens e.g. to restart the MCU*/
 #define LV_ASSERT_HANDLER_INCLUDE <stdint.h>
@@ -833,7 +833,7 @@
 #define LV_USE_VECTOR_GRAPHIC  1
 
 /* Enable ThorVG (vector graphics library) from the src/libs folder */
-#define LV_USE_THORVG_INTERNAL 1 
+#define LV_USE_THORVG_INTERNAL 1
 
 /* Enable ThorVG by assuming that its installed and linked to the project */
 #define LV_USE_THORVG_EXTERNAL 0

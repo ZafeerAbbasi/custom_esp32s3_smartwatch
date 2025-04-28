@@ -26,16 +26,19 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 #include <lvgl/lvgl.h>
-#include "app_clock.h"
 
 /* Exported types ------------------------------------------------------------*/
 
-/* General Struct for Widgets and thier corresponding style */
-typedef struct COMMON_zUserWidgetObj_t
+/**
+ * @brief Custom List Option Struct
+ * @note Each List Option consists of a Panel, Image, and Label
+ */
+typedef struct COMMON_zCustomListOption_t
 {
-    lv_obj_t                    *pUserWidget;
-    lv_style_t                  userWidgetStyle;
-} COMMON_zUserWidgetObj_t;
+    lv_obj_t         *pOptionPanel;
+    lv_obj_t         *pOptionImg;
+    lv_obj_t         *pOptionLabel;
+} COMMON_zCustomListOption_t;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -48,9 +51,29 @@ typedef struct COMMON_zUserWidgetObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
+void COMMON_AddListOption( const char *pLabelText,
+                            const lv_image_dsc_t *pImg,
+                            COMMON_zCustomListOption_t *pListOption,
+                            lv_event_cb_t pfnOptionClickedCallback,
+                            lv_obj_t *pList );
+void COMMON_RegisterUserObj( lv_obj_t *pObj );
+void COMMON_UnRegisterUserObj( lv_obj_t *pObj );
+void COMMON_ListCircularScrollCallback( lv_event_t *pEvent );
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
+/* Macro for concatenating strings */
+#define MALLOC_AND_CONCAT(dest_ptr, str1, str2)                    \
+    do {                                                           \
+        size_t len = strlen(str1) + strlen(str2) + 1;               \
+        dest_ptr = (char *)malloc(len);                            \
+        if (dest_ptr != NULL) {                                    \
+            strcpy(dest_ptr, str1);                                \
+            strcat(dest_ptr, str2);                                \
+        }                                                          \
+    } while(0)
+
+/* Screen Resolutions */
 #define APP_SCREEN_WIDTH  240
 #define APP_SCREEN_HEIGHT 280
 

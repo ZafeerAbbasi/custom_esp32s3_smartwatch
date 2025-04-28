@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : lvgl_app.c
-  * @brief          : Contains for application lvgl functions.
+  * @brief          : Contains application lvgl functions.
   ******************************************************************************
   * @attention
   *

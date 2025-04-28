@@ -16,7 +16,7 @@
 #include "lvgl/examples/lv_examples.h"
 #include "lvgl/demos/lv_demos.h"
 #include "glob.h"
-#include "app_user.h"
+#include "app_main.h"
 
 /*********************
  *      DEFINES
@@ -30,7 +30,7 @@
  *  STATIC PROTOTYPES
  **********************/
 static lv_display_t * hal_init(int32_t w, int32_t h);
-
+static void printCoordinates(lv_event_t * e);
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -93,6 +93,15 @@ int main(int argc, char **argv)
  *   STATIC FUNCTIONS
  **********************/
 
+static void printCoordinates(lv_event_t * e)
+{
+    if (lv_event_get_code(e) == LV_EVENT_PRESSED) {
+        lv_point_t point;
+        lv_indev_get_point(lv_indev_get_act(), &point);
+        printf("Mouse clicked at: x=%d, y=%d\n", point.x, point.y);
+    }
+}
+
 /**
  * Initialize the Hardware Abstraction Layer (HAL) for the LVGL graphics
  * library
@@ -108,6 +117,7 @@ static lv_display_t * hal_init(int32_t w, int32_t h)
   lv_indev_set_group(mouse, lv_group_get_default());
   lv_indev_set_display(mouse, disp);
   lv_display_set_default(disp);
+  lv_indev_add_event_cb(mouse, printCoordinates, LV_EVENT_PRESSED, NULL);
 
   LV_IMAGE_DECLARE(mouse_cursor_icon); /*Declare the image file.*/
   lv_obj_t * cursor_obj;

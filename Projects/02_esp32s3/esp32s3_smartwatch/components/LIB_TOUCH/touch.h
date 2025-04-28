@@ -49,7 +49,7 @@ extern esp_lcd_touch_handle_t TOUCH_zTouchPanelHdl;
 esp_err_t TOUCH_TouchControllerInit( void );
 
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 #define TOUCH_GPIO_INT      ( GPIO_NUM_14 )
 #define TOUCH_GPIO_RST      ( GPIO_NUM_13 )

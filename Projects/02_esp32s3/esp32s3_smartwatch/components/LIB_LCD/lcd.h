@@ -59,7 +59,7 @@ void LCD_SetDispOnOff( bool bIsOn );
 void LCD_SetBacklightLvlPct( uint8_t uLvlPct );
 void LCD_ControlLCDBackLightPWMTimer( bool bIsStart );
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 /* LCD size */
 #define LCD_H_RES 				(240)

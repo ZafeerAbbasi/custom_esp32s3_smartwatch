@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : app_user.h
+  * @file           : app_main.h
   * @brief          : Header for APP_USER module
   ******************************************************************************
   * @attention
@@ -27,15 +27,16 @@ extern "C" {
 
 #include <lvgl/lvgl.h>
 #include "app_clock.h"
+#include "app_ctrl_panel.h"
 
 /* Exported types ------------------------------------------------------------*/
 
 /* Main Watch Object Struct */
 typedef struct APP_zUserWatchObj_t
 {
-    COMMON_zUserWidgetObj_t     zMainWatchContainer;
-    CLOCK_zUserClockObj_t       zClockObj;
-    COMMON_zUserWidgetObj_t     zControlPanelObj;
+    lv_obj_t                        *pMainWatchContainer;
+    CLOCK_zUserClockObj_t           zClockObj;
+    CTRLPANEL_zUserCtrlPanelObj_t   zCtrlPanelObj;
 } APP_zUserWatchObj_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -51,7 +52,7 @@ typedef struct APP_zUserWatchObj_t
 
 void APP_Init( void );
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 
 #ifdef __cplusplus

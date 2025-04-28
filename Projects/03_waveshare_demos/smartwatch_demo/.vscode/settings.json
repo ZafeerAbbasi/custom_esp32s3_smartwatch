@@ -13,7 +13,8 @@
     "lv_indev_private.h": "c",
     "piobot.h": "c",
     "lv_timer_private.h": "c",
-    "smart_resized.h": "c"
+    "smart_resized.h": "c",
+    "ui.h": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "clang",

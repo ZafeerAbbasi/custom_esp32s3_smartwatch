@@ -47,7 +47,7 @@ extern "C" {
 
 esp_err_t I2C_PortZeroBusMasterInit( void );
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 
 /* Touch controller */

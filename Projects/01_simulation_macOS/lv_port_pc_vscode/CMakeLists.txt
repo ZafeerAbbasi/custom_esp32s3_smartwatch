@@ -83,10 +83,14 @@ if(USE_FREERTOS)
     # Link FreeRTOS libraries
     target_link_libraries(main freertos_config FreeRTOS)
 else()
+    # Find all .c files in the LIB_APP directory and add them to the source list
+    file(GLOB LIB_APP_SOURCES
+        "${PROJECT_SOURCE_DIR}/LIB_APP/**/*.c"
+    )
+
+    # Create the executable, including the found .c files from LIB_APP
     add_executable(main
-        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CLOCK/app_clock.c
-        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_COMMON/app_common.c
-        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_USER/app_user.c
+        ${LIB_APP_SOURCES}
         ${PROJECT_SOURCE_DIR}/main/src/mouse_cursor_icon.c
         ${PROJECT_SOURCE_DIR}/main/src/main.c
     )
@@ -94,7 +98,8 @@ else()
     target_include_directories(main PUBLIC
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CLOCK
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_COMMON
-        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_USER
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_MAIN
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CTRL_PANEL
     )
 endif()
 

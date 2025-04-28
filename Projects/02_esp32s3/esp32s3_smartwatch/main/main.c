@@ -17,6 +17,7 @@
 /* User includes */
 #include "hal.h"
 #include "lvgl_app.h"
+#include "app_main.h"
 
 #define SCREEN_WIDTH  240
 #define SCREEN_HEIGHT 280
@@ -112,8 +113,8 @@ static void app_main_display(void)
     /* Task lock */
     lvgl_port_lock(-1);
 
-    create_ui( );
-
+    // create_ui( );
+    APP_Init( );
     // lv_demo_widgets();
     
     // LV_IMG_DECLARE(img_test3);
