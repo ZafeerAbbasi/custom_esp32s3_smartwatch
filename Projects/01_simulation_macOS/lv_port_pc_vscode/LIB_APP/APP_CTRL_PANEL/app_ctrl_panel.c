@@ -52,7 +52,7 @@ void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t 
 
     /* Create the Control panel container and remove default styling */
     pCtrlPanelContainerObj = lv_obj_create(pParentObj);
-    COMMON_RegisterUserObj( pCtrlPanelContainerObj );
+    COMMON_RegisterUserObj( pCtrlPanelContainerObj, COMMON_eTypeContainer );
     lv_obj_remove_style_all( pCtrlPanelContainerObj );
     lv_obj_set_size( pCtrlPanelContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
     lv_obj_set_style_bg_opa( pCtrlPanelContainerObj, LV_OPA_COVER, LV_PART_MAIN );
@@ -62,7 +62,7 @@ void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t 
 
     /* Create the Control Panel List on the Control panel container */
     pCtrlPanelListObj = lv_obj_create( pCtrlPanelContainerObj );
-    COMMON_RegisterUserObj( pCtrlPanelListObj );
+    COMMON_RegisterUserObj( pCtrlPanelListObj, COMMON_eTypeDontTrack );
 
     /* Configure the Control Panel List */
     COMMON_SetupCustomListObj( pCtrlPanelListObj );
@@ -70,22 +70,27 @@ void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t 
     /* Create the List Options on the CtrlPanelList */
     COMMON_AddCustomListOption( "App Info",
                             &img_app_info,
-                            200,
+                            80,
                             &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionAppInfo ],
                             pCtrlPanelListObj
                           );
     COMMON_AddCustomListOption( "Settings",
                             &img_settings,
-                            200,
+                            80,
                             &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
                             pCtrlPanelListObj
                           );
     COMMON_AddCustomListOption( "Theme",
                             &img_theme,
-                            200,
+                            80,
                             &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionTheme ],
                             pCtrlPanelListObj
                           );
+
+    /* Add Callback functions */
+    COMMON_AddCustomListOptionCallback( &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
+                                            SETTINGS_InitCallback,
+                                            ( void * )&pUserCtrlPanelObj->zSettingsObj );
 
     /* Add Circular Scroll callback to the CtrlPanel List Obj */
     lv_obj_add_event_cb( pCtrlPanelListObj, COMMON_ListCircularScrollCallback, LV_EVENT_SCROLL, ( void * )&isCircularScroll );

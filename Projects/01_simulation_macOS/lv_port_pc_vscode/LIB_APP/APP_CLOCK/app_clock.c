@@ -98,7 +98,7 @@ void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj )
 
     /* Create Clock Container Obj on main container and remove default styling */
     pClockContainerObj = lv_obj_create( pMainContainerObj );
-    COMMON_RegisterUserObj( pClockContainerObj );
+    COMMON_RegisterUserObj( pClockContainerObj, COMMON_eTypeContainer );
     lv_obj_remove_style_all( pClockContainerObj );
     lv_obj_set_size( pClockContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
 

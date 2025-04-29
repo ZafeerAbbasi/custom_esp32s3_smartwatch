@@ -71,6 +71,7 @@ typedef struct SETTINGS_zUserSettingsObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
+void SETTINGS_InitCallback( lv_event_t *pEvent );
 
 /* Exported defines ----------------------------------------------------------*/
 

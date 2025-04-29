@@ -47,7 +47,7 @@ static int common_ObjCount[ COMMON_eTypeCount ]         = { 0 };
 /* Function prototypes -------------------------------------------------------*/
 
 static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
-static void common_RemoveNode( const lv_obj_t *pObj );
+static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
 
 
 /* User code -----------------------------------------------------------------*/
@@ -121,7 +121,7 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 {
     /* Create Option Panel on the List Obj and register it */
     pListOption->pOptionPanel = lv_obj_create( pParent );
-    COMMON_RegisterUserObj( pListOption->pOptionPanel );
+    COMMON_RegisterUserObj( pListOption->pOptionPanel, COMMON_eTypeListOptionPanel );
 
     /* Configure Option Panel */
     lv_obj_set_width(pListOption->pOptionPanel, 200);
@@ -141,7 +141,7 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 
     /* Create Option Img on the Option Panel and register it */
     pListOption->pOptionImg = lv_img_create( pListOption->pOptionPanel );
-    COMMON_RegisterUserObj( pListOption->pOptionImg );
+    COMMON_RegisterUserObj( pListOption->pOptionImg, COMMON_eTypeDontTrack );
 
     /* Configure Option Img */
     lv_img_set_src(pListOption->pOptionImg, ( const void * )pImg );
@@ -152,11 +152,11 @@ void COMMON_AddCustomListOption( const char *pLabelText,
     lv_obj_set_align(pListOption->pOptionImg, LV_ALIGN_CENTER);
     lv_obj_add_flag(pListOption->pOptionImg, LV_OBJ_FLAG_ADV_HITTEST);   /// Flags
     lv_obj_clear_flag(pListOption->pOptionImg, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_img_set_zoom(pListOption->pOptionImg, 60);
+    lv_img_set_zoom(pListOption->pOptionImg, imgScale);
 
     /* Create Option Label on the Option Panel and register it*/
     pListOption->pOptionLabel = lv_label_create( pListOption->pOptionPanel );
-    COMMON_RegisterUserObj( pListOption->pOptionLabel );
+    COMMON_RegisterUserObj( pListOption->pOptionLabel, COMMON_eTypeLabel );
 
     /* Configure Option Label */
     lv_obj_set_width(pListOption->pOptionLabel, 160);
@@ -174,7 +174,7 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 
 
 /**
- * @brief
+ * @brief Add a Option on a Custom List
  *
  * @param pListOption
  * @param pfnOptionClickedCallback
@@ -222,7 +222,7 @@ void COMMON_SetupCustomListObj( lv_obj_t *pListObj )
  *
  * @note This function MUST be called after creating ANY lv object
  * @param pObj Pointer to the Obj Object
- * @param zObjType Type of object being registered, can be 0 or COMMON_eTypeNone if
+ * @param zObjType Type of object being registered, can be 0 or COMMON_eTypeDontTrack if
  * in case of not tracking this type of object
  */
 void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
@@ -238,11 +238,13 @@ void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
  *
  *
  * @param pObj Pointer to the Obj
+ * @param zObjType Type of object being registered, can be 0 or COMMON_eTypeDontTrack if
+ * in case of not tracking this type of object
  */
-void COMMON_UnRegisterUserObj( lv_obj_t *pObj )
+void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 {
     /* Remove Obj from Registry */
-    common_RemoveNode( pObj );
+    common_RemoveNode( pObj, zObjType );
 }
 
 
@@ -251,6 +253,7 @@ void COMMON_UnRegisterUserObj( lv_obj_t *pObj )
  * @brief Add a User Object to the Obj Registry
  *
  * @param pObj Pointer to the Obj to Register
+ * @param zObjType Type of object being registered, will be 0 if not tracking
  */
 static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 {
@@ -263,7 +266,7 @@ static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType
         return;
     }
 
-    if( zObjType == COMMON_eTypeNone )
+    if( zObjType == COMMON_eTypeDontTrack )
     {
         return; // User does not want to track this obj
     }
@@ -287,11 +290,12 @@ static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType
  * @brief Remove a User Object from the Obj Registry
  *
  * @param pObj Pointer to the Obj Object to Un-Register
+ * @param zObjType Type of object being registered, will be 0 if not tracking
  */
-static void common_RemoveNode( const lv_obj_t *pObj )
+static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 {
     // Start from the head of the list
-    common_zObjNode *pCurrNode = pNodeHead;
+    common_zObjNode *pCurrNode = pNodeHead[ zObjType ];
     common_zObjNode *pPrevNode = NULL;
 
     while( pCurrNode != NULL )
@@ -302,7 +306,7 @@ static void common_RemoveNode( const lv_obj_t *pObj )
             if ( pPrevNode == NULL )
             {
                 // Removing the head node
-                pNodeHead = pCurrNode->pNextNode;
+                pNodeHead[ zObjType ] = pCurrNode->pNextNode;
             }
             else
             {
@@ -314,7 +318,7 @@ static void common_RemoveNode( const lv_obj_t *pObj )
             free( pCurrNode );
 
             // Decrement the Obj count
-            common_ObjCount--;
+            common_ObjCount[ zObjType ]--;
 
             return;
         }

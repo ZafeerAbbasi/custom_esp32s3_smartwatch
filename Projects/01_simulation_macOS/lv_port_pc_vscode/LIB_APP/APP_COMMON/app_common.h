@@ -41,7 +41,7 @@ extern "C" {
  */
 typedef enum COMMON_zUserObjType_t
 {
-    COMMON_eTypeNone    = 0,
+    COMMON_eTypeDontTrack    = 0,
     COMMON_eTypeContainer,
     COMMON_eTypeLabel,
     COMMON_eTypeListOptionPanel,
@@ -87,9 +87,10 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 void COMMON_AddCustomListOptionCallback( COMMON_zCustomListOption_t *pListOption,
                                     lv_event_cb_t pfnOptionClickedCallback,
                                     void *pUserData );
-void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
-void COMMON_UnRegisterUserObj( lv_obj_t *pObj );
 void COMMON_ListCircularScrollCallback( lv_event_t *pEvent );
+
+void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
+void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
 
 /* Exported defines ----------------------------------------------------------*/
 

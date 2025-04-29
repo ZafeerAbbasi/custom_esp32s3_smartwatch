@@ -66,7 +66,7 @@ static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
 {
     /* Create empty container, register it and remove the default style */
     lv_obj_t *pMainContainerObj = lv_obj_create( lv_scr_act( ) );
-    COMMON_RegisterUserObj( pMainContainerObj );
+    COMMON_RegisterUserObj( pMainContainerObj, COMMON_eTypeDontTrack );
     lv_obj_remove_style_all( pMainContainerObj );
 
     /* Set size of Container Object */
