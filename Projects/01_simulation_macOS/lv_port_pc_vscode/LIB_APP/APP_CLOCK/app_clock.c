@@ -98,6 +98,7 @@ void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj )
 
     /* Create Clock Container Obj on main container and remove default styling */
     pClockContainerObj = lv_obj_create( pMainContainerObj );
+    COMMON_RegisterUserObj( pClockContainerObj );
     lv_obj_remove_style_all( pClockContainerObj );
     lv_obj_set_size( pClockContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
 
@@ -208,7 +209,7 @@ static void clock_ConvertDayToString( char *buffer, CLOCK_eDays_t eDay )
  */
 static void clock_ConvertNumToString( char *buffer, uint32_t num )
 {
-    sprintf(buffer, "%d", num);
+    sprintf(buffer, "%lu", num);
 }
 
 
@@ -246,9 +247,9 @@ static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t ho
         snprintf(timeString, sizeof(timeString), "%2d:%2d", hours, minutes);
 
         if (eMeridiem == CLOCK_eMeridiemAM) {
-            snprintf(buffer, 20, "%s AM", timeString);
+            snprintf(buffer, 24, "%s AM", timeString);
         } else {
-            snprintf(buffer, 20, "%s PM", timeString);
+            snprintf(buffer, 24, "%s PM", timeString);
         }
     }
 }

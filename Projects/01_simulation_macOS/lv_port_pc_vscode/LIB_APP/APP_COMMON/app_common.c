@@ -29,6 +29,7 @@
 typedef struct common_zObjNode
 {
     const lv_obj_t                  *pObj;
+    COMMON_zUserObjType_t           zObjType;
     struct common_zObjNode       *pNextNode;
 } common_zObjNode;
 
@@ -40,12 +41,12 @@ typedef struct common_zObjNode
 
 /* Variables -----------------------------------------------------------------*/
 
-static common_zObjNode *pNodeHead    = NULL;
-static int common_ObjCount           = 0;
+static common_zObjNode *pNodeHead[ COMMON_eTypeCount]   = { NULL };
+static int common_ObjCount[ COMMON_eTypeCount ]         = { 0 };
 
 /* Function prototypes -------------------------------------------------------*/
 
-static void common_AddNode( const lv_obj_t *pObj );
+static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
 static void common_RemoveNode( const lv_obj_t *pObj );
 
 
@@ -67,7 +68,7 @@ void COMMON_ListCircularScrollCallback( lv_event_t *pEvent )
 
     lv_coord_t r = lv_obj_get_height(list) * 7 / 10;
     uint32_t i;
-    uint32_t child_cnt = lv_obj_get_child_count(list);
+    uint32_t child_cnt = lv_obj_get_child_cnt(list);
     for (i = 0; i < child_cnt; i++)
     {
         lv_obj_t *child = lv_obj_get_child(list, i);
@@ -98,38 +99,35 @@ void COMMON_ListCircularScrollCallback( lv_event_t *pEvent )
         /*Translate the item by the calculated X coordinate*/
         lv_obj_set_style_translate_x(child, isCircularScroll ? x : 0, 0);
 
-        /*Use some opacity with larger translations*/
-        // lv_opa_t opa = lv_map(x, 0, r, LV_OPA_TRANSP, LV_OPA_COVER);
-        // lv_obj_set_style_opa(child, LV_OPA_COVER - opa, 0);
     }
 }
 
 
 
 /**
- * @brief Add a Option on a List
+ * @brief Add an Option to a List
  *
  * @param pLabelText Label for the Option
  * @param pImg Image for the Option
- * @param pListOption Pointer to the List Option Obj
- * @param pfnOptionClickedCallback Callback if the user clicks on the option, can be NULL
- * @param pList Pointer to the List which the option is placed on
+ * @param imgScale Image scale
+ * @param pListOption Pointer to the ListOption struct
+ * @param pParent Parent Obj - usually the list object
  */
-void COMMON_AddListOption( const char *pLabelText,
-                            const lv_image_dsc_t *pImg,
+void COMMON_AddCustomListOption( const char *pLabelText,
+                            const lv_img_dsc_t *pImg,
+                            uint32_t imgScale,
                             COMMON_zCustomListOption_t *pListOption,
-                            lv_event_cb_t pfnOptionClickedCallback,
-                            lv_obj_t *pList )
+                            lv_obj_t *pParent )
 {
     /* Create Option Panel on the List Obj and register it */
-    pListOption->pOptionPanel = lv_obj_create( pList );
+    pListOption->pOptionPanel = lv_obj_create( pParent );
     COMMON_RegisterUserObj( pListOption->pOptionPanel );
 
     /* Configure Option Panel */
     lv_obj_set_width(pListOption->pOptionPanel, 200);
     lv_obj_set_height(pListOption->pOptionPanel, 64);
     lv_obj_set_align(pListOption->pOptionPanel, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(pListOption->pOptionPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_clear_flag(pListOption->pOptionPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(pListOption->pOptionPanel, 0, LV_PART_MAIN );
     lv_obj_set_style_bg_opa(pListOption->pOptionPanel, LV_OPA_TRANSP, LV_PART_MAIN );
     lv_obj_set_style_border_color(pListOption->pOptionPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN );
@@ -142,19 +140,19 @@ void COMMON_AddListOption( const char *pLabelText,
     lv_obj_set_style_pad_bottom(pListOption->pOptionPanel, 5, LV_PART_MAIN );
 
     /* Create Option Img on the Option Panel and register it */
-    pListOption->pOptionImg = lv_image_create( pListOption->pOptionPanel );
+    pListOption->pOptionImg = lv_img_create( pListOption->pOptionPanel );
     COMMON_RegisterUserObj( pListOption->pOptionImg );
 
     /* Configure Option Img */
-    lv_image_set_src(pListOption->pOptionImg, ( const void * )pImg );
+    lv_img_set_src(pListOption->pOptionImg, ( const void * )pImg );
     lv_obj_set_width(pListOption->pOptionImg, LV_SIZE_CONTENT);  /// 1
     lv_obj_set_height(pListOption->pOptionImg, LV_SIZE_CONTENT); /// 1
     lv_obj_set_x(pListOption->pOptionImg, -74);
     lv_obj_set_y(pListOption->pOptionImg, 2);
     lv_obj_set_align(pListOption->pOptionImg, LV_ALIGN_CENTER);
     lv_obj_add_flag(pListOption->pOptionImg, LV_OBJ_FLAG_ADV_HITTEST);   /// Flags
-    lv_obj_remove_flag(pListOption->pOptionImg, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_image_set_scale(pListOption->pOptionImg, 60);
+    lv_obj_clear_flag(pListOption->pOptionImg, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_img_set_zoom(pListOption->pOptionImg, 60);
 
     /* Create Option Label on the Option Panel and register it*/
     pListOption->pOptionLabel = lv_label_create( pListOption->pOptionPanel );
@@ -171,12 +169,51 @@ void COMMON_AddListOption( const char *pLabelText,
     lv_label_set_long_mode(pListOption->pOptionLabel, LV_LABEL_LONG_CLIP);
     lv_obj_set_style_text_font(pListOption->pOptionLabel, &lv_font_montserrat_20, LV_PART_MAIN );
 
-    /* Add Option Clicked Callback on the Option panel, if available */
-    if( pfnOptionClickedCallback != NULL )
-    {
-        lv_obj_add_event_cb( pListOption->pOptionPanel, pfnOptionClickedCallback, LV_EVENT_CLICKED, NULL );
-    }
+}
 
+
+
+/**
+ * @brief
+ *
+ * @param pListOption
+ * @param pfnOptionClickedCallback
+ * @param pUserData
+ */
+void COMMON_AddCustomListOptionCallback( COMMON_zCustomListOption_t *pListOption,
+                                    lv_event_cb_t pfnOptionClickedCallback,
+                                    void *pUserData )
+{
+    /* Add the callback to the ListOption panel */
+    lv_obj_add_event_cb( pListOption->pOptionPanel,
+                            pfnOptionClickedCallback,
+                            LV_EVENT_CLICKED,
+                            pUserData );
+}
+
+
+/**
+ * @brief Setup and Style a default obj into a Custom List
+ *
+ * @param pListObj Pointer to default obj
+ */
+void COMMON_SetupCustomListObj( lv_obj_t *pListObj )
+{
+    /* Configure the List */
+    lv_obj_set_width(pListObj, lv_pct(100));
+    lv_obj_set_height(pListObj, lv_pct(100));
+    lv_obj_set_align(pListObj, LV_ALIGN_TOP_MID);
+    lv_obj_set_flex_flow(pListObj, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(pListObj, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_scrollbar_mode(pListObj, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(pListObj, LV_DIR_VER);
+    lv_obj_set_style_radius(pListObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_bg_opa(pListObj, LV_OPA_TRANSP, LV_PART_MAIN );
+    lv_obj_set_style_border_width(pListObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_left(pListObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_right(pListObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_top(pListObj, 50, LV_PART_MAIN );
+    lv_obj_set_style_pad_bottom(pListObj, 70, LV_PART_MAIN );
 }
 
 
@@ -184,13 +221,14 @@ void COMMON_AddListOption( const char *pLabelText,
  * @brief Register a User Obj to the Obj Registry
  *
  * @note This function MUST be called after creating ANY lv object
- * @param pName Name for the Obj
  * @param pObj Pointer to the Obj Object
+ * @param zObjType Type of object being registered, can be 0 or COMMON_eTypeNone if
+ * in case of not tracking this type of object
  */
-void COMMON_RegisterUserObj( lv_obj_t *pObj )
+void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 {
     /* Register Obj to the Registry */
-    common_AddNode( pObj );
+    common_AddNode( pObj, zObjType );
 }
 
 
@@ -214,7 +252,7 @@ void COMMON_UnRegisterUserObj( lv_obj_t *pObj )
  *
  * @param pObj Pointer to the Obj to Register
  */
-static void common_AddNode( const lv_obj_t *pObj )
+static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 {
     // Allocate memory for a new node
     common_zObjNode *pNewNode = ( common_zObjNode * )malloc( sizeof( common_zObjNode ) );
@@ -225,15 +263,22 @@ static void common_AddNode( const lv_obj_t *pObj )
         return;
     }
 
-    // Assign the user Obj object to the new node
-    pNewNode->pObj = pObj;
+    if( zObjType == COMMON_eTypeNone )
+    {
+        return; // User does not want to track this obj
+    }
+
+    // Assign the user Obj object and type to the new node
+    pNewNode->pObj      = pObj;
+    pNewNode->zObjType  = zObjType;
+
 
     // Insert the new node at the beginning of the list
-    pNewNode->pNextNode = pNodeHead;
-    pNodeHead = pNewNode;
+    pNewNode->pNextNode = pNodeHead[ zObjType ];
+    pNodeHead[ zObjType ] = pNewNode;
 
     // Increment the Obj count
-    common_ObjCount++;
+    common_ObjCount[ zObjType ]++;
 }
 
 

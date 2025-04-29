@@ -117,7 +117,7 @@ static lv_display_t * hal_init(int32_t w, int32_t h)
   lv_indev_set_group(mouse, lv_group_get_default());
   lv_indev_set_display(mouse, disp);
   lv_display_set_default(disp);
-  lv_indev_add_event_cb(mouse, printCoordinates, LV_EVENT_PRESSED, NULL);
+  lv_indev_add_event_cb(mouse, NULL, LV_EVENT_PRESSED, NULL);
 
   LV_IMAGE_DECLARE(mouse_cursor_icon); /*Declare the image file.*/
   lv_obj_t * cursor_obj;

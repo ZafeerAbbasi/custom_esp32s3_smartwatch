@@ -62,7 +62,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 # Add compile definitions based on the selected options
-add_compile_definitions($<$<BOOL:${LV_USE_DRAW_SDL}>:LV_USE_DRAW_SDL=1>)
+# add_compile_definitions($<$<BOOL:${LV_USE_DRAW_SDL}>:LV_USE_DRAW_SDL=1>)
 add_compile_definitions($<$<BOOL:${LV_USE_LIBPNG}>:LV_USE_LIBPNG=1>)
 add_compile_definitions($<$<BOOL:${LV_USE_LIBJPEG_TURBO}>:LV_USE_LIBJPEG_TURBO=1>)
 add_compile_definitions($<$<BOOL:${LV_USE_FFMPEG}>:LV_USE_FFMPEG=1>)
@@ -100,10 +100,12 @@ else()
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_COMMON
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_MAIN
         ${PROJECT_SOURCE_DIR}/LIB_APP/APP_CTRL_PANEL
+        ${PROJECT_SOURCE_DIR}/LIB_APP/APP_SETTINGS
     )
 endif()
 
 # Define LVGL configuration as a simple include
+target_compile_definitions( main PRIVATE USE_SDL=1 )
 target_compile_definitions(main PRIVATE LV_CONF_INCLUDE_SIMPLE)
 target_link_libraries(main lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES} m pthread)
 

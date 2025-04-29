@@ -1,0 +1,5 @@
+{
+    "idf.espIdfPath": "/Users/zafeer/esp/v5.4.1/esp-idf",
+    "idf.toolsPath": "/Users/zafeer/.espressif",
+    "idf.pythonInstallPath": "/usr/local/bin/python3"
+}
