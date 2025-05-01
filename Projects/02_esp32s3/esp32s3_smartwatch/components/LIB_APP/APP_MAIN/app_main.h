@@ -25,7 +25,12 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "esp_lvgl_port.h"
+#ifdef USE_SDL
+    #include <lvgl/lvgl.h>
+#else
+    #include "esp_lvgl_port.h"
+#endif
+
 #include "app_clock.h"
 #include "app_ctrl_panel.h"
 

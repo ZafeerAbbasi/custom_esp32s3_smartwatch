@@ -25,9 +25,29 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "esp_lvgl_port.h"
+#include <stdlib.h>
+#include <stdio.h>
+#ifdef USE_SDL
+    #include <lvgl/lvgl.h>
+#else
+    #include "esp_lvgl_port.h"
+#endif
 
 /* Exported types ------------------------------------------------------------*/
+
+/**
+ * @brief Types of User Objects Enum
+ * @note Used in Registry
+ */
+typedef enum COMMON_zUserObjType_t
+{
+    COMMON_eTypeDontTrack    = 0,
+    COMMON_eTypeMainContainer,
+    COMMON_eTypeLabel,
+    COMMON_eTypeListOptionPanel,
+    
+    COMMON_eTypeCount
+} COMMON_zUserObjType_t;
 
 /**
  * @brief Custom List Option Struct
@@ -45,20 +65,33 @@ typedef struct COMMON_zCustomListOption_t
 
 /* Exported variables --------------------------------------------------------*/
 
+/* Images */
+LV_IMG_DECLARE( img_app_info );
+LV_IMG_DECLARE( img_brightness );
+LV_IMG_DECLARE( img_circular_scroll );
+LV_IMG_DECLARE( img_screen_timeout );
+LV_IMG_DECLARE( img_settings );
+LV_IMG_DECLARE( img_theme );
+
 
 /* Exported macro ------------------------------------------------------------*/
 
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void COMMON_AddListOption( const char *pLabelText,
+void COMMON_SetupCustomListObj( lv_obj_t *pListObj );
+void COMMON_AddCustomListOption( const char *pLabelText,
                             const lv_img_dsc_t *pImg,
+                            uint32_t imgScale,
                             COMMON_zCustomListOption_t *pListOption,
-                            lv_event_cb_t pfnOptionClickedCallback,
-                            lv_obj_t *pList );
-void COMMON_RegisterUserObj( lv_obj_t *pObj );
-void COMMON_UnRegisterUserObj( lv_obj_t *pObj );
+                            lv_obj_t *pParent );
+void COMMON_AddCustomListOptionCallback( COMMON_zCustomListOption_t *pListOption,
+                                    lv_event_cb_t pfnOptionClickedCallback,
+                                    void *pUserData );
 void COMMON_ListCircularScrollCallback( lv_event_t *pEvent );
+
+void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
+void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
 
 /* Exported defines ----------------------------------------------------------*/
 

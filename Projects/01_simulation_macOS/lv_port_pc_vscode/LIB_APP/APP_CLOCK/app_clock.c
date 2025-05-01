@@ -84,7 +84,7 @@ static void clock_ConvertTimeToString( char *buffer, uint8_t minutes, uint8_t ho
 void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj )
 {
     lv_obj_t *pMainContainerObj                             = pParentObj;
-    lv_obj_t *pClockContainerObj                            = pUserClockObj->pClockContainerObj;
+    lv_obj_t **ppClockContainerObj                          = &pUserClockObj->pClockContainerObj;
     lv_obj_t **ppClockLabelsArray                           = pUserClockObj->aClockLabelObjs;
     CLOCK_zClockTimeFields_t *pCurrentTimeSettings          = &pUserClockObj->zCurrentClockSettings;
     char clockTimeStr[ 25 ]                                 = { 0 };
@@ -97,21 +97,17 @@ void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj )
     clock_SetInitialClockSettings( &pUserClockObj->zCurrentClockSettings );
 
     /* Create Clock Container Obj on main container and remove default styling */
-    pClockContainerObj = lv_obj_create( pMainContainerObj );
-    COMMON_RegisterUserObj( pClockContainerObj, COMMON_eTypeContainer );
-    lv_obj_remove_style_all( pClockContainerObj );
-    lv_obj_set_size( pClockContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+    *ppClockContainerObj = lv_obj_create( pMainContainerObj );
+    lv_obj_remove_style_all( *ppClockContainerObj );
+    lv_obj_set_size( *ppClockContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
 
     /* Configure Clock Container Background */
-    lv_obj_set_style_bg_opa( pClockContainerObj, LV_OPA_COVER, LV_PART_MAIN );
-    lv_obj_set_style_bg_color(pClockContainerObj, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_color(pClockContainerObj, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_dir(pClockContainerObj, LV_GRAD_DIR_VER, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa( *ppClockContainerObj, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /* Initialize the label objs */
     for( int i = 0; i < CLOCK_eLabelCount; i++ )
     {
-        ppClockLabelsArray[ i ] = lv_label_create( pClockContainerObj );
+        ppClockLabelsArray[ i ] = lv_label_create( *ppClockContainerObj );
 
         /* TODO: ADD IF STATEMENT BASED ON THEME SELECT TEXT COLOR */
         lv_obj_set_style_text_color( ppClockLabelsArray[ i ], lv_color_white( ), LV_PART_MAIN );

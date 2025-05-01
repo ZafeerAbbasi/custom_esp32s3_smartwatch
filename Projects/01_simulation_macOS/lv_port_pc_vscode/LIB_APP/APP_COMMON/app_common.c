@@ -41,6 +41,8 @@ typedef struct common_zObjNode
 
 /* Variables -----------------------------------------------------------------*/
 
+lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ] = { 0 };
+
 static common_zObjNode *pNodeHead[ COMMON_eTypeCount]   = { NULL };
 static int common_ObjCount[ COMMON_eTypeCount ]         = { 0 };
 
@@ -52,12 +54,29 @@ static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjT
 
 /* User code -----------------------------------------------------------------*/
 
+void COMMON_InitStyles( void )
+{
+    /* Configure the dark theme style */
+    lv_style_t *zDarkTheme = &COMMON_aThemeStyles[ COMMON_eThemeDark ];
+    lv_style_set_bg_opa( zDarkTheme, LV_OPA_COVER );
+    lv_style_set_bg_color( zDarkTheme, lv_color_make( 13, 17, 23 ) );
+    lv_style_set_bg_grad_color( zDarkTheme, lv_color_make( 40, 52, 71 ) );
+    lv_style_set_bg_grad_dir( zDarkTheme, LV_GRAD_DIR_VER );
+
+    /* Configure the light theme style */
+    lv_style_t *zLightTheme = &COMMON_aThemeStyles[ COMMON_eThemeLight ];
+    lv_style_set_bg_opa( zLightTheme, LV_OPA_COVER );
+    lv_style_set_bg_color( zLightTheme, lv_color_make(255, 211, 165) );
+    lv_style_set_bg_grad_color( zLightTheme, lv_color_make(213, 145, 142) );
+    lv_style_set_bg_grad_dir( zLightTheme, LV_GRAD_DIR_VER );
+}
+
 /**
- * @brief Custom List Circular Scroll Callback
+ * @brief Custom List Circular Scroll Cb
  *
  * @param pEvent Pointer to
  */
-void COMMON_ListCircularScrollCallback( lv_event_t *pEvent )
+void COMMON_ListCircularScrollCb( lv_event_t *pEvent )
 {
     lv_obj_t *list = lv_event_get_target(pEvent);
     bool isCircularScroll = *( bool *)lv_event_get_user_data( pEvent );
@@ -141,7 +160,6 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 
     /* Create Option Img on the Option Panel and register it */
     pListOption->pOptionImg = lv_img_create( pListOption->pOptionPanel );
-    COMMON_RegisterUserObj( pListOption->pOptionImg, COMMON_eTypeDontTrack );
 
     /* Configure Option Img */
     lv_img_set_src(pListOption->pOptionImg, ( const void * )pImg );
@@ -177,16 +195,16 @@ void COMMON_AddCustomListOption( const char *pLabelText,
  * @brief Add a Option on a Custom List
  *
  * @param pListOption
- * @param pfnOptionClickedCallback
+ * @param pfnOptionClickedCb
  * @param pUserData
  */
-void COMMON_AddCustomListOptionCallback( COMMON_zCustomListOption_t *pListOption,
-                                    lv_event_cb_t pfnOptionClickedCallback,
+void COMMON_AddCustomListOptionCb( COMMON_zCustomListOption_t *pListOption,
+                                    lv_event_cb_t pfnOptionClickedCb,
                                     void *pUserData )
 {
-    /* Add the callback to the ListOption panel */
+    /* Add the Cb to the ListOption panel */
     lv_obj_add_event_cb( pListOption->pOptionPanel,
-                            pfnOptionClickedCallback,
+                            pfnOptionClickedCb,
                             LV_EVENT_CLICKED,
                             pUserData );
 }

@@ -27,7 +27,11 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "esp_lvgl_port.h"
+#ifdef USE_SDL
+    #include <lvgl/lvgl.h>
+#else
+    #include "esp_lvgl_port.h"
+#endif
 #include "app_common.h"
 
 /* Exported types ------------------------------------------------------------*/

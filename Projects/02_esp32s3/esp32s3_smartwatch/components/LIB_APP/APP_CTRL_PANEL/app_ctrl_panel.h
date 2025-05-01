@@ -25,10 +25,13 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
-#include <stdlib.h>
-#include <stdio.h>
-#include "esp_lvgl_port.h"
+#ifdef USE_SDL
+    #include <lvgl/lvgl.h>
+#else
+    #include "esp_lvgl_port.h"
+#endif
 #include "app_common.h"
+#include "app_settings.h"
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -40,18 +43,21 @@ typedef enum CTRLPANEL_eCtrlPanelOptions_t
 {
     CTRLPANEL_eOptionAppInfo        = 0,
     CTRLPANEL_eOptionSettings,
-    CTRLPANEL_eOptionTheme
+    CTRLPANEL_eOptionTheme,
+    CTRLPANEL_eOptionCount
 } CTRLPANEL_eCtrlPanelOptions_t;
 
 /**
  * @brief Main User Control Panel Object
- * @note Contains CtrlPanel Container, CtrlPanel List Object and CtrlPanel Option objects, which go on the list
+ * @note Contains CtrlPanel Container, CtrlPanel List Object and CtrlPanel Option objects,
+ * which go on the list oject
  */
 typedef struct CTRLPANEL_zUserCtrlPanelObj_t
 {
     lv_obj_t                        *pCtrlPanelContainerObj;
     lv_obj_t                        *pCtrlPanelListObj;
-    COMMON_zCustomListOption_t      aCtrlPanelOptions[7];
+    COMMON_zCustomListOption_t      aCtrlPanelOptions[CTRLPANEL_eOptionCount];
+    SETTINGS_zUserSettingsObj_t     zSettingsObj;
 } CTRLPANEL_zUserCtrlPanelObj_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,9 +65,6 @@ typedef struct CTRLPANEL_zUserCtrlPanelObj_t
 
 /* Exported variables --------------------------------------------------------*/
 
-LV_IMG_DECLARE( img_settings );
-LV_IMG_DECLARE( img_theme );
-LV_IMG_DECLARE( img_app_info );
 
 /* Exported macro ------------------------------------------------------------*/
 

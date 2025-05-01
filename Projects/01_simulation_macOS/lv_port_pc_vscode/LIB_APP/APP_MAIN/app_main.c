@@ -45,6 +45,9 @@ static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj );
  */
 void APP_Init( void )
 {
+    /* Initalize the styles which are used by multiple modules */
+    COMMON_InitStyles( );
+
     /* Create the main container for the clock and control panel */
     app_CreateMainContainer( &APP_zMainUserWatchObj );
 
@@ -66,11 +69,14 @@ static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
 {
     /* Create empty container, register it and remove the default style */
     lv_obj_t *pMainContainerObj = lv_obj_create( lv_scr_act( ) );
-    COMMON_RegisterUserObj( pMainContainerObj, COMMON_eTypeDontTrack );
+    COMMON_RegisterUserObj( pMainContainerObj, COMMON_eTypeContainer );
     lv_obj_remove_style_all( pMainContainerObj );
 
     /* Set size of Container Object */
     lv_obj_set_size( pMainContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+
+    /* Configure bg */
+    lv_obj_add_style( pMainContainerObj, &COMMON_aThemeStyles[ COMMON_eThemeDark ], LV_PART_MAIN );
 
     /* Configure horizontal scroll on the main container */
     lv_obj_add_flag( pMainContainerObj, LV_OBJ_FLAG_SCROLL_ONE );

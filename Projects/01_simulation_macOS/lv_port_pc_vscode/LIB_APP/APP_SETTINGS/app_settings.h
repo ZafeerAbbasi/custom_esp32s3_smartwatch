@@ -58,6 +58,9 @@ typedef struct SETTINGS_zUserSettingsObj_t
     lv_obj_t                        *pSettingsContainerObj;
     lv_obj_t                        *pSettingsListObj;
     COMMON_zCustomListOption_t      aSettingsOptions[ SETTINGS_eOptionCount ];
+    lv_obj_t                        *pSettingsExitBtn;
+    lv_obj_t                        *pSettingsExitBtnLabel;
+    lv_obj_t                        *pSettingsLoadingScreen;
 } SETTINGS_zUserSettingsObj_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -71,7 +74,7 @@ typedef struct SETTINGS_zUserSettingsObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void SETTINGS_InitCallback( lv_event_t *pEvent );
+void SETTINGS_InitCb( lv_event_t *pEvent );
 
 /* Exported defines ----------------------------------------------------------*/
 

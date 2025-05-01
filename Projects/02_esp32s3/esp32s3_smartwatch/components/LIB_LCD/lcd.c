@@ -127,7 +127,7 @@ esp_err_t LCD_LcdControllerInit( void )
 
     /* LCD backlight on */
     lcd_BackLightPWMInit( );
-    LCD_SetBacklightLvlPct( 50 );
+    LCD_SetBacklightLvlPct( 10 );
 
     return ret;
 

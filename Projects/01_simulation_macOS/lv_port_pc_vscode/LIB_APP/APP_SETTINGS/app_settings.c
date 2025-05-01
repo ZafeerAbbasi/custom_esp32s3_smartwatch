@@ -30,19 +30,14 @@
 
 /* Variables -----------------------------------------------------------------*/
 
-/* Pointer to Settings Loading screen, needs to be static because it is
-used by another callback during the transtition from loading screen
-to actual settings menu */
-static lv_obj_t *settings_pSettingsLoadingScreen = NULL;
-
-static lv_obj_t *settings_pSettingsScreen = NULL;
 
 /* Function prototypes -------------------------------------------------------*/
 
-void settings_BuildSettingsScreen( lv_timer_t *pTimer );
+static void settings_BuildSettingsScreen( lv_timer_t *pTimer );
 static void exit_btn_event_cb(lv_event_t *e);
-static void finish_screen_build(lv_timer_t *t);
+static void settings_FinishScreenBuilding( lv_timer_t *pTimer );
 static void fade_out_cb(void *obj, int32_t v);
+static void fade_out_anim_ready_cb(lv_anim_t *a);
 
 /* User code -----------------------------------------------------------------*/
 
@@ -52,101 +47,125 @@ static void fade_out_cb(void *obj, int32_t v);
  *
  * @param pEvent Pointer to the event
  */
-void SETTINGS_InitCallback( lv_event_t *pEvent )
+void SETTINGS_InitCb( lv_event_t *pEvent )
 {
+    SETTINGS_zUserSettingsObj_t *pUserSettingsObj = ( SETTINGS_zUserSettingsObj_t * )lv_event_get_user_data( pEvent );
+    lv_obj_t **ppLoadingScreen = &pUserSettingsObj->pSettingsLoadingScreen;
+
     /* First lets create the loading screen
     to display while the actual settings screen is being made
-
     We create the screen in the callback because creating it at the start
     and keeping it in ram will slow down the application */
-    settings_pSettingsLoadingScreen = lv_obj_create( lv_scr_act( ) );
-    lv_obj_remove_style_all( settings_pSettingsLoadingScreen );
-    lv_obj_set_size(settings_pSettingsLoadingScreen, LV_PCT(100), LV_PCT(100));
-    lv_obj_set_style_bg_opa(settings_pSettingsLoadingScreen, LV_OPA_COVER, 0);
-    lv_obj_set_style_bg_color(settings_pSettingsLoadingScreen, lv_color_black(), 0);
-    lv_obj_clear_flag(settings_pSettingsLoadingScreen, LV_OBJ_FLAG_SCROLLABLE);
+    *ppLoadingScreen = lv_obj_create( lv_scr_act( ) );
+
+    /* Configure Loading Screen */
+    lv_obj_remove_style_all( *ppLoadingScreen );
+    lv_obj_set_size( *ppLoadingScreen, LV_PCT( 100 ), LV_PCT( 100 ) );
+    lv_obj_set_style_bg_opa( *ppLoadingScreen, LV_OPA_COVER, 0 );
+    lv_obj_set_style_bg_color( *ppLoadingScreen, lv_color_black(), 0 );
+    lv_obj_clear_flag( *ppLoadingScreen, LV_OBJ_FLAG_SCROLLABLE );
 
     /* Add Image to loading screen */
-    lv_obj_t *pImg = lv_img_create( settings_pSettingsLoadingScreen );
+    lv_obj_t *pImg = lv_img_create( *ppLoadingScreen );
     lv_img_set_src( pImg, ( const void * )&img_settings );
     lv_img_set_zoom( pImg, 200 );
     lv_obj_center( pImg );
 
     /* Start building the settings menu while loading screen is visible */
-    lv_timer_create( settings_BuildSettingsScreen, 50, lv_event_get_user_data( pEvent ) );
+    lv_timer_create( settings_BuildSettingsScreen, 50, ( void * )pUserSettingsObj );
 
 }
 
 
-void settings_BuildSettingsScreen( lv_timer_t *pTimer )
+static void settings_BuildSettingsScreen( lv_timer_t *pTimer )
 {
-    SETTINGS_zUserSettingsObj_t *pUserSettingsObj       = ( SETTINGS_zUserSettingsObj_t * )lv_timer_get_user_data( pTimer );
-    lv_obj_t *pSettingsContainerObj                     = pUserSettingsObj->pSettingsContainerObj;
-    lv_obj_t *pSettingsListObj                          = pUserSettingsObj->pSettingsListObj;
+    #ifdef USE_SDL
+        SETTINGS_zUserSettingsObj_t *pUserSettingsObj       = ( SETTINGS_zUserSettingsObj_t * )lv_timer_get_user_data( pTimer );
+    #else
+        SETTINGS_zUserSettingsObj_t *pUserSettingsObj       = ( SETTINGS_zUserSettingsObj_t * )pTimer->user_data;
+    #endif
+
+    lv_obj_t **ppSettingsContainerObj                   = &pUserSettingsObj->pSettingsContainerObj;
+    lv_obj_t **ppSettingsListObj                        = &pUserSettingsObj->pSettingsListObj;
     COMMON_zCustomListOption_t *pSettingsOptionsArray   = pUserSettingsObj->aSettingsOptions;
+    lv_obj_t **ppExitBtn                                = &pUserSettingsObj->pSettingsExitBtn;
+    lv_obj_t **ppExitBtnLabel                           = &pUserSettingsObj->pSettingsExitBtnLabel;
+    lv_obj_t **ppLoadingScreen                          = &pUserSettingsObj->pSettingsLoadingScreen;
 
     /* Create the Settings container and remove default styling */
-    pSettingsContainerObj = lv_obj_create(lv_scr_act( ));
-    lv_obj_add_flag(pSettingsContainerObj, LV_OBJ_FLAG_HIDDEN); // Hide initially
-    COMMON_RegisterUserObj( pSettingsContainerObj, COMMON_eTypeContainer );
+    *ppSettingsContainerObj = lv_obj_create( lv_scr_act( ) );
+    lv_obj_add_flag( *ppSettingsContainerObj, LV_OBJ_FLAG_HIDDEN ); // Hide initially
+    COMMON_RegisterUserObj(  *ppSettingsContainerObj, COMMON_eTypeContainer );
 
     /* Bring Loading screen to the front */
-    lv_obj_move_foreground( settings_pSettingsLoadingScreen );
+    lv_obj_move_foreground( *ppLoadingScreen );
 
-    lv_obj_remove_style_all( pSettingsContainerObj );
-    lv_obj_set_size( pSettingsContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
-    lv_obj_set_style_bg_opa( pSettingsContainerObj, LV_OPA_COVER, LV_PART_MAIN );
-    lv_obj_set_style_bg_color(pSettingsContainerObj, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_color(pSettingsContainerObj, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_dir(pSettingsContainerObj, LV_GRAD_DIR_VER, LV_PART_MAIN);
+    lv_obj_remove_style_all( *ppSettingsContainerObj );
+    lv_obj_set_size( *ppSettingsContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+    lv_obj_add_style( *ppSettingsContainerObj, &COMMON_aThemeStyles[ COMMON_eThemeDark ], LV_PART_MAIN );
 
     /* Create the Settings List on the Settings container */
-    pSettingsListObj = lv_obj_create( pSettingsContainerObj );
-    COMMON_RegisterUserObj( pSettingsListObj, COMMON_eTypeDontTrack );
+    *ppSettingsListObj = lv_obj_create( *ppSettingsContainerObj );
 
     /* Configure the Settings List */
-    COMMON_SetupCustomListObj( pSettingsListObj );
+    COMMON_SetupCustomListObj( *ppSettingsListObj );
 
     /* Create List options on the SettingsList */
     COMMON_AddCustomListOption( "Brightness",
                                 &img_brightness,
                                 80,
                                 &pSettingsOptionsArray[ SETTINGS_eOptionScreenBrightness ],
-                                pSettingsListObj );
+                                *ppSettingsListObj );
 
     /* TODO: Add rest of settings options */
 
     // Create Exit button
-    lv_obj_t *pExitBtn = lv_btn_create(pSettingsContainerObj);
-    lv_obj_align(pExitBtn, LV_ALIGN_TOP_LEFT, 10, 10);
-    lv_obj_t *label = lv_label_create(pExitBtn);
-    lv_label_set_text(label, "Exit");
+    *ppExitBtn  = lv_btn_create( *ppSettingsContainerObj );
+    COMMON_RegisterUserObj( *ppExitBtn, COMMON_eTypeBtn );
+    lv_obj_align( *ppExitBtn , LV_ALIGN_TOP_LEFT, 10, 10 );
 
-    settings_pSettingsScreen                            = pSettingsContainerObj;
-    lv_obj_clear_flag(settings_pSettingsScreen, LV_OBJ_FLAG_HIDDEN);
+    *ppExitBtnLabel = lv_label_create( *ppExitBtn );
+    COMMON_RegisterUserObj( ppExitBtnLabel, COMMON_eTypeLabel );
+    lv_label_set_text( *ppExitBtnLabel, "Exit" );
 
     // Register the callback
-    lv_obj_add_event_cb(pExitBtn, exit_btn_event_cb, LV_EVENT_CLICKED, ( void * )pSettingsContainerObj );
+    lv_obj_add_event_cb( *ppExitBtnLabel, exit_btn_event_cb, LV_EVENT_CLICKED, ( void * )ppSettingsContainerObj );
 
-    lv_timer_create(finish_screen_build, 500, NULL);  // 100ms delay
-    lv_timer_del(pTimer);
+    /* Create a timer to initiate the loading screen fade, and show the settings screen */
+    lv_timer_create( settings_FinishScreenBuilding, 500, ( void * )pUserSettingsObj );  // 100ms delay
+
+    /* Delete the timer so we don't call this function again */
+    lv_timer_del( pTimer );
 }
 
 
 // Step 3: Called after settings screen is created
-static void finish_screen_build(lv_timer_t *t)
+static void settings_FinishScreenBuilding( lv_timer_t *pTimer )
 {
+    #ifdef USE_SDL
+        SETTINGS_zUserSettingsObj_t *pUserSettingsObj       = ( SETTINGS_zUserSettingsObj_t * )lv_timer_get_user_data( pTimer );
+    #else
+        SETTINGS_zUserSettingsObj_t *pUserSettingsObj       = ( SETTINGS_zUserSettingsObj_t * )pTimer->user_data;
+    #endif
 
-    // 2. Animate loading screen fade out
-    lv_anim_t a;
-    lv_anim_init(&a);
-    lv_anim_set_var(&a, settings_pSettingsLoadingScreen);
-    lv_anim_set_exec_cb(&a, fade_out_cb);
-    lv_anim_set_time(&a, 1000); // 300ms fade
-    lv_anim_set_values(&a, LV_OPA_COVER, LV_OPA_TRANSP);
-    lv_anim_start(&a);
+    lv_obj_t **ppLoadingScreen      = &pUserSettingsObj->pSettingsLoadingScreen;
+    lv_obj_t **ppSettingsContainer  = &pUserSettingsObj->pSettingsContainerObj;
 
-    lv_timer_del(t);
+    // Animate loading screen fade out
+    lv_anim_t zAnimation;
+    lv_anim_init( &zAnimation );
+    lv_anim_set_var( &zAnimation, *ppLoadingScreen );
+    lv_anim_set_exec_cb( &zAnimation, fade_out_cb );
+    lv_anim_set_time( &zAnimation, 300 ); // 300ms fade
+    lv_anim_set_values( &zAnimation, LV_OPA_COVER, LV_OPA_TRANSP );
+    lv_anim_set_ready_cb( &zAnimation, fade_out_anim_ready_cb );
+    lv_anim_start( &zAnimation );
+
+    /* Remove the hidden flag from settings screen, the loading screen is still in front right now */
+    lv_obj_clear_flag( *ppSettingsContainer, LV_OBJ_FLAG_HIDDEN );
+
+    /* Delete the timer so we don't call this function again */
+    lv_timer_del( pTimer );
 }
 
 // Callback function
@@ -163,7 +182,9 @@ static void exit_btn_event_cb(lv_event_t *e)
 static void fade_out_cb(void *obj, int32_t v)
 {
     lv_obj_set_style_opa((lv_obj_t *)obj, v, 0);
-    if (v == LV_OPA_TRANSP) {
-        lv_obj_del((lv_obj_t *)obj);
-    }
+}
+
+static void fade_out_anim_ready_cb(lv_anim_t *a)
+{
+    lv_obj_del((lv_obj_t *)a->var);
 }

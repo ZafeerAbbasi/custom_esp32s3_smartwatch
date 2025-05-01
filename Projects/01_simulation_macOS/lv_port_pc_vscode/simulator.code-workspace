@@ -31,7 +31,8 @@
             "app_main.h": "c",
             "app_common.h": "c",
             "stdio.h": "c",
-            "app_ctrl_panel.h": "c"
+            "app_ctrl_panel.h": "c",
+            "app_settings.h": "c"
         },
 	},
 	// tasks.json section

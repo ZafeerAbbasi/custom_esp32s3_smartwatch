@@ -1,6 +1,0 @@
-FastIMU=https://github.com/LiquidCGS/FastIMU/archive/refs/tags/1.2.6.zip
-lovyan03/LovyanGFX@^1.1.16
-fbiego/ChronosESP32@^1.7.0
-lvgl/lvgl@^9.2.2
-fbiego/Timber@^1.0.0
-bblanchon/ArduinoJson@^7.1.0

@@ -66,11 +66,17 @@ static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
 {
     /* Create empty container, register it and remove the default style */
     lv_obj_t *pMainContainerObj = lv_obj_create( lv_scr_act( ) );
-    COMMON_RegisterUserObj( pMainContainerObj );
+    COMMON_RegisterUserObj( pMainContainerObj, COMMON_eTypeMainContainer );
     lv_obj_remove_style_all( pMainContainerObj );
 
     /* Set size of Container Object */
     lv_obj_set_size( pMainContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+
+    /* Configure bg */
+    lv_obj_set_style_bg_opa( pMainContainerObj, LV_OPA_COVER, LV_PART_MAIN );
+    lv_obj_set_style_bg_color(pMainContainerObj, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_color(pMainContainerObj, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_dir(pMainContainerObj, LV_GRAD_DIR_VER, LV_PART_MAIN);
 
     /* Configure horizontal scroll on the main container */
     lv_obj_add_flag( pMainContainerObj, LV_OBJ_FLAG_SCROLL_ONE );
