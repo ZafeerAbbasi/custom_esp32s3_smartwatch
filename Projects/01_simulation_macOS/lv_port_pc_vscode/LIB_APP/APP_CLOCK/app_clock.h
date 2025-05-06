@@ -36,77 +36,77 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 
-/* CLOCK enums used for tracking dates*/
-typedef enum CLOCK_eMeridiem_t
+/* Clock enums used for tracking dates*/
+typedef enum Clock_eMeridiem_t
 {
-    CLOCK_eMeridiemAM = 0,
-    CLOCK_eMeridiemPM
-} CLOCK_eMeridiem_t;
+    Clock_eMeridiemAM = 0,
+    Clock_eMeridiemPM
+} Clock_eMeridiem_t;
 
-typedef enum CLOCK_eDays_t
+typedef enum Clock_eDays_t
 {
-    CLOCK_eDayMonday = 0,
-    CLOCK_eDayTuesday,
-    CLOCK_eDayWednesday,
-    CLOCK_eDayThursday,
-    CLOCK_eDayFriday,
-    CLOCK_eDaySaturday,
-    CLOCK_eDaySunday
-} CLOCK_eDays_t;
+    Clock_eDayMonday = 0,
+    Clock_eDayTuesday,
+    Clock_eDayWednesday,
+    Clock_eDayThursday,
+    Clock_eDayFriday,
+    Clock_eDaySaturday,
+    Clock_eDaySunday
+} Clock_eDays_t;
 
-typedef enum CLOCK_eMonths_t
+typedef enum Clock_eMonths_t
 {
-    CLOCK_eMonthJan = 0,
-    CLOCK_eMonthFeb,
-    CLOCK_eMonthMar,
-    CLOCK_eMonthApr,
-    CLOCK_eMonthMay,
-    CLOCK_eMonthJun,
-    CLOCK_eMonthJul,
-    CLOCK_eMonthAug,
-    CLOCK_eMonthSep,
-    CLOCK_eMonthOct,
-    CLOCK_eMonthNov,
-    CLOCK_eMonthDec
-} CLOCK_eMonths_t;
+    Clock_eMonthJan = 0,
+    Clock_eMonthFeb,
+    Clock_eMonthMar,
+    Clock_eMonthApr,
+    Clock_eMonthMay,
+    Clock_eMonthJun,
+    Clock_eMonthJul,
+    Clock_eMonthAug,
+    Clock_eMonthSep,
+    Clock_eMonthOct,
+    Clock_eMonthNov,
+    Clock_eMonthDec
+} Clock_eMonths_t;
 
-typedef struct CLOCK_zClockTimeFields_t
+typedef struct Clock_zClockTimeFields_t
 {
     uint8_t                     seconds;
     uint8_t                     minutes;
     uint8_t                     hour;
-    CLOCK_eDays_t               eDay;
+    Clock_eDays_t               eDay;
     uint8_t                     date;
-    CLOCK_eMonths_t             eMonth;
+    Clock_eMonths_t             eMonth;
     uint16_t                    year;
-    CLOCK_eMeridiem_t           eMeridiem;
-} CLOCK_zClockTimeFields_t;
+    Clock_eMeridiem_t           eMeridiem;
+} Clock_zClockTimeFields_t;
 
 /**
  * @brief Clock Labels Enum
- * @note Used to index the array of ClockLabelObjs in CLOCK_zUserClockObj_t
+ * @note Used to index the array of ClockLabelObjs in Clock_zUsrClockObj_t
  */
-typedef enum CLOCK_eLabels_t
+typedef enum Clock_eLabels_t
 {
-    CLOCK_eLabelTime,
-    CLOCK_eLabelDate,
-    CLOCK_eLabelDay,
-    CLOCK_eLabelMonth,
-    CLOCK_eLabelYear,
-    CLOCK_eLabelCount
-} CLOCK_eLabels_t;
+    Clock_eLabelTime,
+    Clock_eLabelDate,
+    Clock_eLabelDay,
+    Clock_eLabelMonth,
+    Clock_eLabelYear,
+    Clock_eLabelCount
+} Clock_eLabels_t;
 
 /**
- * @brief Main User Clock Object Struct
- * @note Contains: Current/Unsaved clock settings, Clock Label Objects, Clock Container Object
+ * @brief Main Usr Clock Object Struct
+ * @note Contains: Current/Unsaved Clock settings, Clock Label Objects, Clock Cont Object
  */
-typedef struct CLOCK_zUserClockObj_t
+typedef struct Clock_zUsrClockObj_t
 {
-    CLOCK_zClockTimeFields_t    zCurrentClockSettings;
-    CLOCK_zClockTimeFields_t    zUnsavedClockSettings;
-    lv_obj_t                    *aClockLabelObjs[ CLOCK_eLabelCount];
-    lv_obj_t                    *pClockContainerObj;
-} CLOCK_zUserClockObj_t;
+    Clock_zClockTimeFields_t    zCurrentClockSettings;
+    Clock_zClockTimeFields_t    zUnsavedClockSettings;
+    lv_obj_t                    *aClockLabelObjs[ Clock_eLabelCount];
+    lv_obj_t                    *pClockContObj;
+} Clock_zUsrClockObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -119,7 +119,7 @@ typedef struct CLOCK_zUserClockObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void CLOCK_Init( CLOCK_zUserClockObj_t *pUserClockObj, lv_obj_t *pParentObj );
+void Clock_Init( Clock_zUsrClockObj_t *pUsrClockObj, lv_obj_t *pParentObj );
 
 /* Exported defines ----------------------------------------------------------*/
 

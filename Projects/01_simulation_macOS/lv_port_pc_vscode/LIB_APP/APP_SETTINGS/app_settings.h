@@ -37,31 +37,52 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /**
- * @brief Settings Options Enum
- * @note Used to index the array of aSettingsOptions in SETTINGS_zUserSettingsObj_t
+ * @brief Settings Exit Button Struct
+ * @note Contains Button Cont, and a label
  */
-typedef enum SETTINGS_eSettingsOptions_t
+typedef struct SETTINGS_zExitBtn_t
 {
-    SETTINGS_eOptionScreenBrightness    = 0,
-    SETTINGS_eOptionCircularScroll,
-    SETTINGS_eOptionScreenTimeout,
-    SETTINGS_eOptionCount
-} SETTINGS_eSettingsOptions_t;
+    lv_obj_t                            *pBtnCont;
+    lv_obj_t                            *pBtnLabel;
+} SETTINGS_zExitBtn_t;
 
 /**
- * @brief Main User Settings Object
- * @note Contains Settins Container, Settings List Object and Settings Options objs,
- * which go on the list object
+ * @brief Brightness list option struct
+ * @note Contains basic list option struct, slider,
+ * and slider label
  */
-typedef struct SETTINGS_zUserSettingsObj_t
+typedef struct SETTINGS_zListOptBright_t
 {
-    lv_obj_t                        *pSettingsContainerObj;
-    lv_obj_t                        *pSettingsListObj;
-    COMMON_zCustomListOption_t      aSettingsOptions[ SETTINGS_eOptionCount ];
-    lv_obj_t                        *pSettingsExitBtn;
-    lv_obj_t                        *pSettingsExitBtnLabel;
-    lv_obj_t                        *pSettingsLoadingScreen;
-} SETTINGS_zUserSettingsObj_t;
+    COMMON_zBasicListOpt_t              zBasicOptionObjs;
+    lv_obj_t                            *pSlider;
+    lv_obj_t                            *pSliderLabel;
+} SETTINGS_zListOptBright_t;
+
+/**
+ * @brief Circular Scroll Option struct
+ * @note Contains basic list option struct, switch,
+ * and switch label
+ */
+typedef struct SETTINGS_zListOptCircScroll_t
+{
+    COMMON_zBasicListOpt_t              zBasicOptionObjs;
+    lv_obj_t                            *pSwitch;
+    lv_obj_t                            *pSwitchLabel;
+} SETTINGS_zListOptCircScroll_t;
+
+/**
+ * @brief Main Usr Settings Object
+ * @note Contains all objects on the settings screen
+ */
+typedef struct SETTINGS_zUsrSettingsObj_t
+{
+    lv_obj_t                            *pSettingsContObj;
+    lv_obj_t                            *pSettingsListObj;
+    lv_obj_t                            *pSettingsLoadingScreen;
+    SETTINGS_zExitBtn_t                 zSettingsExitBtn;
+    SETTINGS_zListOptBright_t           zListOptBright;
+    SETTINGS_zListOptCircScroll_t       zListOptCircScroll;
+} SETTINGS_zUsrSettingsObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 

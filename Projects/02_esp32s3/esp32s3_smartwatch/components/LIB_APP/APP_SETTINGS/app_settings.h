@@ -37,28 +37,38 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /**
- * @brief Settings Options Enum
- * @note Used to index the array of aSettingsOptions in SETTINGS_zUserSettingsObj_t
+ * @brief Settings Exit Button Struct
+ * @note Contains Button Container, and a label
  */
-typedef enum SETTINGS_eSettingsOptions_t
+typedef struct SETTINGS_zExitBtn_t
 {
-    SETTINGS_eOptionScreenBrightness    = 0,
-    SETTINGS_eOptionCircularScroll,
-    SETTINGS_eOptionScreenTimeout,
-    SETTINGS_eOptionCount
-} SETTINGS_eSettingsOptions_t;
+    lv_obj_t                            *pBtnContainer;
+    lv_obj_t                            *pBtnLabel;
+} SETTINGS_zExitBtn_t;
+
+/**
+ * @brief Brightness list option struct
+ * @note Contains the settings option struct and a slider
+ */
+typedef struct SETTINGS_zListOptionBrightness_t
+{
+    COMMON_zBasicListOption_t           zBasicOptionObjs;
+    lv_obj_t                            *pBrightnessSlider;
+    lv_obj_t                            *pSliderLabel;
+} SETTINGS_zListOptionBrightness_t;
 
 /**
  * @brief Main User Settings Object
- * @note Contains Settins Container, Settings List Object and Settings Options objs,
- * which go on the list object
+ * @note Contains all objects on the settings screen
  */
 typedef struct SETTINGS_zUserSettingsObj_t
 {
-    lv_obj_t                        *pSettingsContainerObj;
-    lv_obj_t                        *pSettingsListObj;
-    COMMON_zCustomListOption_t      aSettingsOptions[ SETTINGS_eOptionCount ];
-    lv_obj_t                        *pSettingsExitBtn;
+    lv_obj_t                            *pSettingsContainerObj;
+    lv_obj_t                            *pSettingsListObj;
+    lv_obj_t                            *pSettingsLoadingScreen;
+
+    SETTINGS_zExitBtn_t                 zSettingsExitBtn;
+    SETTINGS_zListOptionBrightness_t    zListOptionBrightness;
 } SETTINGS_zUserSettingsObj_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -72,7 +82,7 @@ typedef struct SETTINGS_zUserSettingsObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void SETTINGS_InitCallback( lv_event_t *pEvent );
+void SETTINGS_InitCb( lv_event_t *pEvent );
 
 /* Exported defines ----------------------------------------------------------*/
 

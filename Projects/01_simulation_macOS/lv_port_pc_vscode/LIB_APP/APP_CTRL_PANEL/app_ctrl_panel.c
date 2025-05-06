@@ -30,8 +30,6 @@
 
 /* Variables -----------------------------------------------------------------*/
 
-/* Flag to use circular scroll or not, default is true */
-bool isCircularScroll = true;
 
 /* Function prototypes -------------------------------------------------------*/
 
@@ -41,23 +39,23 @@ bool isCircularScroll = true;
 /**
  * @brief Initialize the Control Panel Screen
  *
- * @param pUserCtrlPanelObj Pointer to the User Control Panel Object from the Main Watch Object
- * @param pParentObj Pointer to the Parent Object ( Main Watch Container )
+ * @param pUsrCtrlPanelObj Pointer to the Usr Control Panel Object from the Main Watch Object
+ * @param pParentObj Pointer to the Parent Object ( Main Watch Cont )
  */
-void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t *pParentObj )
+void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *pParentObj )
 {
-    lv_obj_t **ppCtrlPanelContainerObj                  = &pUserCtrlPanelObj->pCtrlPanelContainerObj;
-    lv_obj_t **ppCtrlPanelListObj                       = &pUserCtrlPanelObj->pCtrlPanelListObj;
-    COMMON_zCustomListOption_t *pCtrlPaneOptionsArray   = pUserCtrlPanelObj->aCtrlPanelOptions;
+    lv_obj_t **ppCtrlPanelContObj                  = &pUsrCtrlPanelObj->pCtrlPanelContObj;
+    lv_obj_t **ppCtrlPanelListObj                       = &pUsrCtrlPanelObj->pCtrlPanelListObj;
+    COMMON_zBasicListOpt_t *pCtrlPaneOptionsArray   = pUsrCtrlPanelObj->aCtrlPanelOptions;
 
-    /* Create the Control panel container and remove default styling */
-    *ppCtrlPanelContainerObj = lv_obj_create(pParentObj);
-    lv_obj_remove_style_all( *ppCtrlPanelContainerObj );
-    lv_obj_set_size( *ppCtrlPanelContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
-    lv_obj_set_style_bg_opa( *ppCtrlPanelContainerObj, LV_OPA_TRANSP, LV_PART_MAIN );
+    /* Create the Control panel Cont and remove default styling */
+    *ppCtrlPanelContObj = lv_obj_create(pParentObj);
+    lv_obj_remove_style_all( *ppCtrlPanelContObj );
+    lv_obj_set_size( *ppCtrlPanelContObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+    lv_obj_set_style_bg_opa( *ppCtrlPanelContObj, LV_OPA_TRANSP, LV_PART_MAIN );
 
-    /* Create the Control Panel List on the Control panel container */
-    *ppCtrlPanelListObj = lv_obj_create( *ppCtrlPanelContainerObj );
+    /* Create the Control Panel List on the Control panel Cont */
+    *ppCtrlPanelListObj = lv_obj_create( *ppCtrlPanelContObj );
 
     /* Configure the Control Panel List */
     COMMON_SetupCustomListObj( *ppCtrlPanelListObj );
@@ -82,13 +80,13 @@ void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t 
                             *ppCtrlPanelListObj
                           );
 
+    /* Make sure first option is in the middle at start */
+    lv_obj_scroll_to_view(lv_obj_get_child(*ppCtrlPanelListObj, 0), LV_ANIM_OFF);
+
     /* Add Cb functions */
     COMMON_AddCustomListOptionCb( &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
                                             SETTINGS_InitCb,
-                                            ( void * )&pUserCtrlPanelObj->zSettingsObj );
-
-    /* Add Circular Scroll Cb to the CtrlPanel List Obj */
-    lv_obj_add_event_cb( *ppCtrlPanelListObj, COMMON_ListCircularScrollCb, LV_EVENT_SCROLL, ( void * )&isCircularScroll );
+                                            ( void * )&pUsrCtrlPanelObj->zSettingsObj );
 
     /* Manually send first event to enable scrolling effect */
     #ifdef USE_SDL

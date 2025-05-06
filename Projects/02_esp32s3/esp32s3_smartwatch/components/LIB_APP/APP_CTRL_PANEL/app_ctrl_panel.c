@@ -46,57 +46,55 @@ bool isCircularScroll = true;
  */
 void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t *pParentObj )
 {
-    lv_obj_t *pCtrlPanelContainerObj                    = pUserCtrlPanelObj->pCtrlPanelContainerObj;
-    lv_obj_t *pCtrlPanelListObj                         = pUserCtrlPanelObj->pCtrlPanelListObj;
-    COMMON_zCustomListOption_t *pCtrlPaneOptionsArray   = pUserCtrlPanelObj->aCtrlPanelOptions;
+    lv_obj_t **ppCtrlPanelContainerObj                  = &pUserCtrlPanelObj->pCtrlPanelContainerObj;
+    lv_obj_t **ppCtrlPanelListObj                       = &pUserCtrlPanelObj->pCtrlPanelListObj;
+    COMMON_zBasicListOption_t *pCtrlPaneOptionsArray   = pUserCtrlPanelObj->aCtrlPanelOptions;
 
     /* Create the Control panel container and remove default styling */
-    pCtrlPanelContainerObj = lv_obj_create(pParentObj);
-    COMMON_RegisterUserObj( pCtrlPanelContainerObj, COMMON_eTypeDontTrack );
-    lv_obj_remove_style_all( pCtrlPanelContainerObj );
-    lv_obj_set_size( pCtrlPanelContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
-    lv_obj_set_style_bg_opa( pCtrlPanelContainerObj, LV_OPA_TRANSP, LV_PART_MAIN );
+    *ppCtrlPanelContainerObj = lv_obj_create(pParentObj);
+    lv_obj_remove_style_all( *ppCtrlPanelContainerObj );
+    lv_obj_set_size( *ppCtrlPanelContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+    lv_obj_set_style_bg_opa( *ppCtrlPanelContainerObj, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /* Create the Control Panel List on the Control panel container */
-    pCtrlPanelListObj = lv_obj_create( pCtrlPanelContainerObj );
-    COMMON_RegisterUserObj( pCtrlPanelListObj, COMMON_eTypeDontTrack );
+    *ppCtrlPanelListObj = lv_obj_create( *ppCtrlPanelContainerObj );
 
     /* Configure the Control Panel List */
-    COMMON_SetupCustomListObj( pCtrlPanelListObj );
+    COMMON_SetupCustomListObj( *ppCtrlPanelListObj );
 
     /* Create the List Options on the CtrlPanelList */
     COMMON_AddCustomListOption( "App Info",
                             &img_app_info,
                             80,
                             &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionAppInfo ],
-                            pCtrlPanelListObj
+                            *ppCtrlPanelListObj
                           );
     COMMON_AddCustomListOption( "Settings",
                             &img_settings,
                             80,
                             &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
-                            pCtrlPanelListObj
+                            *ppCtrlPanelListObj
                           );
     COMMON_AddCustomListOption( "Theme",
                             &img_theme,
                             80,
                             &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionTheme ],
-                            pCtrlPanelListObj
+                            *ppCtrlPanelListObj
                           );
 
-    /* Add Callback functions */
-    COMMON_AddCustomListOptionCallback( &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
-                                            SETTINGS_InitCallback,
+    /* Add Cb functions */
+    COMMON_AddCustomListOptionCb( &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
+                                            SETTINGS_InitCb,
                                             ( void * )&pUserCtrlPanelObj->zSettingsObj );
 
-    /* Add Circular Scroll callback to the CtrlPanel List Obj */
-    lv_obj_add_event_cb( pCtrlPanelListObj, COMMON_ListCircularScrollCallback, LV_EVENT_SCROLL, ( void * )&isCircularScroll );
+    /* Add Circular Scroll Cb to the CtrlPanel List Obj */
+    lv_obj_add_event_cb( *ppCtrlPanelListObj, COMMON_ListCircularScrollCb, LV_EVENT_SCROLL, ( void * )&isCircularScroll );
 
     /* Manually send first event to enable scrolling effect */
     #ifdef USE_SDL
-        lv_obj_send_event(pCtrlPanelListObj, LV_EVENT_SCROLL, NULL);
+        lv_obj_send_event(*ppCtrlPanelListObj, LV_EVENT_SCROLL, NULL);
     #else
-        lv_event_send(pCtrlPanelListObj, LV_EVENT_SCROLL, NULL);
+        lv_event_send(*ppCtrlPanelListObj, LV_EVENT_SCROLL, NULL);
     #endif
 
 }

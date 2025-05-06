@@ -430,7 +430,7 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_IMG_CIRCU
 
 const lv_img_dsc_t img_circular_scroll = {
 #ifdef USE_SDL
-  .header.cf = LV_COLOR_FORMAT_XRGB8888,
+  .header.cf = LV_COLOR_FORMAT_RGB565,
   .data_size = 10000 * LV_COLOR_DEPTH / 8,
 #else
   .header.cf = LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED,

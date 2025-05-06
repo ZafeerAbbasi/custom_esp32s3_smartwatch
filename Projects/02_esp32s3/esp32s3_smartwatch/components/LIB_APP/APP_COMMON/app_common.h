@@ -36,34 +36,50 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /**
+ * @brief Enum used to index array of lv_style_t
+ *
+ */
+typedef enum COMMON_eTheme_t
+{
+    COMMON_eThemeDark       = 0,
+    COMMON_eThemeLight,
+    COMMON_eThemeCount
+} COMMON_eTheme_t;
+
+/**
  * @brief Types of User Objects Enum
  * @note Used in Registry
  */
 typedef enum COMMON_zUserObjType_t
 {
     COMMON_eTypeDontTrack    = 0,
-    COMMON_eTypeMainContainer,
+    COMMON_eTypeContainer,
     COMMON_eTypeLabel,
     COMMON_eTypeListOptionPanel,
-    
+    COMMON_eTypeLoadingScreen,
+    COMMON_eTypeBtn,
+    COMMON_eTypeSlider,
     COMMON_eTypeCount
 } COMMON_zUserObjType_t;
 
 /**
- * @brief Custom List Option Struct
- * @note Each List Option consists of a Panel, Image, and Label
+ * @brief Basic List Option Struct
+ * @note Basic List Option consists of a Panel, Image, and Label
  */
-typedef struct COMMON_zCustomListOption_t
+typedef struct COMMON_zBasicListOption_t
 {
     lv_obj_t         *pOptionPanel;
     lv_obj_t         *pOptionImg;
     lv_obj_t         *pOptionLabel;
-} COMMON_zCustomListOption_t;
+} COMMON_zBasicListOption_t;
 
 /* Exported constants --------------------------------------------------------*/
 
 
 /* Exported variables --------------------------------------------------------*/
+
+/* Themes */
+extern lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ];
 
 /* Images */
 LV_IMG_DECLARE( img_app_info );
@@ -79,16 +95,18 @@ LV_IMG_DECLARE( img_theme );
 
 /* Exported functions prototypes ---------------------------------------------*/
 
+void COMMON_InitStyles( void );
+
 void COMMON_SetupCustomListObj( lv_obj_t *pListObj );
 void COMMON_AddCustomListOption( const char *pLabelText,
                             const lv_img_dsc_t *pImg,
                             uint32_t imgScale,
-                            COMMON_zCustomListOption_t *pListOption,
+                            COMMON_zBasicListOption_t *pListOption,
                             lv_obj_t *pParent );
-void COMMON_AddCustomListOptionCallback( COMMON_zCustomListOption_t *pListOption,
-                                    lv_event_cb_t pfnOptionClickedCallback,
+void COMMON_AddCustomListOptionCb( COMMON_zBasicListOption_t *pListOption,
+                                    lv_event_cb_t pfnOptionClickedCb,
                                     void *pUserData );
-void COMMON_ListCircularScrollCallback( lv_event_t *pEvent );
+void COMMON_ListCircularScrollCb( lv_event_t *pEvent );
 
 void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
 void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );

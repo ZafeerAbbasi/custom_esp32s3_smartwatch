@@ -56,7 +56,7 @@ typedef struct CTRLPANEL_zUserCtrlPanelObj_t
 {
     lv_obj_t                        *pCtrlPanelContainerObj;
     lv_obj_t                        *pCtrlPanelListObj;
-    COMMON_zCustomListOption_t      aCtrlPanelOptions[CTRLPANEL_eOptionCount];
+    COMMON_zBasicListOption_t       aCtrlPanelOptions[CTRLPANEL_eOptionCount];
     SETTINGS_zUserSettingsObj_t     zSettingsObj;
 } CTRLPANEL_zUserCtrlPanelObj_t;
 

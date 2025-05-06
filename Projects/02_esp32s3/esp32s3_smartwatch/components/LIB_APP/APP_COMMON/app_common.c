@@ -28,9 +28,9 @@
  */
 typedef struct common_zObjNode
 {
-    const lv_obj_t                  *pObj;
-    COMMON_zUserObjType_t           zObjType;
-    struct common_zObjNode       *pNextNode;
+    const lv_obj_t              *pObj;
+    COMMON_zUserObjType_t       zObjType;
+    struct common_zObjNode      *pNextNode;
 } common_zObjNode;
 
 /* Define --------------------------------------------------------------------*/
@@ -41,7 +41,9 @@ typedef struct common_zObjNode
 
 /* Variables -----------------------------------------------------------------*/
 
-static common_zObjNode *pNodeHead[ COMMON_eTypeCount]   = { NULL };
+lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ] = { 0 };
+
+static common_zObjNode *pNodeHead[ COMMON_eTypeCount ]   = { NULL };
 static int common_ObjCount[ COMMON_eTypeCount ]         = { 0 };
 
 /* Function prototypes -------------------------------------------------------*/
@@ -53,11 +55,34 @@ static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjT
 /* User code -----------------------------------------------------------------*/
 
 /**
- * @brief Custom List Circular Scroll Callback
+ * @brief Initialize commonly-used styles
  *
- * @param pEvent Pointer to
  */
-void COMMON_ListCircularScrollCallback( lv_event_t *pEvent )
+void COMMON_InitStyles( void )
+{
+    /* Configure the dark theme style */
+    lv_style_t *zDarkTheme = &COMMON_aThemeStyles[ COMMON_eThemeDark ];
+    lv_style_set_bg_opa( zDarkTheme, LV_OPA_COVER );
+    lv_style_set_bg_color( zDarkTheme, lv_color_make( 13, 17, 23 ) );
+    lv_style_set_bg_grad_color( zDarkTheme, lv_color_make( 40, 52, 71 ) );
+    lv_style_set_bg_grad_dir( zDarkTheme, LV_GRAD_DIR_VER );
+
+    /* Configure the light theme style */
+    lv_style_t *zLightTheme = &COMMON_aThemeStyles[ COMMON_eThemeLight ];
+    lv_style_set_bg_opa( zLightTheme, LV_OPA_COVER );
+    lv_style_set_bg_color( zLightTheme, lv_color_make(255, 211, 165) );
+    lv_style_set_bg_grad_color( zLightTheme, lv_color_make(213, 145, 142) );
+    lv_style_set_bg_grad_dir( zLightTheme, LV_GRAD_DIR_VER );
+}
+
+
+
+/**
+ * @brief Custom List Circular Scroll Cb
+ *
+ * @param pEvent Pointer to Event
+ */
+void COMMON_ListCircularScrollCb( lv_event_t *pEvent )
 {
     lv_obj_t *list = lv_event_get_target(pEvent);
     bool isCircularScroll = *( bool *)lv_event_get_user_data( pEvent );
@@ -116,7 +141,7 @@ void COMMON_ListCircularScrollCallback( lv_event_t *pEvent )
 void COMMON_AddCustomListOption( const char *pLabelText,
                             const lv_img_dsc_t *pImg,
                             uint32_t imgScale,
-                            COMMON_zCustomListOption_t *pListOption,
+                            COMMON_zBasicListOption_t *pListOption,
                             lv_obj_t *pParent )
 {
     /* Create Option Panel on the List Obj and register it */
@@ -139,9 +164,8 @@ void COMMON_AddCustomListOption( const char *pLabelText,
     lv_obj_set_style_pad_top(pListOption->pOptionPanel, 0, LV_PART_MAIN );
     lv_obj_set_style_pad_bottom(pListOption->pOptionPanel, 5, LV_PART_MAIN );
 
-    /* Create Option Img on the Option Panel and register it */
+    /* Create Option Img on the Option Panel*/
     pListOption->pOptionImg = lv_img_create( pListOption->pOptionPanel );
-    COMMON_RegisterUserObj( pListOption->pOptionImg, COMMON_eTypeDontTrack );
 
     /* Configure Option Img */
     lv_img_set_src(pListOption->pOptionImg, ( const void * )pImg );
@@ -176,20 +200,21 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 /**
  * @brief Add a Option on a Custom List
  *
- * @param pListOption
- * @param pfnOptionClickedCallback
- * @param pUserData
+ * @param pListOption Pointer to a List Option
+ * @param pfnOptionClickedCb Option Clicked Callback
+ * @param pUserData User data to be accessed in the callback
  */
-void COMMON_AddCustomListOptionCallback( COMMON_zCustomListOption_t *pListOption,
-                                    lv_event_cb_t pfnOptionClickedCallback,
+void COMMON_AddCustomListOptionCb( COMMON_zBasicListOption_t *pListOption,
+                                    lv_event_cb_t pfnOptionClickedCb,
                                     void *pUserData )
 {
-    /* Add the callback to the ListOption panel */
+    /* Add the Cb to the ListOption panel */
     lv_obj_add_event_cb( pListOption->pOptionPanel,
-                            pfnOptionClickedCallback,
+                            pfnOptionClickedCb,
                             LV_EVENT_CLICKED,
                             pUserData );
 }
+
 
 
 /**
@@ -215,6 +240,7 @@ void COMMON_SetupCustomListObj( lv_obj_t *pListObj )
     lv_obj_set_style_pad_top(pListObj, 50, LV_PART_MAIN );
     lv_obj_set_style_pad_bottom(pListObj, 70, LV_PART_MAIN );
 }
+
 
 
 /**

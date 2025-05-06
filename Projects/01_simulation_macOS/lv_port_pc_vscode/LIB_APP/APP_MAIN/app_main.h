@@ -37,12 +37,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /* Main Watch Object Struct */
-typedef struct APP_zUserWatchObj_t
+typedef struct APP_zUsrWatchObj_t
 {
-    lv_obj_t                        *pMainWatchContainer;
-    CLOCK_zUserClockObj_t           zClockObj;
-    CTRLPANEL_zUserCtrlPanelObj_t   zCtrlPanelObj;
-} APP_zUserWatchObj_t;
+    lv_obj_t                        *pMainWatchCont;
+    Clock_zUsrClockObj_t           zClockObj;
+    CTRLPANEL_zUsrCtrlPanelObj_t   zCtrlPanelObj;
+} APP_zUsrWatchObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 

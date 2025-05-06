@@ -28,10 +28,18 @@
  */
 typedef struct common_zObjNode
 {
-    const lv_obj_t                  *pObj;
-    COMMON_zUserObjType_t           zObjType;
-    struct common_zObjNode       *pNextNode;
+    lv_obj_t                    *pObj;
+    COMMON_zUsrObjType_t       zObjType;
+    struct common_zObjNode      *pNextNode;
 } common_zObjNode;
+
+/**
+ * @brief Typedef for function pointer that is used
+ * when an object is found while iterating through
+ * the registry
+ *
+ */
+typedef void ( *COMMON_pfnObjFoundCb_t )( common_zObjNode * );
 
 /* Define --------------------------------------------------------------------*/
 
@@ -41,19 +49,69 @@ typedef struct common_zObjNode
 
 /* Variables -----------------------------------------------------------------*/
 
-lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ] = { 0 };
+/* Flag to use circular scroll or not, default is true */
+bool COMMON_isCircularScroll                                    = true;
 
-static common_zObjNode *pNodeHead[ COMMON_eTypeCount]   = { NULL };
-static int common_ObjCount[ COMMON_eTypeCount ]         = { 0 };
+/* Array of commonly used themes */
+lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ]            = { 0 };
+
+static common_zObjNode *common_aNodeHeads[ COMMON_eTypeCount ]  = { NULL };
+static int common_ObjCount[ COMMON_eTypeCount ]                 = { 0 };
 
 /* Function prototypes -------------------------------------------------------*/
 
-static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
-static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
+static void common_AddNode( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType );
+static void common_RemoveNode( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType );
+static void common_IterateRegistry( COMMON_zUsrObjType_t zObjType, COMMON_pfnObjFoundCb_t pObjFoundCb );
 
 
 /* User code -----------------------------------------------------------------*/
 
+/**
+ * @brief Set the Scroll Mode for all Lists
+ *
+ * @param isCircScroll true if circular scroll, false for normal scroll
+ */
+void COMMON_SetAllListScroll( bool isCircScroll )
+{
+    bool currVal = COMMON_isCircularScroll;
+    bool isChanged = ( currVal == isCircScroll ) ? false : true;
+
+    if( isChanged )
+    {
+        COMMON_isCircularScroll = isCircScroll;
+
+        /* Manually send event to all list objs to update the scroll change */
+
+        // Start from the head of the list
+        common_zObjNode *pCurrNode = common_aNodeHeads[ COMMON_eTypeCustomList ];
+
+        while( pCurrNode != NULL )
+        {
+            if( pCurrNode->zObjType == COMMON_eTypeCustomList )
+            {
+                #ifdef USE_SDL
+                    lv_obj_send_event( pCurrNode->pObj, LV_EVENT_SCROLL, NULL);
+                #else
+                    lv_event_send( pCurrNode->pObj, LV_EVENT_SCROLL, NULL);
+                #endif
+            }
+
+            pCurrNode = pCurrNode->pNextNode;
+        }
+    }
+    else
+    {
+        return;
+    }
+}
+
+
+
+/**
+ * @brief Initialize commonly-used styles
+ *
+ */
 void COMMON_InitStyles( void )
 {
     /* Configure the dark theme style */
@@ -71,10 +129,12 @@ void COMMON_InitStyles( void )
     lv_style_set_bg_grad_dir( zLightTheme, LV_GRAD_DIR_VER );
 }
 
+
+
 /**
  * @brief Custom List Circular Scroll Cb
  *
- * @param pEvent Pointer to
+ * @param pEvent Pointer to Event
  */
 void COMMON_ListCircularScrollCb( lv_event_t *pEvent )
 {
@@ -131,61 +191,64 @@ void COMMON_ListCircularScrollCb( lv_event_t *pEvent )
  * @param imgScale Image scale
  * @param pListOption Pointer to the ListOption struct
  * @param pParent Parent Obj - usually the list object
+ *
+ * @note WARNING: This should ONLY be used when adding options to a list that WILL NEVER
+ * BE DELETED
  */
 void COMMON_AddCustomListOption( const char *pLabelText,
                             const lv_img_dsc_t *pImg,
                             uint32_t imgScale,
-                            COMMON_zCustomListOption_t *pListOption,
+                            COMMON_zBasicListOpt_t *pListOption,
                             lv_obj_t *pParent )
 {
     /* Create Option Panel on the List Obj and register it */
-    pListOption->pOptionPanel = lv_obj_create( pParent );
-    COMMON_RegisterUserObj( pListOption->pOptionPanel, COMMON_eTypeListOptionPanel );
+    pListOption->pOptPanel = lv_obj_create( pParent );
+    COMMON_RegisterUsrObj( pListOption->pOptPanel, COMMON_eTypeListOptionPanel );
 
     /* Configure Option Panel */
-    lv_obj_set_width(pListOption->pOptionPanel, 200);
-    lv_obj_set_height(pListOption->pOptionPanel, 64);
-    lv_obj_set_align(pListOption->pOptionPanel, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(pListOption->pOptionPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_obj_set_style_radius(pListOption->pOptionPanel, 0, LV_PART_MAIN );
-    lv_obj_set_style_bg_opa(pListOption->pOptionPanel, LV_OPA_TRANSP, LV_PART_MAIN );
-    lv_obj_set_style_border_color(pListOption->pOptionPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN );
-    lv_obj_set_style_border_opa(pListOption->pOptionPanel, 255, LV_PART_MAIN );
-    lv_obj_set_style_border_width(pListOption->pOptionPanel, 1, LV_PART_MAIN );
-    lv_obj_set_style_border_side(pListOption->pOptionPanel, LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN );
-    lv_obj_set_style_pad_left(pListOption->pOptionPanel, 0, LV_PART_MAIN );
-    lv_obj_set_style_pad_right(pListOption->pOptionPanel, 0, LV_PART_MAIN );
-    lv_obj_set_style_pad_top(pListOption->pOptionPanel, 0, LV_PART_MAIN );
-    lv_obj_set_style_pad_bottom(pListOption->pOptionPanel, 5, LV_PART_MAIN );
+    lv_obj_set_width(pListOption->pOptPanel, 200);
+    lv_obj_set_height(pListOption->pOptPanel, 64);
+    lv_obj_set_align(pListOption->pOptPanel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(pListOption->pOptPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_set_style_radius(pListOption->pOptPanel, 0, LV_PART_MAIN );
+    lv_obj_set_style_bg_opa(pListOption->pOptPanel, LV_OPA_TRANSP, LV_PART_MAIN );
+    lv_obj_set_style_border_color(pListOption->pOptPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN );
+    lv_obj_set_style_border_opa(pListOption->pOptPanel, 255, LV_PART_MAIN );
+    lv_obj_set_style_border_width(pListOption->pOptPanel, 1, LV_PART_MAIN );
+    lv_obj_set_style_border_side(pListOption->pOptPanel, LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN );
+    lv_obj_set_style_pad_left(pListOption->pOptPanel, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_right(pListOption->pOptPanel, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_top(pListOption->pOptPanel, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_bottom(pListOption->pOptPanel, 5, LV_PART_MAIN );
 
-    /* Create Option Img on the Option Panel and register it */
-    pListOption->pOptionImg = lv_img_create( pListOption->pOptionPanel );
+    /* Create Option Img on the Option Panel*/
+    pListOption->pOptImg = lv_img_create( pListOption->pOptPanel );
 
     /* Configure Option Img */
-    lv_img_set_src(pListOption->pOptionImg, ( const void * )pImg );
-    lv_obj_set_width(pListOption->pOptionImg, LV_SIZE_CONTENT);  /// 1
-    lv_obj_set_height(pListOption->pOptionImg, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(pListOption->pOptionImg, -74);
-    lv_obj_set_y(pListOption->pOptionImg, 2);
-    lv_obj_set_align(pListOption->pOptionImg, LV_ALIGN_CENTER);
-    lv_obj_add_flag(pListOption->pOptionImg, LV_OBJ_FLAG_ADV_HITTEST);   /// Flags
-    lv_obj_clear_flag(pListOption->pOptionImg, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_img_set_zoom(pListOption->pOptionImg, imgScale);
+    lv_img_set_src(pListOption->pOptImg, ( const void * )pImg );
+    lv_obj_set_width(pListOption->pOptImg, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(pListOption->pOptImg, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(pListOption->pOptImg, -74);
+    lv_obj_set_y(pListOption->pOptImg, 2);
+    lv_obj_set_align(pListOption->pOptImg, LV_ALIGN_CENTER);
+    lv_obj_add_flag(pListOption->pOptImg, LV_OBJ_FLAG_ADV_HITTEST);   /// Flags
+    lv_obj_clear_flag(pListOption->pOptImg, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_img_set_zoom(pListOption->pOptImg, imgScale);
 
     /* Create Option Label on the Option Panel and register it*/
-    pListOption->pOptionLabel = lv_label_create( pListOption->pOptionPanel );
-    COMMON_RegisterUserObj( pListOption->pOptionLabel, COMMON_eTypeLabel );
+    pListOption->pOptLabel = lv_label_create( pListOption->pOptPanel );
+    COMMON_RegisterUsrObj( pListOption->pOptLabel, COMMON_eTypeLabel );
 
     /* Configure Option Label */
-    lv_obj_set_width(pListOption->pOptionLabel, 160);
-    lv_obj_set_height(pListOption->pOptionLabel, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(pListOption->pOptionLabel, 54);
-    lv_obj_set_y(pListOption->pOptionLabel, 3);
-    lv_obj_set_align(pListOption->pOptionLabel, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(pListOption->pOptionLabel, pLabelText);
-    lv_obj_set_style_text_color( pListOption->pOptionLabel, lv_color_white( ), LV_PART_MAIN );
-    lv_label_set_long_mode(pListOption->pOptionLabel, LV_LABEL_LONG_CLIP);
-    lv_obj_set_style_text_font(pListOption->pOptionLabel, &lv_font_montserrat_20, LV_PART_MAIN );
+    lv_obj_set_width(pListOption->pOptLabel, 160);
+    lv_obj_set_height(pListOption->pOptLabel, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(pListOption->pOptLabel, 54);
+    lv_obj_set_y(pListOption->pOptLabel, 3);
+    lv_obj_set_align(pListOption->pOptLabel, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(pListOption->pOptLabel, pLabelText);
+    lv_obj_set_style_text_color( pListOption->pOptLabel, lv_color_white( ), LV_PART_MAIN );
+    lv_label_set_long_mode(pListOption->pOptLabel, LV_LABEL_LONG_CLIP);
+    lv_obj_set_style_text_font(pListOption->pOptLabel, &lv_font_montserrat_20, LV_PART_MAIN );
 
 }
 
@@ -194,20 +257,21 @@ void COMMON_AddCustomListOption( const char *pLabelText,
 /**
  * @brief Add a Option on a Custom List
  *
- * @param pListOption
- * @param pfnOptionClickedCb
- * @param pUserData
+ * @param pListOption Pointer to a List Option
+ * @param pfnOptionClickedCb Option Clicked Callback
+ * @param pUsrData Usr data to be accessed in the callback
  */
-void COMMON_AddCustomListOptionCb( COMMON_zCustomListOption_t *pListOption,
+void COMMON_AddCustomListOptionCb( COMMON_zBasicListOpt_t *pListOption,
                                     lv_event_cb_t pfnOptionClickedCb,
-                                    void *pUserData )
+                                    void *pUsrData )
 {
     /* Add the Cb to the ListOption panel */
-    lv_obj_add_event_cb( pListOption->pOptionPanel,
+    lv_obj_add_event_cb( pListOption->pOptPanel,
                             pfnOptionClickedCb,
                             LV_EVENT_CLICKED,
-                            pUserData );
+                            pUsrData );
 }
+
 
 
 /**
@@ -224,6 +288,7 @@ void COMMON_SetupCustomListObj( lv_obj_t *pListObj )
     lv_obj_set_flex_flow(pListObj, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(pListObj, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_scrollbar_mode(pListObj, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_add_flag( pListObj, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_scroll_dir(pListObj, LV_DIR_VER);
     lv_obj_set_style_radius(pListObj, 0, LV_PART_MAIN );
     lv_obj_set_style_bg_opa(pListObj, LV_OPA_TRANSP, LV_PART_MAIN );
@@ -232,18 +297,26 @@ void COMMON_SetupCustomListObj( lv_obj_t *pListObj )
     lv_obj_set_style_pad_right(pListObj, 0, LV_PART_MAIN );
     lv_obj_set_style_pad_top(pListObj, 50, LV_PART_MAIN );
     lv_obj_set_style_pad_bottom(pListObj, 70, LV_PART_MAIN );
+
+    /* Register the list */
+    COMMON_RegisterUsrObj( pListObj, COMMON_eTypeCustomList );
+
+    /* Add circular scroll to the list if enabled */
+    lv_obj_add_event_cb( pListObj, COMMON_ListCircularScrollCb, LV_EVENT_SCROLL, ( void * )&COMMON_isCircularScroll );
 }
 
 
+
 /**
- * @brief Register a User Obj to the Obj Registry
+ * @brief Register a Usr Obj to the Obj Registry
  *
- * @note This function MUST be called after creating ANY lv object
  * @param pObj Pointer to the Obj Object
  * @param zObjType Type of object being registered, can be 0 or COMMON_eTypeDontTrack if
  * in case of not tracking this type of object
+ *
+ * @note WARNING: This should ONLY be used for objs that will NEVER BE DELETED
  */
-void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
+void COMMON_RegisterUsrObj( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType )
 {
     /* Register Obj to the Registry */
     common_AddNode( pObj, zObjType );
@@ -252,14 +325,14 @@ void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 
 
 /**
- * @brief Un-Register a User Obj from the Obj Registry
+ * @brief Un-Register a Usr Obj from the Obj Registry
  *
  *
  * @param pObj Pointer to the Obj
  * @param zObjType Type of object being registered, can be 0 or COMMON_eTypeDontTrack if
  * in case of not tracking this type of object
  */
-void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
+void COMMON_UnRegisterUsrObj( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType )
 {
     /* Remove Obj from Registry */
     common_RemoveNode( pObj, zObjType );
@@ -268,12 +341,12 @@ void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
 
 
 /**
- * @brief Add a User Object to the Obj Registry
+ * @brief Add a Usr Object to the Obj Registry
  *
  * @param pObj Pointer to the Obj to Register
  * @param zObjType Type of object being registered, will be 0 if not tracking
  */
-static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
+static void common_AddNode( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType )
 {
     // Allocate memory for a new node
     common_zObjNode *pNewNode = ( common_zObjNode * )malloc( sizeof( common_zObjNode ) );
@@ -286,17 +359,17 @@ static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType
 
     if( zObjType == COMMON_eTypeDontTrack )
     {
-        return; // User does not want to track this obj
+        return; // Usr does not want to track this obj
     }
 
-    // Assign the user Obj object and type to the new node
+    // Assign the Usr Obj object and type to the new node
     pNewNode->pObj      = pObj;
     pNewNode->zObjType  = zObjType;
 
 
     // Insert the new node at the beginning of the list
-    pNewNode->pNextNode = pNodeHead[ zObjType ];
-    pNodeHead[ zObjType ] = pNewNode;
+    pNewNode->pNextNode = common_aNodeHeads[ zObjType ];
+    common_aNodeHeads[ zObjType ] = pNewNode;
 
     // Increment the Obj count
     common_ObjCount[ zObjType ]++;
@@ -305,15 +378,15 @@ static void common_AddNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType
 
 
 /**
- * @brief Remove a User Object from the Obj Registry
+ * @brief Remove a Usr Object from the Obj Registry
  *
  * @param pObj Pointer to the Obj Object to Un-Register
  * @param zObjType Type of object being registered, will be 0 if not tracking
  */
-static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjType )
+static void common_RemoveNode( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType )
 {
     // Start from the head of the list
-    common_zObjNode *pCurrNode = pNodeHead[ zObjType ];
+    common_zObjNode *pCurrNode = common_aNodeHeads[ zObjType ];
     common_zObjNode *pPrevNode = NULL;
 
     while( pCurrNode != NULL )
@@ -324,7 +397,7 @@ static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjT
             if ( pPrevNode == NULL )
             {
                 // Removing the head node
-                pNodeHead[ zObjType ] = pCurrNode->pNextNode;
+                common_aNodeHeads[ zObjType ] = pCurrNode->pNextNode;
             }
             else
             {
@@ -343,6 +416,31 @@ static void common_RemoveNode( const lv_obj_t *pObj, COMMON_zUserObjType_t zObjT
 
         // Move to the next node in the list
         pPrevNode = pCurrNode;
+        pCurrNode = pCurrNode->pNextNode;
+    }
+}
+
+
+
+/**
+ * @brief Iterate through the registry execute a function is the specified
+ * obj type is found
+ *
+ * @param zObjType Type of object to look for
+ * @param pObjFoundCb Function to execute if obj is found
+ */
+static void common_IterateRegistry( COMMON_zUsrObjType_t zObjType, COMMON_pfnObjFoundCb_t pObjFoundCb )
+{
+    // Start from the head of the list
+    common_zObjNode *pCurrNode = common_aNodeHeads[ zObjType ];
+
+    while( pCurrNode != NULL )
+    {
+        if( pCurrNode->zObjType == zObjType )
+        {
+            pObjFoundCb( pCurrNode );
+        }
+
         pCurrNode = pCurrNode->pNextNode;
     }
 }

@@ -37,7 +37,7 @@ extern "C" {
 
 /**
  * @brief Control Panel Options Enum
- * @note Used to index the array of aCtrlPanelOptions in CTRLPANEL_zUserCtrlPanelObj_t
+ * @note Used to index the array of aCtrlPanelOptions in CTRLPANEL_zUsrCtrlPanelObj_t
  */
 typedef enum CTRLPANEL_eCtrlPanelOptions_t
 {
@@ -48,17 +48,17 @@ typedef enum CTRLPANEL_eCtrlPanelOptions_t
 } CTRLPANEL_eCtrlPanelOptions_t;
 
 /**
- * @brief Main User Control Panel Object
- * @note Contains CtrlPanel Container, CtrlPanel List Object and CtrlPanel Option objects,
+ * @brief Main Usr Control Panel Object
+ * @note Contains CtrlPanel Cont, CtrlPanel List Object and CtrlPanel Option objects,
  * which go on the list oject
  */
-typedef struct CTRLPANEL_zUserCtrlPanelObj_t
+typedef struct CTRLPANEL_zUsrCtrlPanelObj_t
 {
-    lv_obj_t                        *pCtrlPanelContainerObj;
+    lv_obj_t                        *pCtrlPanelContObj;
     lv_obj_t                        *pCtrlPanelListObj;
-    COMMON_zCustomListOption_t      aCtrlPanelOptions[CTRLPANEL_eOptionCount];
-    SETTINGS_zUserSettingsObj_t     zSettingsObj;
-} CTRLPANEL_zUserCtrlPanelObj_t;
+    COMMON_zBasicListOpt_t       aCtrlPanelOptions[CTRLPANEL_eOptionCount];
+    SETTINGS_zUsrSettingsObj_t     zSettingsObj;
+} CTRLPANEL_zUsrCtrlPanelObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -71,7 +71,7 @@ typedef struct CTRLPANEL_zUserCtrlPanelObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t *pParentObj );
+void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *pParentObj );
 
 
 /* Exported defines ----------------------------------------------------------*/
