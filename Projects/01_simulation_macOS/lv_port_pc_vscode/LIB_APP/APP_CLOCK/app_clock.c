@@ -18,6 +18,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "app_clock.h"
+#include <inttypes.h>
 
 /* Typedef -------------------------------------------------------------------*/
 
@@ -109,8 +110,8 @@ void Clock_Init( Clock_zUsrClockObj_t *pUsrClockObj, lv_obj_t *pParentObj )
     {
         ppClockLabelsArray[ i ] = lv_label_create( *ppClockContObj );
 
-        /* TODO: ADD IF STATEMENT BASED ON THEME SELECT TEXT COLOR */
-        lv_obj_set_style_text_color( ppClockLabelsArray[ i ], lv_color_white( ), LV_PART_MAIN );
+        /* Apply style according to current theme */
+        COMMON_ApplyCurrThemeStyle( ppClockLabelsArray[ i ], COMMON_eTypeLabel );
     }
 
     /* Format the Clock data into a string format for use in label */
@@ -205,7 +206,7 @@ static void Clock_ConvertDayToString( char *buffer, Clock_eDays_t eDay )
  */
 static void Clock_ConvertNumToString( char *buffer, uint32_t num )
 {
-    sprintf(buffer, "%lu", num);
+    sprintf(buffer, "%" PRIu32, num);
 }
 
 

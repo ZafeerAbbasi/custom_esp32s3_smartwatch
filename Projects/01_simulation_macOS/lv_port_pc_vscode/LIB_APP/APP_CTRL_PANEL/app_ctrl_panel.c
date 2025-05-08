@@ -44,9 +44,9 @@
  */
 void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *pParentObj )
 {
-    lv_obj_t **ppCtrlPanelContObj                  = &pUsrCtrlPanelObj->pCtrlPanelContObj;
+    lv_obj_t **ppCtrlPanelContObj                       = &pUsrCtrlPanelObj->pCtrlPanelContObj;
     lv_obj_t **ppCtrlPanelListObj                       = &pUsrCtrlPanelObj->pCtrlPanelListObj;
-    COMMON_zBasicListOpt_t *pCtrlPaneOptionsArray   = pUsrCtrlPanelObj->aCtrlPanelOptions;
+    COMMON_zBasicListOpt_t *pCtrlPaneOptionsArray       = pUsrCtrlPanelObj->aCtrlPanelOptions;
 
     /* Create the Control panel Cont and remove default styling */
     *ppCtrlPanelContObj = lv_obj_create(pParentObj);
@@ -64,19 +64,19 @@ void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *p
     COMMON_AddCustomListOption( "App Info",
                             &img_app_info,
                             80,
-                            &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionAppInfo ],
+                            &pCtrlPaneOptionsArray[ CTRLPANEL_eOptAppInfo ],
                             *ppCtrlPanelListObj
                           );
     COMMON_AddCustomListOption( "Settings",
                             &img_settings,
                             80,
-                            &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
+                            &pCtrlPaneOptionsArray[ CTRLPANEL_eOptSettings ],
                             *ppCtrlPanelListObj
                           );
     COMMON_AddCustomListOption( "Theme",
                             &img_theme,
                             80,
-                            &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionTheme ],
+                            &pCtrlPaneOptionsArray[ CTRLPANEL_eOptTheme ],
                             *ppCtrlPanelListObj
                           );
 
@@ -84,7 +84,7 @@ void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *p
     lv_obj_scroll_to_view(lv_obj_get_child(*ppCtrlPanelListObj, 0), LV_ANIM_OFF);
 
     /* Add Cb functions */
-    COMMON_AddCustomListOptionCb( &pCtrlPaneOptionsArray[ CTRLPANEL_eOptionSettings ],
+    COMMON_AddCustomListOptionCb( &pCtrlPaneOptionsArray[ CTRLPANEL_eOptSettings ],
                                             SETTINGS_InitCb,
                                             ( void * )&pUsrCtrlPanelObj->zSettingsObj );
 

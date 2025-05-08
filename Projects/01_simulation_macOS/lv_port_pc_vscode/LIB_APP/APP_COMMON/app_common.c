@@ -50,13 +50,16 @@ typedef void ( *COMMON_pfnObjFoundCb_t )( common_zObjNode * );
 /* Variables -----------------------------------------------------------------*/
 
 /* Flag to use circular scroll or not, default is true */
-bool COMMON_isCircularScroll                                    = true;
+bool COMMON_isCircularScroll                                                    = true;
 
 /* Array of commonly used themes */
-lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ]            = { 0 };
+lv_style_t COMMON_aThemeStyles[ COMMON_eTypeCount ][ COMMON_eThemeCount ] = { 0 };
 
-static common_zObjNode *common_aNodeHeads[ COMMON_eTypeCount ]  = { NULL };
-static int common_ObjCount[ COMMON_eTypeCount ]                 = { 0 };
+/* Flag used to track current theme */
+COMMON_eTheme_t COMMON_eCurrTheme                                               = COMMON_eThemeDark;
+
+static common_zObjNode *common_aNodeHeads[ COMMON_eTypeCount ]                  = { NULL };
+static int common_ObjCount[ COMMON_eTypeCount ]                                 = { 0 };
 
 /* Function prototypes -------------------------------------------------------*/
 
@@ -66,6 +69,19 @@ static void common_IterateRegistry( COMMON_zUsrObjType_t zObjType, COMMON_pfnObj
 
 
 /* User code -----------------------------------------------------------------*/
+
+/**
+ * @brief Apply the current theme to an User - defined obj type
+ *
+ * @param pObj Pointer to the object to style
+ * @param zObjType User - defined obj type
+ */
+void COMMON_ApplyCurrThemeStyle( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType )
+{
+    lv_obj_add_style( pObj, &COMMON_aThemeStyles[ zObjType ][ COMMON_eCurrTheme ], LV_PART_MAIN );
+}
+
+
 
 /**
  * @brief Set the Scroll Mode for all Lists
@@ -114,19 +130,35 @@ void COMMON_SetAllListScroll( bool isCircScroll )
  */
 void COMMON_InitStyles( void )
 {
-    /* Configure the dark theme style */
-    lv_style_t *zDarkTheme = &COMMON_aThemeStyles[ COMMON_eThemeDark ];
+    /* Container Dark/Light Theme */
+    lv_style_t *zDarkTheme = &COMMON_aThemeStyles[ COMMON_eTypeCont ][ COMMON_eThemeDark ];
     lv_style_set_bg_opa( zDarkTheme, LV_OPA_COVER );
     lv_style_set_bg_color( zDarkTheme, lv_color_make( 13, 17, 23 ) );
     lv_style_set_bg_grad_color( zDarkTheme, lv_color_make( 40, 52, 71 ) );
     lv_style_set_bg_grad_dir( zDarkTheme, LV_GRAD_DIR_VER );
-
-    /* Configure the light theme style */
-    lv_style_t *zLightTheme = &COMMON_aThemeStyles[ COMMON_eThemeLight ];
+    lv_style_t *zLightTheme = &COMMON_aThemeStyles[ COMMON_eTypeCont ][ COMMON_eThemeLight ];
     lv_style_set_bg_opa( zLightTheme, LV_OPA_COVER );
     lv_style_set_bg_color( zLightTheme, lv_color_make(255, 211, 165) );
     lv_style_set_bg_grad_color( zLightTheme, lv_color_make(213, 145, 142) );
     lv_style_set_bg_grad_dir( zLightTheme, LV_GRAD_DIR_VER );
+
+    /* Label Dark/Light Theme */
+    zDarkTheme = &COMMON_aThemeStyles[ COMMON_eTypeLabel ][ COMMON_eThemeDark ];
+    lv_style_set_text_color( zDarkTheme, lv_color_white( ) );
+    zLightTheme = &COMMON_aThemeStyles[ COMMON_eTypeLabel ][ COMMON_eThemeLight ];
+    lv_style_set_text_color( zLightTheme, lv_color_black( ) );
+
+    /* List Option Panel Dark/Light Theme */
+    zDarkTheme = &COMMON_aThemeStyles[ COMMON_eTypeListOptionPanel ][ COMMON_eThemeDark ];
+    lv_style_set_border_color( zDarkTheme, lv_color_white( ) );
+    zLightTheme = &COMMON_aThemeStyles[ COMMON_eTypeListOptionPanel ][ COMMON_eThemeLight ];
+    lv_style_set_border_color( zLightTheme, lv_color_black( ) );
+
+    /* Loading screen Dark/Light Theme */
+    zDarkTheme = &COMMON_aThemeStyles[ COMMON_eTypeLoadingScreen ][ COMMON_eThemeDark ];
+    lv_style_set_bg_color( zDarkTheme, lv_color_black( ) );
+    zLightTheme = &COMMON_aThemeStyles[ COMMON_eTypeLoadingScreen ][ COMMON_eThemeLight ];
+    lv_style_set_bg_color( zLightTheme, lv_color_white( ) );
 }
 
 
@@ -212,7 +244,6 @@ void COMMON_AddCustomListOption( const char *pLabelText,
     lv_obj_clear_flag(pListOption->pOptPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(pListOption->pOptPanel, 0, LV_PART_MAIN );
     lv_obj_set_style_bg_opa(pListOption->pOptPanel, LV_OPA_TRANSP, LV_PART_MAIN );
-    lv_obj_set_style_border_color(pListOption->pOptPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN );
     lv_obj_set_style_border_opa(pListOption->pOptPanel, 255, LV_PART_MAIN );
     lv_obj_set_style_border_width(pListOption->pOptPanel, 1, LV_PART_MAIN );
     lv_obj_set_style_border_side(pListOption->pOptPanel, LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN );
@@ -220,6 +251,7 @@ void COMMON_AddCustomListOption( const char *pLabelText,
     lv_obj_set_style_pad_right(pListOption->pOptPanel, 0, LV_PART_MAIN );
     lv_obj_set_style_pad_top(pListOption->pOptPanel, 0, LV_PART_MAIN );
     lv_obj_set_style_pad_bottom(pListOption->pOptPanel, 5, LV_PART_MAIN );
+    COMMON_ApplyCurrThemeStyle( pListOption->pOptPanel, COMMON_eTypeListOptionPanel );
 
     /* Create Option Img on the Option Panel*/
     pListOption->pOptImg = lv_img_create( pListOption->pOptPanel );
@@ -246,9 +278,9 @@ void COMMON_AddCustomListOption( const char *pLabelText,
     lv_obj_set_y(pListOption->pOptLabel, 3);
     lv_obj_set_align(pListOption->pOptLabel, LV_ALIGN_LEFT_MID);
     lv_label_set_text(pListOption->pOptLabel, pLabelText);
-    lv_obj_set_style_text_color( pListOption->pOptLabel, lv_color_white( ), LV_PART_MAIN );
     lv_label_set_long_mode(pListOption->pOptLabel, LV_LABEL_LONG_CLIP);
     lv_obj_set_style_text_font(pListOption->pOptLabel, &lv_font_montserrat_20, LV_PART_MAIN );
+    COMMON_ApplyCurrThemeStyle( pListOption->pOptLabel, COMMON_eTypeLabel );
 
 }
 

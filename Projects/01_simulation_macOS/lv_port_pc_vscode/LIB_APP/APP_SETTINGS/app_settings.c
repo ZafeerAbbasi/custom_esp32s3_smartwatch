@@ -83,8 +83,8 @@ void SETTINGS_InitCb( lv_event_t *pEvent )
     lv_obj_remove_style_all( *ppLoadingScreen );
     lv_obj_set_size( *ppLoadingScreen, LV_PCT( 100 ), LV_PCT( 100 ) );
     lv_obj_set_style_bg_opa( *ppLoadingScreen, LV_OPA_COVER, 0 );
-    lv_obj_set_style_bg_color( *ppLoadingScreen, lv_color_black(), 0 );
     lv_obj_clear_flag( *ppLoadingScreen, LV_OBJ_FLAG_SCROLLABLE );
+    COMMON_ApplyCurrThemeStyle( *ppLoadingScreen, COMMON_eTypeLoadingScreen );
 
     /* Add Image to loading screen */
     lv_obj_t *pImg = lv_img_create( *ppLoadingScreen );
@@ -129,7 +129,7 @@ static void settings_BuildSettingsScreen( lv_timer_t *pTimer )
     /* Configure the settings Cont */
     lv_obj_set_style_border_width( *ppSettingsContObj, 0, LV_PART_MAIN );
     lv_obj_set_size( *ppSettingsContObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
-    lv_obj_add_style( *ppSettingsContObj, &COMMON_aThemeStyles[ COMMON_eThemeDark ], LV_PART_MAIN );
+    COMMON_ApplyCurrThemeStyle( *ppSettingsContObj, COMMON_eTypeCont );
 
     /* Create the Settings List on the Settings Cont */
     *ppSettingsListObj = lv_obj_create( *ppSettingsContObj );
@@ -214,7 +214,6 @@ static void settings_CreateBrightnessSetting( SETTINGS_zListOptBright_t *pOpt, l
     lv_obj_clear_flag(*ppPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(*ppPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(*ppPanel, LV_OPA_TRANSP, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(*ppPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(*ppPanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(*ppPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_side(*ppPanel, LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -222,6 +221,7 @@ static void settings_CreateBrightnessSetting( SETTINGS_zListOptBright_t *pOpt, l
     lv_obj_set_style_pad_right(*ppPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_top(*ppPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(*ppPanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    COMMON_ApplyCurrThemeStyle( *ppPanel, COMMON_eTypeListOptionPanel );
 
     /* Brightness Slider */
     *ppSlider = lv_slider_create(*ppPanel);
@@ -238,8 +238,8 @@ static void settings_CreateBrightnessSetting( SETTINGS_zListOptBright_t *pOpt, l
     /* Percent Label next to slider */
     *ppSliderLabel = lv_label_create( *ppPanel );
     lv_label_set_text(*ppSliderLabel, "0%");
-    lv_obj_set_style_text_color( *ppSliderLabel, lv_color_white( ), LV_PART_MAIN );
     lv_obj_align_to(*ppSliderLabel, *ppSlider, LV_ALIGN_OUT_RIGHT_MID, 20, 0);
+    COMMON_ApplyCurrThemeStyle( *ppSliderLabel, COMMON_eTypeLabel );
 
     /* "Screen Brightness" Label on panel */
     *ppLabel = lv_label_create(*ppPanel);
@@ -249,7 +249,7 @@ static void settings_CreateBrightnessSetting( SETTINGS_zListOptBright_t *pOpt, l
     lv_obj_set_y(*ppLabel, 5);
     lv_label_set_text(*ppLabel, "Screen Brightness");
     lv_obj_set_style_text_font( *ppLabel, &lv_font_montserrat_16, LV_PART_MAIN );
-    lv_obj_set_style_text_color( *ppLabel, lv_color_white( ), LV_PART_MAIN );
+    COMMON_ApplyCurrThemeStyle( *ppLabel, COMMON_eTypeLabel );
 
     /* Brightness Icon */
     *ppImg = lv_img_create(*ppPanel);
@@ -294,7 +294,6 @@ static void settings_CreateCircScrollSetting( SETTINGS_zListOptCircScroll_t *pOp
     lv_obj_clear_flag(*ppPanel, LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(*ppPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(*ppPanel, LV_OPA_TRANSP, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(*ppPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(*ppPanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(*ppPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_side(*ppPanel, LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -302,6 +301,7 @@ static void settings_CreateCircScrollSetting( SETTINGS_zListOptCircScroll_t *pOp
     lv_obj_set_style_pad_right(*ppPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_top(*ppPanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(*ppPanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    COMMON_ApplyCurrThemeStyle( *ppPanel, COMMON_eTypeListOptionPanel );
 
     /* "Circular Scroll" Label on panel */
     *ppLabel = lv_label_create(*ppPanel);
@@ -311,7 +311,7 @@ static void settings_CreateCircScrollSetting( SETTINGS_zListOptCircScroll_t *pOp
     lv_obj_set_y(*ppLabel, 5);
     lv_label_set_text(*ppLabel, "Circular Scroll");
     lv_obj_set_style_text_font( *ppLabel, &lv_font_montserrat_16, LV_PART_MAIN );
-    lv_obj_set_style_text_color( *ppLabel, lv_color_white( ), LV_PART_MAIN );
+    COMMON_ApplyCurrThemeStyle( *ppLabel, COMMON_eTypeLabel );
 
     /* Brightness Icon */
     *ppImg = lv_img_create(*ppPanel);
@@ -333,7 +333,7 @@ static void settings_CreateCircScrollSetting( SETTINGS_zListOptCircScroll_t *pOp
     *ppSwitchLabel = lv_label_create( *ppPanel );
     lv_obj_align_to( *ppSwitchLabel, *ppSwitch, LV_ALIGN_OUT_RIGHT_MID, 20, 0 );
     lv_label_set_text( *ppSwitchLabel, lv_obj_has_state( *ppSwitch, LV_STATE_CHECKED ) ? "On" : "Off" );
-    lv_obj_set_style_text_color( *ppSwitchLabel, lv_color_white( ), LV_PART_MAIN );
+    COMMON_ApplyCurrThemeStyle( *ppSwitchLabel, COMMON_eTypeLabel );
 
 }
 
@@ -353,7 +353,7 @@ static void settings_CircScrollCb( lv_event_t *pEvent )
 
     /* Update Label */
     lv_label_set_text( *ppSwitchLabel,
-                        isSwitchChecked ? "ON" : "OFF" );
+                        isSwitchChecked ? "On" : "Off" );
 
     /* Change CircScroll */
     COMMON_SetAllListScroll( isSwitchChecked );

@@ -104,7 +104,7 @@ typedef struct Clock_zUsrClockObj_t
 {
     Clock_zClockTimeFields_t    zCurrentClockSettings;
     Clock_zClockTimeFields_t    zUnsavedClockSettings;
-    lv_obj_t                    *aClockLabelObjs[ Clock_eLabelCount];
+    lv_obj_t                    *aClockLabelObjs[ Clock_eLabelCount ];
     lv_obj_t                    *pClockContObj;
 } Clock_zUsrClockObj_t;
 

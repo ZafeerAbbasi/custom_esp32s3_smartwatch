@@ -61,7 +61,8 @@ void APP_Init( void )
 
 
 /**
- * @brief Create the main Cont for the Clock and control panel
+ * @brief Create the main Container on which the clock and ctrlpanel
+ * will be placed on
  *
  * @param pUsrWatchObj Pointer to the main Usr watch object
  */
@@ -75,8 +76,8 @@ static void app_CreateMainCont( APP_zUsrWatchObj_t *pUsrWatchObj )
     /* Set size of Cont Object */
     lv_obj_set_size( pMainContObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
 
-    /* Configure bg */
-    lv_obj_add_style( pMainContObj, &COMMON_aThemeStyles[ COMMON_eThemeDark ], LV_PART_MAIN );
+    /* Add style according to current theme */
+    COMMON_ApplyCurrThemeStyle( pMainContObj, COMMON_eTypeCont );
 
     /* Configure horizontal scroll on the main Cont */
     lv_obj_add_flag( pMainContObj, LV_OBJ_FLAG_SCROLL_ONE );

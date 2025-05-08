@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file           : app_ctrl_panel.h
-  * @brief          :
+  * @file           : app_theme.h
+  * @brief          : Header for APP_THEME module
   ******************************************************************************
   * @attention
   *
@@ -16,8 +16,8 @@
 */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __APP_CTRL_PANEL_H
-#define __APP_CTRL_PANEL_H
+#ifndef __APP_THEME_H
+#define __APP_THEME_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,42 +25,51 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 
+#include <stdlib.h>
+#include <stdio.h>
 #ifdef USE_SDL
     #include <lvgl/lvgl.h>
 #else
     #include "esp_lvgl_port.h"
 #endif
 #include "app_common.h"
-#include "app_settings.h"
-#include "app_theme.h"
 
 /* Exported types ------------------------------------------------------------*/
 
 /**
- * @brief Control Panel Options Enum
- * @note Used to index the array of aCtrlPanelOptions in CTRLPANEL_zUsrCtrlPanelObj_t
+ * @brief Theme Exit Button Struct
+ * @note Contains Button Cont, and a label
  */
-typedef enum CTRLPANEL_eBasicOpts
+typedef struct THEME_zExitBtn_t
 {
-    CTRLPANEL_eOptAppInfo        = 0,
-    CTRLPANEL_eOptSettings,
-    CTRLPANEL_eOptTheme,
-    CTRLPANEL_eBasicOptCnt
-} CTRLPANEL_eBasicOpts;
+    lv_obj_t                            *pBtnCont;
+    lv_obj_t                            *pBtnLabel;
+} THEME_zExitBtn_t;
 
 /**
- * @brief Main Usr Control Panel Object
- * @note Contains CtrlPanel Cont, CtrlPanel List Object and CtrlPanel Option objects,
- * which go on the list oject
+ * @brief Theme Switch struct
+ * @note Contains basic list option struct, switch,
+ * and switch label
  */
-typedef struct CTRLPANEL_zUsrCtrlPanelObj_t
+typedef struct Theme_zThemeSwitch_t
 {
-    lv_obj_t                        *pCtrlPanelContObj;
-    lv_obj_t                        *pCtrlPanelListObj;
-    COMMON_zBasicListOpt_t          aCtrlPanelOptions[ CTRLPANEL_eBasicOptCnt ];
-    SETTINGS_zUsrSettingsObj_t      zSettingsObj;
-    THEME_zUsrThemeObj_t            zThemeObj;
-} CTRLPANEL_zUsrCtrlPanelObj_t;
+    COMMON_zBasicListOpt_t              zBasicOptionObjs;
+    lv_obj_t                            *pSwitch;
+    lv_obj_t                            *pSwitchLabel;
+} Theme_zThemeSwitch_t;
+
+/**
+ * @brief Main Usr Theme Object
+ * @note Contains all objects on the settings screen
+ */
+typedef struct THEME_zUsrThemeObj_t
+{
+    lv_obj_t                            *pThemeContObj;
+    lv_obj_t                            *pThemeListObj;
+    lv_obj_t                            *pThemeLoadingScreen;
+    THEME_zExitBtn_t                    zThemeExitBtn;
+    Theme_zThemeSwitch_t                zThemeSwitch;
+} THEME_zUsrThemeObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -73,8 +82,7 @@ typedef struct CTRLPANEL_zUsrCtrlPanelObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *pParentObj );
-
+void THEME_InitCb( lv_event_t *pEvent );
 
 /* Exported defines ----------------------------------------------------------*/
 
@@ -83,4 +91,4 @@ void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *p
 }
 #endif
 
-#endif /* __LCD_H */
+#endif /* __APP_THEME_H */

@@ -82,8 +82,8 @@ typedef struct COMMON_zBasicListOpt_t
 /* Circular Scroll Flag */
 extern bool COMMON_isCircularScroll;
 
-/* Themes */
-extern lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ];
+/* Current Theme Flag */
+extern COMMON_eTheme_t COMMON_eCurrTheme;
 
 /* Images */
 LV_IMG_DECLARE( img_app_info );
@@ -100,6 +100,7 @@ LV_IMG_DECLARE( img_theme );
 /* Exported functions prototypes ---------------------------------------------*/
 
 void COMMON_InitStyles( void );
+void COMMON_ApplyCurrThemeStyle( lv_obj_t *pObj, COMMON_zUsrObjType_t zObjType );
 
 void COMMON_SetupCustomListObj( lv_obj_t *pListObj );
 void COMMON_AddCustomListOption( const char *pLabelText,
