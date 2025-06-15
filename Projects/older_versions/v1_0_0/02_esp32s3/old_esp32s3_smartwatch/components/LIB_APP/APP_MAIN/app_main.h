@@ -31,18 +31,18 @@ extern "C" {
     #include "esp_lvgl_port.h"
 #endif
 
-#include "app_clk.h"
+#include "app_clock.h"
 #include "app_ctrl_panel.h"
 
 /* Exported types ------------------------------------------------------------*/
 
 /* Main Watch Object Struct */
-typedef struct APP_zUsrWatchObj_t
+typedef struct APP_zUserWatchObj_t
 {
-    lv_obj_t                        *pMainWatchCont;
-    CLK_zUsrClkObj_t                zClockObj;
-    CTRLPANEL_zUsrCtrlPanelObj_t    zCtrlPanelObj;
-} APP_zUsrWatchObj_t;
+    lv_obj_t                        *pMainWatchContainer;
+    CLOCK_zUserClockObj_t           zClockObj;
+    CTRLPANEL_zUserCtrlPanelObj_t   zCtrlPanelObj;
+} APP_zUserWatchObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 

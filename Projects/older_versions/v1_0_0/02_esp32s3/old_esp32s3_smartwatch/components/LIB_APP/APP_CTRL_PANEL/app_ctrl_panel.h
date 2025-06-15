@@ -32,35 +32,33 @@ extern "C" {
 #endif
 #include "app_common.h"
 #include "app_settings.h"
-#include "app_theme.h"
 
 /* Exported types ------------------------------------------------------------*/
 
 /**
  * @brief Control Panel Options Enum
- * @note Used to index the array of aCtrlPanelOptions in CTRLPANEL_zUsrCtrlPanelObj_t
+ * @note Used to index the array of aCtrlPanelOptions in CTRLPANEL_zUserCtrlPanelObj_t
  */
-typedef enum CTRLPANEL_eBasicOpts
+typedef enum CTRLPANEL_eCtrlPanelOptions_t
 {
-    CTRLPANEL_eOptAppInfo        = 0,
-    CTRLPANEL_eOptSettings,
-    CTRLPANEL_eOptTheme,
-    CTRLPANEL_eBasicOptCnt
-} CTRLPANEL_eBasicOpts;
+    CTRLPANEL_eOptionAppInfo        = 0,
+    CTRLPANEL_eOptionSettings,
+    CTRLPANEL_eOptionTheme,
+    CTRLPANEL_eOptionCount
+} CTRLPANEL_eCtrlPanelOptions_t;
 
 /**
- * @brief Main Usr Control Panel Object
- * @note Contains CtrlPanel Cont, CtrlPanel List Object and CtrlPanel Option objects,
+ * @brief Main User Control Panel Object
+ * @note Contains CtrlPanel Container, CtrlPanel List Object and CtrlPanel Option objects,
  * which go on the list oject
  */
-typedef struct CTRLPANEL_zUsrCtrlPanelObj_t
+typedef struct CTRLPANEL_zUserCtrlPanelObj_t
 {
-    lv_obj_t                        *pCtrlPanelContObj;
+    lv_obj_t                        *pCtrlPanelContainerObj;
     lv_obj_t                        *pCtrlPanelListObj;
-    COMMON_zBasicListOpt_t          aCtrlPanelOptions[ CTRLPANEL_eBasicOptCnt ];
-    SETTINGS_zUsrSettingsObj_t      zSettingsObj;
-    THEME_zUsrThemeObj_t            zThemeObj;
-} CTRLPANEL_zUsrCtrlPanelObj_t;
+    COMMON_zBasicListOption_t       aCtrlPanelOptions[CTRLPANEL_eOptionCount];
+    SETTINGS_zUserSettingsObj_t     zSettingsObj;
+} CTRLPANEL_zUserCtrlPanelObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -73,7 +71,7 @@ typedef struct CTRLPANEL_zUsrCtrlPanelObj_t
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-void CTRLPANEL_Init( CTRLPANEL_zUsrCtrlPanelObj_t *pUsrCtrlPanelObj, lv_obj_t *pParentObj );
+void CTRLPANEL_Init( CTRLPANEL_zUserCtrlPanelObj_t *pUserCtrlPanelObj, lv_obj_t *pParentObj );
 
 
 /* Exported defines ----------------------------------------------------------*/

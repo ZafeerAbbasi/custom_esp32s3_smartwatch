@@ -7,6 +7,6 @@ list(FILTER INCLUDE_DIRS INCLUDE REGEX ".*/$")  # Keep only directories
 
 idf_component_register(
     SRCS ${SOURCES}
-    INCLUDE_DIRS "APP_CLK" "APP_COMMON" "APP_CTRL_PANEL" "APP_MAIN" "APP_SETTINGS" "APP_THEME"
+    INCLUDE_DIRS "APP_CLOCK" "APP_COMMON" "APP_CTRL_PANEL" "APP_MAIN" "APP_SETTINGS"
     REQUIRES "espressif__esp_lvgl_port" "LIB_LCD"
 )

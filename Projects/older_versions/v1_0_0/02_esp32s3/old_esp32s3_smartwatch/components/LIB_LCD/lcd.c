@@ -31,9 +31,6 @@
 
 /* Variables -----------------------------------------------------------------*/
 
-/* LCD Brightness Pct Value, initial is 10 */
-int32_t LCD_brightnessVal = 10;
-
 /* LCD IO and panel */
 esp_lcd_panel_io_handle_t LCD_zLcdIoHdl = NULL;
 esp_lcd_panel_handle_t LCD_zLcdPanelHdl = NULL;
@@ -171,11 +168,7 @@ void LCD_SetBacklightLvlPct( uint8_t uLvlPct )
         uLvlPct = 0;
     }
 
-    /* Update the Flag */
-    LCD_brightnessVal = uLvlPct;
-
-    /* Calculate the Duty Cycle 
-    The resolution is 8 bit, so 2^8 = 255 ( Max value ) */
+    /* Calculate the Duty Cycle */
     uint32_t dutyCycle = ( uLvlPct * 255 ) / 100;
 
     /* Set the duty cycle for the backlight */

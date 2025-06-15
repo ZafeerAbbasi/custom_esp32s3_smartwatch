@@ -30,12 +30,12 @@
 
 /* Variables -----------------------------------------------------------------*/
 
-/* Main Usr Watch Object */
-APP_zUsrWatchObj_t APP_zMainUsrWatchObj = { 0 };
+/* Main User Watch Object */
+APP_zUserWatchObj_t APP_zMainUserWatchObj = { 0 };
 
 /* Function prototypes -------------------------------------------------------*/
 
-static void app_CreateMainCont( APP_zUsrWatchObj_t *pUsrWatchObj );
+static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj );
 
 /* User code -----------------------------------------------------------------*/
 
@@ -48,53 +48,52 @@ void APP_Init( void )
     /* Initalize the styles which are used by multiple modules */
     COMMON_InitStyles( );
 
-    /* Create the main Cont for the Clock and control panel */
-    app_CreateMainCont( &APP_zMainUsrWatchObj );
+    /* Create the main container for the clock and control panel */
+    app_CreateMainContainer( &APP_zMainUserWatchObj );
 
     /* Create the Clock Screen */
-    CLK_Init( &APP_zMainUsrWatchObj.zClockObj, APP_zMainUsrWatchObj.pMainWatchCont );
+    CLOCK_Init( &APP_zMainUserWatchObj.zClockObj, APP_zMainUserWatchObj.pMainWatchContainer );
 
     /* Create the Control Panel Screen */
-    CTRLPANEL_Init( &APP_zMainUsrWatchObj.zCtrlPanelObj, APP_zMainUsrWatchObj.pMainWatchCont );
+    CTRLPANEL_Init( &APP_zMainUserWatchObj.zCtrlPanelObj, APP_zMainUserWatchObj.pMainWatchContainer );
 }
 
 
 
 /**
- * @brief Create the main Container on which the clock and ctrlpanel
- * will be placed on
+ * @brief Create the main container for the clock and control panel
  *
- * @param pUsrWatchObj Pointer to the main Usr watch object
+ * @param pUserWatchObj Pointer to the main user watch object
  */
-static void app_CreateMainCont( APP_zUsrWatchObj_t *pUsrWatchObj )
+static void app_CreateMainContainer( APP_zUserWatchObj_t *pUserWatchObj )
 {
-    /* Create empty Cont, register it and remove the default style */
-    lv_obj_t *pMainContObj = lv_obj_create( lv_scr_act( ) );
-    COMMON_RegisterUsrObj( pMainContObj, COMMON_eTypeCont );
-    lv_obj_remove_style_all( pMainContObj );
+    /* Create empty container, register it and remove the default style */
+    lv_obj_t *pMainContainerObj = lv_obj_create( lv_scr_act( ) );
+    COMMON_RegisterUserObj( pMainContainerObj, COMMON_eTypeContainer );
+    lv_obj_remove_style_all( pMainContainerObj );
 
-    /* Set size of Cont Object */
-    lv_obj_set_size( pMainContObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
+    /* Set size of Container Object */
+    lv_obj_set_size( pMainContainerObj, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT );
 
-    /* Add style according to current theme */
-    COMMON_ApplyCurrThemeStyle( pMainContObj, COMMON_eTypeCont );
+    /* Configure bg */
+    lv_obj_add_style( pMainContainerObj, &COMMON_aThemeStyles[ COMMON_eThemeDark ], LV_PART_MAIN );
 
-    /* Configure horizontal scroll on the main Cont */
-    lv_obj_add_flag( pMainContObj, LV_OBJ_FLAG_SCROLL_ONE );
-    lv_obj_set_scroll_snap_x( pMainContObj, LV_SCROLL_SNAP_START );
-    lv_obj_set_scroll_dir( pMainContObj, LV_DIR_HOR );
-    lv_obj_set_scrollbar_mode( pMainContObj, LV_SCROLLBAR_MODE_OFF );
+    /* Configure horizontal scroll on the main container */
+    lv_obj_add_flag( pMainContainerObj, LV_OBJ_FLAG_SCROLL_ONE );
+    lv_obj_set_scroll_snap_x( pMainContainerObj, LV_SCROLL_SNAP_START );
+    lv_obj_set_scroll_dir( pMainContainerObj, LV_DIR_HOR );
+    lv_obj_set_scrollbar_mode( pMainContainerObj, LV_SCROLLBAR_MODE_OFF );
 
     /* Use FLEX layout with horizontal flow */
-    lv_obj_set_layout( pMainContObj, LV_LAYOUT_FLEX );
-    lv_obj_set_flex_flow( pMainContObj, LV_FLEX_FLOW_ROW ); // Add children horizontally
+    lv_obj_set_layout( pMainContainerObj, LV_LAYOUT_FLEX );
+    lv_obj_set_flex_flow( pMainContainerObj, LV_FLEX_FLOW_ROW ); // Add children horizontally
 
-    /* Remove all spacing/padding of the Cont style */
-    lv_obj_set_style_pad_all( pMainContObj, 0, LV_PART_MAIN );
-    lv_obj_set_style_pad_row( pMainContObj, 0, LV_PART_MAIN );
-    lv_obj_set_style_pad_column( pMainContObj, 0, LV_PART_MAIN );
-    lv_obj_set_style_pad_gap( pMainContObj, 0, LV_PART_MAIN );
+    /* Remove all spacing/padding of the container style */
+    lv_obj_set_style_pad_all( pMainContainerObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_row( pMainContainerObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_column( pMainContainerObj, 0, LV_PART_MAIN );
+    lv_obj_set_style_pad_gap( pMainContainerObj, 0, LV_PART_MAIN );
 
-    /* Add Main Cont to the watch obj */
-    pUsrWatchObj->pMainWatchCont = pMainContObj;
+    /* Add Main container to the watch obj */
+    pUserWatchObj->pMainWatchContainer = pMainContainerObj;
 }

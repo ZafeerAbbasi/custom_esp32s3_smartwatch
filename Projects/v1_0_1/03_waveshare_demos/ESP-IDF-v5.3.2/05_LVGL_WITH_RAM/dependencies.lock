@@ -88,6 +88,6 @@ direct_dependencies:
 - espressif/esp_lcd_touch_ft5x06
 - idf
 - lvgl/lvgl
-manifest_hash: 8d9069b5da2507d0a3399ec2cb3fa5fce809211aeedeee810ae1b6a2027ccbeb
+manifest_hash: 7aec2961f570a22abdca951985a0582b06f42d43d9a700c342426e6822b4b5cd
 target: esp32s3
 version: 2.0.0

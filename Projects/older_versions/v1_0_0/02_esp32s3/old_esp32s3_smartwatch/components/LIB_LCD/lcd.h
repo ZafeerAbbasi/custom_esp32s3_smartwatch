@@ -48,8 +48,6 @@ extern "C" {
 extern esp_lcd_panel_io_handle_t LCD_zLcdIoHdl;
 extern esp_lcd_panel_handle_t LCD_zLcdPanelHdl;
 
-extern int32_t LCD_brightnessVal;
-
 
 /* Exported macro ------------------------------------------------------------*/
 

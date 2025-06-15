@@ -38,51 +38,38 @@ extern "C" {
 
 /**
  * @brief Settings Exit Button Struct
- * @note Contains Button Cont, and a label
+ * @note Contains Button Container, and a label
  */
 typedef struct SETTINGS_zExitBtn_t
 {
-    lv_obj_t                            *pBtnCont;
+    lv_obj_t                            *pBtnContainer;
     lv_obj_t                            *pBtnLabel;
 } SETTINGS_zExitBtn_t;
 
 /**
  * @brief Brightness list option struct
- * @note Contains basic list option struct, slider,
- * and slider label
+ * @note Contains the settings option struct and a slider
  */
-typedef struct SETTINGS_zListOptBright_t
+typedef struct SETTINGS_zListOptionBrightness_t
 {
-    COMMON_zBasicListOpt_t              zBasicOptionObjs;
-    lv_obj_t                            *pSlider;
+    COMMON_zBasicListOption_t           zBasicOptionObjs;
+    lv_obj_t                            *pBrightnessSlider;
     lv_obj_t                            *pSliderLabel;
-} SETTINGS_zListOptBright_t;
+} SETTINGS_zListOptionBrightness_t;
 
 /**
- * @brief Circular Scroll Option struct
- * @note Contains basic list option struct, switch,
- * and switch label
- */
-typedef struct SETTINGS_zListOptCircScroll_t
-{
-    COMMON_zBasicListOpt_t              zBasicOptionObjs;
-    lv_obj_t                            *pSwitch;
-    lv_obj_t                            *pSwitchLabel;
-} SETTINGS_zListOptCircScroll_t;
-
-/**
- * @brief Main Usr Settings Object
+ * @brief Main User Settings Object
  * @note Contains all objects on the settings screen
  */
-typedef struct SETTINGS_zUsrSettingsObj_t
+typedef struct SETTINGS_zUserSettingsObj_t
 {
-    lv_obj_t                            *pSettingsContObj;
+    lv_obj_t                            *pSettingsContainerObj;
     lv_obj_t                            *pSettingsListObj;
     lv_obj_t                            *pSettingsLoadingScreen;
+
     SETTINGS_zExitBtn_t                 zSettingsExitBtn;
-    SETTINGS_zListOptBright_t           zListOptBright;
-    SETTINGS_zListOptCircScroll_t       zListOptCircScroll;
-} SETTINGS_zUsrSettingsObj_t;
+    SETTINGS_zListOptionBrightness_t    zListOptionBrightness;
+} SETTINGS_zUserSettingsObj_t;
 
 /* Exported constants --------------------------------------------------------*/
 

@@ -28,7 +28,6 @@ extern "C" {
 #include "esp_lvgl_port.h"
 #include "lcd.h"
 #include "touch.h"
-#include "usr_common.h"
 
 /* Exported types ------------------------------------------------------------*/
 

@@ -13,5 +13,5 @@ dependencies:
     public: true
 
   lvgl/lvgl:
-    version: "*"
+    version: "8.4.*"
     public: true

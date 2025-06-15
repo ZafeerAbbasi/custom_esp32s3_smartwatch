@@ -11,7 +11,5 @@
     "idf.openOcdConfigs": [
         "board/esp32s3-builtin.cfg"
     ],
-    "files.associations": {
-        "esp_lcd_panel_vendor.h": "c"
-    }
+    "idf.port": "/dev/tty.usbmodem143201"
 }

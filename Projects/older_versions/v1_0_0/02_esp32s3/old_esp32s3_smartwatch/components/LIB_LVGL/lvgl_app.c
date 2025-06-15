@@ -41,42 +41,11 @@ static lv_indev_drv_t zLvglInputDeviceDriver;
 
 /* User code -----------------------------------------------------------------*/
 
-void LVGL_fnTask( void *pvArg )
-{
-    COMMON_teWIFI_NOTIF teWifiNotif = COMMON_eWIFI_NOTIF_IGNORE;
-    
-    // Init
-    LVGL_Init( );
-
-    // Wait for Wifi task to notify us that
-    // we have finished scanning all APs
-    if( xTaskNotifyWait( 0x00,
-                         0xFFFFFFFF,
-                         ( uint32_t * )&teWifiNotif,
-                         portMAX_DELAY ) == pdPASS )
-    {
-        if( teWifiNotif == COMMON_eWIFI_NOTIF_AP_SCAN_CMPLT )
-        {
-            // Get the list of AP
-            taskENTER_CRITICAL( &COMMON_tzLockWifiLvgl );
-            /* Get AP */
-            taskEXIT_CRITICAL( &COMMON_tzLockWifiLvgl );
-
-            lvgl_port_lock( 0 );
-            // WIFI_fnCreateWifiSelectionScr( )
-            lvgl_port_unlock( );
-        }
-    }
-
-
-}
-
-/***************************************************************************//**
-    @brief Initialize LVGL Engine, Display and Touch Driver
-    
-    @returns esp_err_t esp_err_t ESP_OK on success, error code on failure
-    
- ******************************************************************************/
+/**
+ * @brief Create LVGL Task and Initialize Display and Touch Driver
+ * 
+ * @return esp_err_t ESP_OK on success, error code on failure
+ */
 esp_err_t LVGL_Init( void )
 {
     esp_err_t ret = ESP_OK;
@@ -112,26 +81,26 @@ esp_err_t LVGL_Init( void )
     pLvglDisplayAndTouchHdl = lvgl_port_add_disp( &zLvglPortDispCfg );
 
     /* Add the Input Device Driver ( Touch ) */
-    lv_indev_drv_init( &zLvglInputDeviceDriver );           // Init with default values
+    lv_indev_drv_init( &zLvglInputDeviceDriver ); // Init with default values
 
     zLvglInputDeviceDriver.type         = LV_INDEV_TYPE_POINTER;
     zLvglInputDeviceDriver.disp         = pLvglDisplayAndTouchHdl;
     zLvglInputDeviceDriver.read_cb      = LVGL_TouchDriverCallback;
     zLvglInputDeviceDriver.user_data    = TOUCH_zTouchPanelHdl;
 
-    lv_indev_drv_register( &zLvglInputDeviceDriver );       // Register Input Device with cb and config
+    lv_indev_drv_register( &zLvglInputDeviceDriver );
 
     return ret;
 }
 
-/***************************************************************************//**
-    @brief LVGL Touch Callback, called every 4ms
-    
-    @param pInputDeviceDriver   Pointer LVGL Input Device Driver
-    @param[out] pUserData       Pointer to User Data which will be registered
-                                with the X and Y co-ordinates of the touch
-    
- ******************************************************************************/
+
+
+/**
+ * @brief LVGL Touch Callback, called every 4ms
+ * 
+ * @param pInputDeviceDriver Pointer LVGL Input Device Driver
+ * @param pUserData Pointer to User Data which should be registered with X and Y Data
+ */
 void LVGL_TouchDriverCallback( lv_indev_drv_t *pInputDeviceDriver, lv_indev_data_t *pUserData )
 {
     esp_lcd_touch_handle_t zTouchPanel = ( esp_lcd_touch_handle_t )pInputDeviceDriver->user_data;

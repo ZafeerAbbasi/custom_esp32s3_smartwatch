@@ -47,44 +47,39 @@ typedef enum COMMON_eTheme_t
 } COMMON_eTheme_t;
 
 /**
- * @brief Types of Usr Objects Enum
+ * @brief Types of User Objects Enum
  * @note Used in Registry
  */
-typedef enum COMMON_eUsrObjType_t
+typedef enum COMMON_zUserObjType_t
 {
     COMMON_eTypeDontTrack    = 0,
-    COMMON_eTypeCont,
+    COMMON_eTypeContainer,
     COMMON_eTypeLabel,
-    COMMON_eTypeCustomLst,
-    COMMON_eTypeLstOptPanel,
-    COMMON_eTypeLoadingScr,
+    COMMON_eTypeListOptionPanel,
+    COMMON_eTypeLoadingScreen,
     COMMON_eTypeBtn,
     COMMON_eTypeSlider,
-    COMMON_eTypeSwitch,
     COMMON_eTypeCount
-} COMMON_eUsrObjType_t;
+} COMMON_zUserObjType_t;
 
 /**
  * @brief Basic List Option Struct
  * @note Basic List Option consists of a Panel, Image, and Label
  */
-typedef struct COMMON_zBasicListOpt_t
+typedef struct COMMON_zBasicListOption_t
 {
-    lv_obj_t         *pOptPanel;
-    lv_obj_t         *pOptImg;
-    lv_obj_t         *pOptLabel;
-} COMMON_zBasicListOpt_t;
+    lv_obj_t         *pOptionPanel;
+    lv_obj_t         *pOptionImg;
+    lv_obj_t         *pOptionLabel;
+} COMMON_zBasicListOption_t;
 
 /* Exported constants --------------------------------------------------------*/
 
 
 /* Exported variables --------------------------------------------------------*/
 
-/* Circular Scroll Flag */
-extern bool COMMON_isCircularScroll;
-
-/* Current Theme Flag */
-extern COMMON_eTheme_t COMMON_eCurrTheme;
+/* Themes */
+extern lv_style_t COMMON_aThemeStyles[ COMMON_eThemeCount ];
 
 /* Images */
 LV_IMG_DECLARE( img_app_info );
@@ -101,24 +96,20 @@ LV_IMG_DECLARE( img_theme );
 /* Exported functions prototypes ---------------------------------------------*/
 
 void COMMON_InitStyles( void );
-void COMMON_ApplyCurrThemeStyle( lv_obj_t *pObj, COMMON_eUsrObjType_t eObjType );
-void COMMON_ChangeCurrThemeFlag( COMMON_eTheme_t eNewTheme );
-void COMMON_SetAllObjsTheme( void );
 
 void COMMON_SetupCustomListObj( lv_obj_t *pListObj );
 void COMMON_AddCustomListOption( const char *pLabelText,
                             const lv_img_dsc_t *pImg,
                             uint32_t imgScale,
-                            COMMON_zBasicListOpt_t *pListOption,
+                            COMMON_zBasicListOption_t *pListOption,
                             lv_obj_t *pParent );
-void COMMON_AddCustomListOptionCb( COMMON_zBasicListOpt_t *pListOption,
+void COMMON_AddCustomListOptionCb( COMMON_zBasicListOption_t *pListOption,
                                     lv_event_cb_t pfnOptionClickedCb,
-                                    void *pUsrData );
+                                    void *pUserData );
 void COMMON_ListCircularScrollCb( lv_event_t *pEvent );
-void COMMON_SetAllListScroll( bool isCircScroll );
 
-void COMMON_RegisterUsrObj( lv_obj_t *pObj, COMMON_eUsrObjType_t eObjType );
-void COMMON_UnRegisterUsrObj( lv_obj_t *pObj, COMMON_eUsrObjType_t eObjType );
+void COMMON_RegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
+void COMMON_UnRegisterUserObj( lv_obj_t *pObj, COMMON_zUserObjType_t zObjType );
 
 /* Exported defines ----------------------------------------------------------*/
 

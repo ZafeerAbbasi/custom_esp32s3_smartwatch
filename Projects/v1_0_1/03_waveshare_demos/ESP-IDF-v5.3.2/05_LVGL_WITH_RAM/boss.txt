@@ -1,0 +1,10 @@
+..................NOTICE: Updating lock file at /Users/zafeer/Downloads/ESP32-S3-Touch-AMOLED-1.8 3/ESP-IDF-v5.3.2/05_LVGL_WITH_RAM/dependencies.lock
+NOTICE: Processing 8 dependencies:
+NOTICE: [1/8] espressif/cmake_utilities (0.5.3)
+NOTICE: [2/8] espressif/esp_io_expander (1.0.1)
+NOTICE: [3/8] espressif/esp_io_expander_tca9554 (1.0.1)
+NOTICE: [4/8] espressif/esp_lcd_sh8601 (1.0.0)
+NOTICE: [5/8] espressif/esp_lcd_touch (1.1.2)
+NOTICE: [6/8] espressif/esp_lcd_touch_ft5x06 (1.0.7)
+NOTICE: [7/8] lvgl/lvgl (8.4.0)
+NOTICE: [8/8] idf (5.4.1)
